@@ -1,0 +1,241 @@
+/************************************************************************
+* Search Tool CSS
+*
+* This style sheet contains those styles used by/in the generation
+* of the mgi search tool
+*
+************************************************************************/
+
+/*
+* QuickSearch shared classes 
+*/
+
+#qsPageHeader {
+    /*position:absolute;*/
+    /*left: 50%;
+    /*width:60em;         /* IE centering workaround */
+    /*margin-left: -30em; /* IE centering; set negative 1/2 width */
+    white-space:nowrap;
+	padding-top:2px;
+    padding-bottom:2px;
+    /*border: 1px solid #ccc;*/
+}
+#qsPageHeader h3{
+    display:inline;
+    color:#002255;
+    font-size:22px;
+    margin:2px;
+}
+#qsPageHeader form{
+    display:inline;
+}
+#qsPageHeader #qsTextField{
+    display:inline;
+    color:#002255;
+    background-color:#DFEFFF;
+}
+.qsButton{
+    font-size: 12px;
+    font-family: Verdana,Arial,Helvetica;
+    color: #002255;
+    font-weight: bolder;
+    background-color: #eeeeee;
+    border-width: 1px;
+    border-style: solid;
+    border-color: #7d95b9;
+    padding: 2px;
+    display:inline;
+    text-decoration: none;
+    cursor:pointer;cursor:hand;
+}
+#qsExamples {
+    position:relative;
+    text-align:center;
+    left: 50%;
+    width:86em;         /* IE centering workaround */
+    margin-left: -43em; /* IE centering; set negative 1/2 width */
+    color: #666666;
+    clear: right;
+    padding-top:-1px;
+    padding-bottom:5px;
+    font-size:10px;
+}
+.matchDisplayableType {
+    font-variant: small-caps;
+}
+
+/*
+* Match details header section.
+*/
+
+
+
+.detailHeaderType {
+    font-family: Verdana, Arial, Helvetica;
+    font-variant: small-caps;
+    font-size: 10px;
+    color: #002255;
+    padding-left: 8px;      
+}
+
+.detailRowType {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 2px;
+}
+
+.italic {
+    font-style: italic;
+}
+
+.smallCaps {
+    font-family: Verdana, Arial, Helvetica;
+    font-variant: small-caps;
+    font-size: 10px;
+}
+
+
+
+
+/*
+* QuickSearch "why did this match...?" pages
+*/
+
+#detailTitleBarWrapper {
+    font-family: Arial,Helvetica;
+    vertical-align: middle;
+    text-align: center;
+    margin-bottom:8px;
+    width: 100%;
+}
+
+.whyMatchData{
+    font-family: Arial,Helvetica;
+    padding-top: 5px;
+    padding-right: 3px;
+    padding-bottom: 5px;    
+    padding-left: 3px;
+}
+.whyMatchSectionHeader1{
+    color: #002255;
+    margin-top: 2px;
+    font-size: 1.35em;
+    font-variant: small-caps;
+}
+.whyMatchSectionHeader2{
+    color: #54709b;
+    margin-left: 25px;
+    padding-top: 2px;
+    font-size: 0.8em;
+    font-style: italic;
+}
+.whyMatchDetailTable{
+    background-color:#666666;
+}
+.whyMatchDetailTable th{
+    padding: 4px;
+    vertical-align: bottom;
+    background-color: #d0e0f0;
+}
+.whyMatchDetailTable td{
+    padding: 4px;
+    vertical-align: bottom;
+}
+
+/*
+* QuickSearch buckets
+*/
+
+.qsBucket {
+    border: 2px;
+    border-style: solid;
+    border-color: #dfefff;
+    background-color: #ffffff;
+    border-collapse: collapse;
+    font-family: Verdana,Arial,Helvetica;
+    font-size: 12px;
+    width:%100;
+}
+.qsBucket th{
+    font-size: 12px;
+    font-family: Arial,Helvetica;
+    vertical-align: top;
+    text-align: left;
+    color: #444444;
+    font-weight: bold;
+    background-color:#dfefff;
+    padding-top:2px;
+    padding-bottom:4px;
+}
+.qsBucket td{
+    padding-left:5px;
+    padding-right:5px;
+    padding-top:2px;
+    padding-bottom:2px;
+    vertical-align: top;
+}
+.qsBucket a{
+    outline-color: invert;
+    outline-style: none;
+    outline-width: 0pt;
+    text-decoration: none;
+    
+}
+
+.qsBucketHeader {
+    font-size: 18px;
+    font-weight: bold;
+    color: #002255;
+    line-height: 1.25;
+    background-color:#f0f8ff;;
+    padding-top:3px;
+    padding-bottom:5px;
+}
+
+.qsBucketRow1 {
+    background-color:#ffffff;
+}
+.qsBucketRow2 {
+    background-color:#f1f1f1;
+} 
+
+.qsWhyMatchLink {
+    background-color:#fafafa;
+	border-width: 1px;
+	border-style: solid;
+	border-color: #DFEFFF;
+	color: #000066;
+	font-style:italic;
+}
+
+/*
+* Generic classes; To be moved into a central CSS (mgi.css probably)
+*/
+
+
+a.helpPopUp:link
+{color:#000010;text-decoration:none}
+a.helpPopUp:active
+{color:#3300FF;text-decoration:none}
+a.helpPopUp:hover
+{color:#3300FF;text-decoration:none}
+
+
+/* colors */
+.grayText {color: #666666;}
+.drkBlueText {color: #002255;}
+.redText {color: #FF0000;}
+.blackText {color: #000000;}
+
+/* font size & appearance */
+.fontSize8      {font-size: 8px;}
+.fontSize10     {font-size: 10px;}
+.fontSize12     {font-size: 12px;}
+.fontSize14     {font-size: 14px;}
+.fontSize16     {font-size: 16px;}
+.fontSize18     {font-size: 18px;}
+.fontSize20     {font-size: 20px;}
+.fontSize22     {font-size: 22px;}
+.fontSize24     {font-size: 24px;}
+.fontBold       {font-weight: bold;}
+.fontItalic     {font-style: italic;}
