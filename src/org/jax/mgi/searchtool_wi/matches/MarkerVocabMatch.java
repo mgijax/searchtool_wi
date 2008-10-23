@@ -95,14 +95,14 @@ public class MarkerVocabMatch extends AbstractMatch {
 
         if ( isChildMatch() ) {
             returnString = "<span class='matchDisplayableType'>"
-              + DisplayHelper.superscript( vocabDisplay.getTypeDisplay() )
+              + DisplayHelper.superscript( this.getDisplayableType() )
               + "</span>" + " : "
               + DisplayHelper.superscript( vocabDisplay.getName() )
               + " (subterm of " + parentVocabDisplay.getAcc_id() + ")";
         }
         else {
             returnString = "<span class='matchDisplayableType'>"
-              + DisplayHelper.superscript( vocabDisplay.getTypeDisplay() )
+              + DisplayHelper.superscript( this.getDisplayableType() )
               + "</span>" + " : "
               + DisplayHelper.superscript( vocabDisplay.getName() )
               + " (" + vocabDisplay.getAcc_id() + ")";
