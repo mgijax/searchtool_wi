@@ -5,7 +5,7 @@
     org.jax.mgi.searchtool_wi.exception.*,
     org.jax.mgi.searchtool_wi.utils.*,
     org.jax.mgi.shr.config.Configuration,
-    QS_Commons.IndexConstants" %>
+    org.jax.mgi.shr.searchtool.IndexConstants" %>
 
 <%
 // Pull the objects we'll need from the request.  These have been attached

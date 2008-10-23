@@ -20,7 +20,7 @@
     <javac classpath="/export/search/jboss-4.2.2.GA/server/default/lib/servlet-api.jar; 
                       /usr/local/jboss-4.2.3.GA/server/default/lib/log4j.jar; 
                       /usr/local/mgi/live/lib/java/core.jar; 
-                      /usr/local/mgi/live/lib/java/qs_commons.jar; 
+                      /usr/local/mgi/live/lib/java/searchtool.jar; 
                       /usr/local/lucene-2.3.2/luceneweb.war; 
                       /usr/local/lucene-2.3.2/lucene-core-2.3.2.jar; 
                       /usr/local/lucene-2.3.2/contrib/snowball/lucene-snowball-2.3.2.jar; "
@@ -33,10 +33,10 @@
       <fileset dir="src/jsp/"/>
       <classes dir="build/"/>
       <lib file="/usr/local/mgi/live/lib/java/core.jar" />
-      <lib file="/usr/local/mgi/live/lib/java/qs_commons.jar" />
+      <lib file="/usr/local/mgi/live/lib/java/searchtool.jar" />
       <lib file="/usr/local/lucene-2.3.2/luceneweb.war" />
       <lib file="/usr/local/lucene-2.3.2/lucene-core-2.3.2.jar" />
-      <lib file="/usr/local/lucene-2.3.2/contrib/snowball/lucene-snowball-2.3.2.jar;" />
+      <lib file="/usr/local/lucene-2.3.2/contrib/snowball/lucene-snowball-2.3.2.jar" />
     </war>
   </target>
 
