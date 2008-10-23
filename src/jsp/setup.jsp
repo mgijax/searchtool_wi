@@ -1,9 +1,9 @@
 <%@ page import="java.util.*,
-    org.jax.mgi.search.results.*,
-    org.jax.mgi.search.lookup.*,
-    org.jax.mgi.search.matches.*,
-    org.jax.mgi.search.exception.*,
-    org.jax.mgi.search.utils.*,
+    org.jax.mgi.searchtool_wi.results.*,
+    org.jax.mgi.searchtool_wi.lookup.*,
+    org.jax.mgi.searchtool_wi.matches.*,
+    org.jax.mgi.searchtool_wi.exception.*,
+    org.jax.mgi.searchtool_wi.utils.*,
     org.jax.mgi.shr.config.Configuration,
     QS_Commons.IndexConstants" %>
 
@@ -32,10 +32,11 @@ if ( searchInput.hasFormParameter("debug")
 DisplayHelper displayHelper
     = new DisplayHelper(stConfig, markerDisplayCache, vocabDisplayCache);
 
-// derive display strings for downstream usage
+// query strings; queryForward to be used in URL generation and forwarding
 String query = searchInput.getSearchString().replaceAll("\"", "&quot;");
-// The String that we use to generate links can't have the "" replacement in it
 String queryForward = searchInput.getSearchString();
+
+// display url strings for downstream usage
 String javawi_url = stConfig.get("JAVAWI_URL");
 String wi_url = stConfig.get("WI_URL");
 String webshare_url = stConfig.get("WEBSHARE_URL");

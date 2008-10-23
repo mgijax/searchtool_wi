@@ -15,7 +15,7 @@
 
 <servlet>
   <servlet-name>Search</servlet-name>
-  <servlet-class>org.jax.mgi.search.servlet.Search</servlet-class>
+  <servlet-class>org.jax.mgi.searchtool_wi.servlet.Search</servlet-class>
   <load-on-startup/>
 </servlet>
 
@@ -26,7 +26,7 @@
 
 <context-param>
   <param-name>globalConfig</param-name>
-  <param-value>/usr/local/mgi/live/mgiconfig/web/GlobalConfig</param-value>
+  <param-value>/usr/local/mgi/live/mgiconfig/webDev/GlobalConfig</param-value>
 </context-param>
 <context-param>
   <param-name>teplateLoc</param-name>
