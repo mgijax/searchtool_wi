@@ -12,7 +12,7 @@ import org.jax.mgi.searchtool_wi.matches.MarkerVocabMatch;
 import org.jax.mgi.searchtool_wi.results.QS_VocabResult;
 import org.jax.mgi.shr.config.Configuration;
 
-import QS_Commons.IndexConstants;
+import org.jax.mgi.shr.searchtool.IndexConstants;
 
 //////////////////////////////////////////////////////////////////////////////
 /**

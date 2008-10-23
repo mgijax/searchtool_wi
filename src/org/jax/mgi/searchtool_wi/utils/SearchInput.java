@@ -12,9 +12,9 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.log4j.Logger;
 import org.apache.lucene.analysis.StopAnalyzer;
 
-import QS_Commons.AnalyzerUtils;
-import QS_Commons.MGITokenCountAnalyzer;
-import QS_Commons.StemmedMGITokenCountAnalyzer;
+import org.jax.mgi.shr.searchtool.AnalyzerUtils;
+import org.jax.mgi.shr.searchtool.MGITokenCountAnalyzer;
+import org.jax.mgi.shr.searchtool.StemmedMGITokenCountAnalyzer;
 
 /** Search Input object, that stores the search string and transforms it in various ways.
  * @author pf, mhall

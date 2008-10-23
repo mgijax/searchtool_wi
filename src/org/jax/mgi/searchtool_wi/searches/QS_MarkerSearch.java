@@ -23,7 +23,7 @@ import org.jax.mgi.searchtool_wi.utils.ScoreConstants;
 import org.jax.mgi.shr.config.Configuration;
 import org.jax.mgi.shr.timing.TimeStamper;
 
-import QS_Commons.IndexConstants;
+import org.jax.mgi.shr.searchtool.IndexConstants;
 
 /**
 * This concrete Search is responsible for gathering all data required for

@@ -18,7 +18,7 @@ import org.jax.mgi.searchtool_wi.matches.MatchTypeScorer;
 import org.jax.mgi.searchtool_wi.results.QS_VocabResult;
 import org.jax.mgi.searchtool_wi.utils.SearchInput;
 import org.jax.mgi.searchtool_wi.utils.ScoreConstants;
-import QS_Commons.IndexConstants;
+import org.jax.mgi.shr.searchtool.IndexConstants;
 
 // MGI Shared Classes
 import org.jax.mgi.shr.config.Configuration;

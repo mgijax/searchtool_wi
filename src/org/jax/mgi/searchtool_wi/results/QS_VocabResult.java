@@ -12,7 +12,7 @@ import org.jax.mgi.searchtool_wi.matches.MatchSorter;
 import org.jax.mgi.searchtool_wi.matches.VocabMatch;
 import org.jax.mgi.shr.config.Configuration;
 import org.apache.lucene.search.Hit;
-import QS_Commons.IndexConstants;
+import org.jax.mgi.shr.searchtool.IndexConstants;
 
 public class QS_VocabResult extends AbstractResult {
 

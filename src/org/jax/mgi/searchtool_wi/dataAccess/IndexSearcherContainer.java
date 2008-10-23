@@ -4,7 +4,7 @@ import org.apache.log4j.Logger;
 import org.apache.lucene.search.IndexSearcher;
 import org.jax.mgi.shr.config.Configuration;
 
-import QS_Commons.MGISimilarity;
+import org.jax.mgi.shr.searchtool.MGISimilarity;
 
 /**
  *

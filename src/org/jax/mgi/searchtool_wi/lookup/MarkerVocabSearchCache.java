@@ -9,7 +9,7 @@ import org.jax.mgi.searchtool_wi.dataAccess.IndexReaderContainer;
 import org.jax.mgi.searchtool_wi.exception.CacheNotLoadedException;
 import org.jax.mgi.shr.config.Configuration;
 
-import QS_Commons.IndexConstants;
+import org.jax.mgi.shr.searchtool.IndexConstants;
 
 /**  The MarkerVocabSearchCache object provides a presistent, in-memory
 *   container for search tool related display data.

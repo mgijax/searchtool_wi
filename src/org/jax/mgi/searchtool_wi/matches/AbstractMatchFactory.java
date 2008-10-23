@@ -8,7 +8,7 @@ import java.io.IOException;
 import org.apache.lucene.search.Hit;
 
 // Quick Search Classes
-import QS_Commons.IndexConstants;
+import org.jax.mgi.shr.searchtool.IndexConstants;
 
 // MGI Shared Classes
 import org.jax.mgi.shr.config.Configuration;

@@ -4,7 +4,7 @@ package org.jax.mgi.searchtool_wi.matches;
 import java.util.*;
 
 // Quick Search Classes
-import QS_Commons.IndexConstants;
+import org.jax.mgi.shr.searchtool.IndexConstants;
 
 /**
 * A MarkerMatch represents a match to a marker (ID, nomenclature, symbols etc)

@@ -12,7 +12,7 @@ import org.jax.mgi.searchtool_wi.matches.OtherMatchFactory;
 import org.jax.mgi.searchtool_wi.results.QS_OtherResult;
 import org.jax.mgi.searchtool_wi.utils.SearchInput;
 import org.jax.mgi.shr.config.Configuration;
-import QS_Commons.IndexConstants;
+import org.jax.mgi.shr.searchtool.IndexConstants;
 
 /**
 * This concrete search is responsible for gathering all data required for

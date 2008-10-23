@@ -29,9 +29,9 @@ import org.jax.mgi.searchtool_wi.results.QS_MarkerResult;
 import org.jax.mgi.searchtool_wi.results.QS_VocabResult;
 import org.jax.mgi.shr.config.Configuration;
 
-import QS_Commons.IndexConstants;
-import QS_Commons.MGIAnalyzer;
-import QS_Commons.StemmedMGIAnalyzer;
+import org.jax.mgi.shr.searchtool.IndexConstants;
+import org.jax.mgi.shr.searchtool.MGIAnalyzer;
+import org.jax.mgi.shr.searchtool.StemmedMGIAnalyzer;
 
 /** The DisplayHelper object provides static utility methods for display
 * @module DisplayHelper

@@ -6,7 +6,7 @@ import org.apache.lucene.analysis.*;
 import org.apache.lucene.queryParser.*;
 import org.apache.lucene.document.*;
 import org.apache.lucene.index.*;
-import QS_Commons.IndexConstants;
+import org.jax.mgi.shr.searchtool.IndexConstants;
 
 /**
 * @module SearchHelper

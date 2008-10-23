@@ -15,7 +15,7 @@ import org.jax.mgi.searchtool_wi.exception.LookupInvalidException;
 import org.jax.mgi.searchtool_wi.results.QS_OtherResult;
 import org.jax.mgi.searchtool_wi.servlet.Search;
 import org.jax.mgi.shr.config.Configuration;
-import QS_Commons.IndexConstants;
+import org.jax.mgi.shr.searchtool.IndexConstants;
 
 //////////////////////////////////////////////////////////////////////////////
 /**

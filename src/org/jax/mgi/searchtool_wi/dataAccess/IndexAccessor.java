@@ -21,9 +21,9 @@ import org.apache.lucene.search.TermQuery;
 import org.jax.mgi.searchtool_wi.utils.SearchInput;
 import org.jax.mgi.shr.config.Configuration;
 
-import QS_Commons.IndexConstants;
-import QS_Commons.MGIAnalyzer;
-import QS_Commons.StemmedMGIAnalyzer;
+import org.jax.mgi.shr.searchtool.IndexConstants;
+import org.jax.mgi.shr.searchtool.MGIAnalyzer;
+import org.jax.mgi.shr.searchtool.StemmedMGIAnalyzer;
 
 /**
  * This class provides the API between the indexes and the search tool. By using

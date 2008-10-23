@@ -10,7 +10,7 @@ import org.jax.mgi.searchtool_wi.exception.CacheNotLoadedException;
 import org.jax.mgi.searchtool_wi.results.QS_MarkerResult;
 import org.jax.mgi.shr.config.Configuration;
 
-import QS_Commons.IndexConstants;
+import org.jax.mgi.shr.searchtool.IndexConstants;
 
 //////////////////////////////////////////////////////////////////////////////
 /**

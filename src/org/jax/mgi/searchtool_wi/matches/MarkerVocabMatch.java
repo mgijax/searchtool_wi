@@ -4,7 +4,7 @@ package org.jax.mgi.searchtool_wi.matches;
 import java.util.*;
 
 // Quick Search Classes
-import QS_Commons.IndexConstants;
+import org.jax.mgi.shr.searchtool.IndexConstants;
 import org.jax.mgi.searchtool_wi.lookup.VocabDisplay;
 import org.jax.mgi.searchtool_wi.lookup.VocabDisplayCache;
 import org.jax.mgi.searchtool_wi.utils.DisplayHelper;

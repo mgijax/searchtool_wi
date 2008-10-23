@@ -4,7 +4,7 @@ package org.jax.mgi.searchtool_wi.matches;
 import java.util.*;
 
 // Quick Search Shared Classes
-import QS_Commons.IndexConstants;
+import org.jax.mgi.shr.searchtool.IndexConstants;
 
 // logging
 import org.apache.log4j.Logger;
