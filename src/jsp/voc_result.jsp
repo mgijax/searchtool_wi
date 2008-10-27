@@ -47,7 +47,7 @@
   out.print("<table class='qsBucket' width='100%'><tr>");
   out.print("<td colspan='4' class='qsBucketHeader'>");
   out.print("Vocabulary Terms ");
-  out.print("<span class='small grayText'> sorted by best match, showing " + (vocabStart + 1) + "-" + (vocabStop + 1) + " of "
+  out.print("<span class='small grayText'> Sorted by best match, showing " + (vocabStart + 1) + "-" + (vocabStop + 1) + " of "
     + (vocabResultContainer.size() + 1) + "</span>&nbsp;&nbsp;&nbsp;&nbsp;");
   if (vocabStart.intValue() > 0) {
       out.print("<a class='small' href='Search.do?query=" + query + "&page=vocab&vocabStart="
@@ -68,7 +68,11 @@
     </th>
     <th style='padding-right: 5px;padding-left:5px;'>Term</th>
     <th style='padding-right: 5px;padding-left:5px;'>Associated Data</th>
-    <th style='padding-right: 5px;padding-left:5px;' width='%40' >Best Match</th>
+    <th style='padding-right: 5px;padding-left:5px;' width='%40' >
+      <span onmouseover="<%=displayHelper.getMarkerBestMatchMouseOver()%>" onmouseout="nd();">
+       <a class="helpPopUp" href="#">Best Match</a>
+      </span>
+    </th>
   </tr>
 <%
 
@@ -163,7 +167,16 @@
   </tr>
 </table>
 
-<br/>
-<br/>
-
+<%
+out.print("<span class='small grayText'> Showing " + (vocabStart + 1) + "-" + (vocabStop + 1) + " of "
+    + (vocabResultContainer.size() + 1) + "</span>&nbsp;&nbsp;&nbsp;&nbsp;");
+  if (vocabStart.intValue() > 0) {
+      out.print("<a class='small' href='Search.do?query=" + query + "&page=vocab&vocabStart="
+        + (vocabStart - vocabRange) +"'>Previous</a> ");
+  }
+  if (vocabStop.intValue() < vocabResultContainer.size()) {
+      out.print("<a class='small' href='Search.do?query=" + query + "&page=vocab&vocabStart="
+        + (vocabStart + vocabRange) +"'>Next</a>");
+  }
+%>
 <%=webTemplate.getTemplateBodyStopHtml()%>

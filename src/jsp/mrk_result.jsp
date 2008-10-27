@@ -75,7 +75,11 @@
     <th style='padding-right:5px;padding-left:5px;'>Symbol</th>
     <th style='padding-right:5px;padding-left:5px;'>Name</th>
     <th style='text-align:right;padding-right:5px;padding-left:5px;'>Chr</th>
-    <th style='padding-right:5px;padding-left:5px;' width='%40' >Best Match</th>
+    <th style='padding-right:5px;padding-left:5px;' width='%40' >
+      <span onmouseover="<%=displayHelper.getMarkerBestMatchMouseOver()%>" onmouseout="nd();">
+       <a class="helpPopUp" href="#">Best Match</a>
+      </span>
+    </th>
   </tr>
 
 <!-- Iterate through data rows -->
@@ -145,7 +149,7 @@
 
 <div style='height:2em;position:absolute;width:100%;'>
   <span class='small grayText'>
-  Sorted by best match, showing <%=markerStart%> -
+  Showing <%=markerStart%> -
   <%=markerStop%> of <%=markerResultContainer.size()%>&nbsp;&nbsp;&nbsp;
   <%=previousLink%> <%=nextLink%>
   </span>
