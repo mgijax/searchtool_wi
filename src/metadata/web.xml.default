@@ -14,7 +14,9 @@
   <url-pattern>/Search.do</url-pattern>
 </servlet-mapping>
 
-<!-- Install Specific Values -->
+<!---------------------------------------------- Install Specific Values -->
+
+<!-- Global Config -->
 <context-param>
   <param-name>globalConfig</param-name>
   <param-value>
@@ -22,6 +24,7 @@
   </param-value>
 </context-param>
 
+<!-- Template Location -->
 <context-param>
   <param-name>teplateLoc</param-name>
   <param-value>
@@ -29,10 +32,19 @@
   </param-value>
 </context-param>
 
+<!-- Index Directory-->
 <context-param>
   <param-name>indexDir</param-name>
   <param-value>
     /data/searchtool/searchtool_wi/
+  </param-value>
+</context-param>
+
+<!-- Result Cache Size-->
+<context-param>
+  <param-name>resultCacheSize</param-name>
+  <param-value>
+    25
   </param-value>
 </context-param>
 
