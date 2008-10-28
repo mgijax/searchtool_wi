@@ -5,6 +5,7 @@ import java.util.*;
 import java.io.IOException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -39,6 +40,7 @@ public class Search extends HttpServlet {
   private static OtherDisplayLookup otherDisplayLookup;
   private static MarkerVocabSearchCache markerVocabSearchCache;
   private static Logger logger;
+  private static ServletContext servletContext;
 
   private static QS_MarkerResultCache markerResultCache;
   private static QS_VocabResultCache vocabResultCache;
@@ -55,14 +57,17 @@ public class Search extends HttpServlet {
   */
   public void init () {
 
+    // Servlet Context - access to parameters in web.xml
+    servletContext = getServletContext();
+
     // Setup a Configuration object
-    String glocalConfigLoc = getServletContext().getInitParameter("globalConfig");
+    String glocalConfigLoc = servletContext.getInitParameter("globalConfig");
     try {
-        stConfig = (WebAppCfg)WebAppCfg.load(glocalConfigLoc, false);
+      stConfig = (WebAppCfg)WebAppCfg.load(glocalConfigLoc, false);
+      // move some web.xml parameters to our native mgi config object
+      stConfig.set("INDEX_DIR", servletContext.getInitParameter("indexDir"));
     }
-    catch (Exception exc) {
-        exc.printStackTrace();
-    }
+    catch (Exception e) { e.printStackTrace(); }
 
     // log4j logging
     logger = Logger.getLogger(Search.class.getName());
@@ -80,8 +85,10 @@ public class Search extends HttpServlet {
     tokenExistanceCache = TokenExistanceCache.getTokenExistanceCache(stConfig);
 
     // Caching of result sets returned from Search execution
-    markerResultCache = new QS_MarkerResultCache(stConfig);
-    vocabResultCache = new QS_VocabResultCache(stConfig);
+    markerResultCache
+      = new QS_MarkerResultCache(servletContext.getInitParameter("resultCacheSize"));
+    vocabResultCache
+      = new QS_VocabResultCache(servletContext.getInitParameter("resultCacheSize"));
   }
 
 

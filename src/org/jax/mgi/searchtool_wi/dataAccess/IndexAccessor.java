@@ -102,6 +102,7 @@ public class IndexAccessor {
     }
 
     public List<Hit> searchMarkerVocabAccID(SearchInput si) throws Exception {
+
         IndexSearcher searcher = isc.getMarkerVocabAccIDIndex();
 
         List<String> tokens = si.getSpaceSepTrailingPunctRemovedList();
