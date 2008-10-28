@@ -3,7 +3,6 @@ package org.jax.mgi.searchtool_wi.lookup;
 import java.util.*;
 
 import org.jax.mgi.searchtool_wi.results.QS_VocabResultContainer;
-import org.jax.mgi.shr.config.Configuration;
 
 /**
 * In-memory cache to hold vocab result-sets of/for user search strings.
@@ -17,29 +16,24 @@ public class QS_VocabResultCache {
   // Fields
   //--------//
 
-  // configuration inforation
-  private Configuration config;
-
   // Time-ordered list of input strings
   private LinkedList vocabContainerOrderQue;
 
   // Time-ordered list of input strings
   private Map<String,QS_VocabResultContainer> vocabResultContainers;
 
-  private static final int resultQueSize = 20;
-
   //-------------//
   // Constructor //
   //-------------//
-  public QS_VocabResultCache(Configuration c)
+  public QS_VocabResultCache(String resultCacheSizeStr)
   {
-    config = c;
+    int resultCacheSize = new Integer(resultCacheSizeStr).intValue();
 
     // Pre-fill que with empty strings; serves to initialize to it's run-time
     // size.  No size-checking logic will be required, as accessor execution
     // will only add/remove one result-set (maintaining this initial size)
     vocabContainerOrderQue = new LinkedList();
-    for (int count=0; count < resultQueSize; count++ ) {
+    for (int count=0; count < resultCacheSize; count++ ) {
         vocabContainerOrderQue.add( new String("") );
     }
 
