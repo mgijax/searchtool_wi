@@ -28,12 +28,14 @@
     String previousLink = new String("");
     String nextLink = new String("");
     if (markerStart.intValue() > 1) {
-        previousLink = "<a class=small href=Search.do?query=" + query + "&page=marker&markerStart="
-          + (markerStart - markerRange) + ">Previous</a>" ;
+        String forwardUrl = stConfig.get("QUICKSEARCH_URL") + "Search.do?query="
+          + displayHelper.getEncodedUrl(queryForward)
+          + "&page=marker&markerStart=" + (markerStart - markerRange);
+        previousLink = "<a class='small' href='" + forwardUrl + "'>Previous</a>";
     }
     if (markerStop.intValue() < markerResultContainer.size()) {
         String forwardUrl = stConfig.get("QUICKSEARCH_URL") + "Search.do?query="
-          + displayHelper.getEncodedUrl(query)
+          + displayHelper.getEncodedUrl(queryForward)
           + "&page=marker&markerStart=" + (markerStart + markerRange);
         nextLink = "<a class='small' href='" + forwardUrl + "'>Next</a>";
     }
