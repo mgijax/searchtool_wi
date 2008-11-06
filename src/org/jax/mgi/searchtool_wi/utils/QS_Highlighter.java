@@ -27,11 +27,12 @@ public class QS_Highlighter {
         workString = encodeSuperscript(workString);
 
         // Highlight the matching string
+        
         // Is this a prefix search?
         // If not, highlight everything
         // If so, and its a symbol search, do something special
         // If not, highlight everything
-
+        
         // Decode the Superscript stuff
 
         workString = decodeSuperscript(workString);
@@ -48,11 +49,11 @@ public class QS_Highlighter {
     }
 
     private String encodeSuperscript (String text) {
-        return text;
+        return text.replaceAll("<", "QWEHGTYDNEMNS").replaceAll(">","YTENSKDUSDHSDN");
     }
 
     private String decodeSuperscript (String text) {
-        return text;
+        return text.replaceAll("QWEHGTYDNEMNS", "<sup>").replaceAll("YTENSKDUSDHSDN", "</sup>");
     }
 
 }

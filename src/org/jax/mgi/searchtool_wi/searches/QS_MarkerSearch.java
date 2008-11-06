@@ -66,6 +66,15 @@ public class QS_MarkerSearch extends AbstractSearch
   private HashSet handledPirsfTerms         = new HashSet();
   private HashSet handledIpTerms            = new HashSet();
 
+  // filters
+  private boolean incNomen                  = true;
+  private boolean incAd                     = true;
+  private boolean incMp                     = true;
+  private boolean incGo                     = true;
+  private boolean incOmim                   = true;
+  private boolean incPirsf                  = true;
+  private boolean incIp                     = true;
+
   // both the "and" and the "or" search use the same index; if the have
   // an "and" hit, do not keep the "or" hit for the same document
   private HashSet handledDocIDs = new HashSet();
@@ -116,6 +125,8 @@ public class QS_MarkerSearch extends AbstractSearch
 
     timer.record("---Marker gatherData Started---");
 
+    parseParms(searchInput);
+
     // exact nomenclature matches
     searchExactMatches(searchInput);
     timer.record("Marker - Done searching Exact");
@@ -140,6 +151,40 @@ public class QS_MarkerSearch extends AbstractSearch
   }
 
   //---------------------------------------------------------- Private Methods
+
+  //--------------------//
+  // Input Parm Parsing
+  //--------------------//
+  private void parseParms (SearchInput searchInput)
+    throws Exception
+  {
+    if (searchInput.hasFormParameter("exclude") ) {
+        for (String excludeItem : searchInput.getParameterValues("exclude")) {
+            if (excludeItem.equals("nomen") ) {
+                incNomen=false;
+            }
+            else if (excludeItem.equals("ad") ) {
+                incAd=false;
+            }
+            else if (excludeItem.equals("mp") ) {
+                incMp=false;
+            }
+            else if (excludeItem.equals("go") ) {
+                incGo=false;
+            }
+            else if (excludeItem.equals("omim") ) {
+                incOmim=false;
+            }
+            else if (excludeItem.equals("pirsf") ) {
+                incPirsf=false;
+            }
+            else if (excludeItem.equals("Ip") ) {
+                incIp=false;
+            }
+        }
+    }
+  }
+
 
   //---------------------//
   // Search Exact Matches
@@ -813,118 +858,124 @@ public class QS_MarkerSearch extends AbstractSearch
     QS_MarkerResult thisMarker;
 
     // assign exact input string matches to their markers
-    for (Iterator iter = exactInputStrMatches.iterator(); iter.hasNext();) {
-        mem = (MarkerMatch)iter.next();
-        thisMarker = getMarker( mem.getDbKey() );
-        thisMarker.addExactMatch(mem);
-        thisMarker.flagExactInputStrMatch();
-    }
+    if (incNomen) {
+        for (Iterator iter = exactInputStrMatches.iterator(); iter.hasNext();) {
+            mem = (MarkerMatch)iter.next();
+            thisMarker = getMarker( mem.getDbKey() );
+            thisMarker.addExactMatch(mem);
+            thisMarker.flagExactInputStrMatch();
+        }
 
-    // assign exact matches to their markers
-    for (Iterator iter = exactNomenMatches.iterator(); iter.hasNext();) {
-        mem = (MarkerMatch)iter.next();
-        thisMarker = getMarker( mem.getDbKey() );
-        thisMarker.addExactMatch(mem);
-        thisMarker.flagExactInputTokenMatch();
-    }
+        // assign exact matches to their markers
+        for (Iterator iter = exactNomenMatches.iterator(); iter.hasNext();) {
+            mem = (MarkerMatch)iter.next();
+            thisMarker = getMarker( mem.getDbKey() );
+            thisMarker.addExactMatch(mem);
+            thisMarker.flagExactInputTokenMatch();
+        }
 
-    // assign nomen matches to their markers
-    for (Iterator iter = markerNomenMatches.iterator(); iter.hasNext();) {
-        nm = (MarkerMatch)iter.next();
-        thisMarker = getMarker( nm.getDbKey() );
-        thisMarker.addNomenMatch(nm);
+        // assign nomen matches to their markers
+        for (Iterator iter = markerNomenMatches.iterator(); iter.hasNext();) {
+            nm = (MarkerMatch)iter.next();
+            thisMarker = getMarker( nm.getDbKey() );
+            thisMarker.addNomenMatch(nm);
+        }
     }
 
     // assign AD matches to their markers
-    for (Iterator iter = adMatches.iterator(); iter.hasNext();) {
-
-        markerVocabMatch = (MarkerVocabMatch)iter.next();
-        markerKeys = markerVocabSearchCache.getAdAnnotMarkers(markerVocabMatch.getDbKey());
-        if (markerKeys != null) {
-            for (Iterator mrkKeyIter = markerKeys.iterator(); mrkKeyIter.hasNext();) {
-                thisMarker = getMarker((String)mrkKeyIter.next());
-                thisMarker.addAdMatch(markerVocabMatch);
+    if (incAd) {
+        for (Iterator iter = adMatches.iterator(); iter.hasNext();) {
+            markerVocabMatch = (MarkerVocabMatch)iter.next();
+            markerKeys = markerVocabSearchCache.getAdAnnotMarkers(markerVocabMatch.getDbKey());
+            if (markerKeys != null) {
+                for (Iterator mrkKeyIter = markerKeys.iterator(); mrkKeyIter.hasNext();) {
+                    thisMarker = getMarker((String)mrkKeyIter.next());
+                    thisMarker.addAdMatch(markerVocabMatch);
+                }
             }
         }
     }
 
     // assign GO matches to their markers
-    for (Iterator iter = goMatches.iterator(); iter.hasNext();) {
-
-        markerVocabMatch = (MarkerVocabMatch)iter.next();
-        markerKeys = markerVocabSearchCache.getGoAnnotMarkers(markerVocabMatch.getDbKey());
-        if (markerKeys != null) {
-            for (Iterator mrkKeyIter = markerKeys.iterator(); mrkKeyIter.hasNext();) {
-                thisMarker = getMarker((String)mrkKeyIter.next());
-                thisMarker.addGoMatch(markerVocabMatch);
+    if (incGo) {
+        for (Iterator iter = goMatches.iterator(); iter.hasNext();) {
+            markerVocabMatch = (MarkerVocabMatch)iter.next();
+            markerKeys = markerVocabSearchCache.getGoAnnotMarkers(markerVocabMatch.getDbKey());
+            if (markerKeys != null) {
+                for (Iterator mrkKeyIter = markerKeys.iterator(); mrkKeyIter.hasNext();) {
+                    thisMarker = getMarker((String)mrkKeyIter.next());
+                    thisMarker.addGoMatch(markerVocabMatch);
+                }
             }
         }
     }
 
     // assign MP matches to their markers
-    for (Iterator iter = mpMatches.iterator(); iter.hasNext();) {
-
-        markerVocabMatch = (MarkerVocabMatch)iter.next();
-        markerKeys = markerVocabSearchCache.getMpAnnotMarkers(markerVocabMatch.getDbKey());
-        if (markerKeys != null) {
-            for (Iterator mrkKeyIter = markerKeys.iterator(); mrkKeyIter.hasNext();) {
-                thisMarker = getMarker((String)mrkKeyIter.next());
-                thisMarker.addMpMatch(markerVocabMatch);
+    if (incMp) {
+        for (Iterator iter = mpMatches.iterator(); iter.hasNext();) {
+            markerVocabMatch = (MarkerVocabMatch)iter.next();
+            markerKeys = markerVocabSearchCache.getMpAnnotMarkers(markerVocabMatch.getDbKey());
+            if (markerKeys != null) {
+                for (Iterator mrkKeyIter = markerKeys.iterator(); mrkKeyIter.hasNext();) {
+                    thisMarker = getMarker((String)mrkKeyIter.next());
+                    thisMarker.addMpMatch(markerVocabMatch);
+                }
             }
         }
     }
 
     // assign Omim matches to their markers
-    for (Iterator iter = omimMatches.iterator(); iter.hasNext();) {
-
-        markerVocabMatch = (MarkerVocabMatch)iter.next();
-        markerKeys = markerVocabSearchCache.getOmimAnnotMarkers(markerVocabMatch.getDbKey());
-        if (markerKeys != null) {
-            for (Iterator mrkKeyIter = markerKeys.iterator(); mrkKeyIter.hasNext();) {
-                thisMarker = getMarker((String)mrkKeyIter.next());
-                thisMarker.addOmimMatch(markerVocabMatch);
+    if (incOmim) {
+        for (Iterator iter = omimMatches.iterator(); iter.hasNext();) {
+            markerVocabMatch = (MarkerVocabMatch)iter.next();
+            markerKeys = markerVocabSearchCache.getOmimAnnotMarkers(markerVocabMatch.getDbKey());
+            if (markerKeys != null) {
+                for (Iterator mrkKeyIter = markerKeys.iterator(); mrkKeyIter.hasNext();) {
+                    thisMarker = getMarker((String)mrkKeyIter.next());
+                    thisMarker.addOmimMatch(markerVocabMatch);
+                }
             }
         }
     }
 
     // assign Omim ortho matches to their markers
-    for (Iterator iter = omimOrthoMatches.iterator(); iter.hasNext();) {
-
-        markerVocabMatch = (MarkerVocabMatch)iter.next();
-        markerKeys = markerVocabSearchCache.getOmimOrthoAnnotMarkers(markerVocabMatch.getDbKey());
-        if (markerKeys != null) {
-            for (Iterator mrkKeyIter = markerKeys.iterator(); mrkKeyIter.hasNext();) {
-                thisMarker = getMarker((String)mrkKeyIter.next());
-                thisMarker.addOmimOrthoMatch(markerVocabMatch);
-
+    if (incOmim) {
+        for (Iterator iter = omimOrthoMatches.iterator(); iter.hasNext();) {
+            markerVocabMatch = (MarkerVocabMatch)iter.next();
+            markerKeys = markerVocabSearchCache.getOmimOrthoAnnotMarkers(markerVocabMatch.getDbKey());
+            if (markerKeys != null) {
+                for (Iterator mrkKeyIter = markerKeys.iterator(); mrkKeyIter.hasNext();) {
+                    thisMarker = getMarker((String)mrkKeyIter.next());
+                    thisMarker.addOmimOrthoMatch(markerVocabMatch);
+                }
             }
         }
     }
 
     // assign PIRSF matches to their markers
-    for (Iterator iter = pirsfMatches.iterator(); iter.hasNext();) {
-
-        markerVocabMatch = (MarkerVocabMatch)iter.next();
-        markerKeys = markerVocabSearchCache.getPsAnnotMarkers(markerVocabMatch.getDbKey());
-
-        if (markerKeys != null) {
-            for (Iterator mrkKeyIter = markerKeys.iterator(); mrkKeyIter.hasNext();) {
-                thisMarker = getMarker((String)mrkKeyIter.next());
-                thisMarker.addPirsfMatch(markerVocabMatch);
+    if (incPirsf) {
+        for (Iterator iter = pirsfMatches.iterator(); iter.hasNext();) {
+            markerVocabMatch = (MarkerVocabMatch)iter.next();
+            markerKeys = markerVocabSearchCache.getPsAnnotMarkers(markerVocabMatch.getDbKey());
+            if (markerKeys != null) {
+                for (Iterator mrkKeyIter = markerKeys.iterator(); mrkKeyIter.hasNext();) {
+                    thisMarker = getMarker((String)mrkKeyIter.next());
+                    thisMarker.addPirsfMatch(markerVocabMatch);
+                }
             }
         }
     }
 
     // assign ip matches to their markers
-    for (Iterator iter = ipMatches.iterator(); iter.hasNext();) {
-
-        markerVocabMatch = (MarkerVocabMatch)iter.next();
-        markerKeys = markerVocabSearchCache.getIpAnnotMarkers(markerVocabMatch.getDbKey());
-
-        if (markerKeys != null) {
-            for (Iterator mrkKeyIter = markerKeys.iterator(); mrkKeyIter.hasNext();) {
-                thisMarker = getMarker((String)mrkKeyIter.next());
-                thisMarker.addIpMatch(markerVocabMatch);
+    if (incOmim) {
+        for (Iterator iter = ipMatches.iterator(); iter.hasNext();) {
+            markerVocabMatch = (MarkerVocabMatch)iter.next();
+            markerKeys = markerVocabSearchCache.getIpAnnotMarkers(markerVocabMatch.getDbKey());
+            if (markerKeys != null) {
+                for (Iterator mrkKeyIter = markerKeys.iterator(); mrkKeyIter.hasNext();) {
+                    thisMarker = getMarker((String)mrkKeyIter.next());
+                    thisMarker.addIpMatch(markerVocabMatch);
+                }
             }
         }
     }

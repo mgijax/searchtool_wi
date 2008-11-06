@@ -291,13 +291,13 @@ public class Search extends HttpServlet {
   {
     // first, try to retrieve this result set from cache
     QS_MarkerResultContainer markerResultContainer
-      = markerResultCache.getMarkerContainer( searchInput.getSearchString().toLowerCase() );
+      = markerResultCache.getMarkerContainer( searchInput.getCacheString().toLowerCase() );
 
     // if not found in cache, generarate the result set and add to cache
     if (markerResultContainer == null) {
         QS_MarkerSearch markerSearch = new QS_MarkerSearch(stConfig);
         markerResultContainer = new QS_MarkerResultContainer(markerSearch.search(searchInput));
-        markerResultCache.addMarkerContainer(searchInput.getSearchString().toLowerCase(), markerResultContainer);
+        markerResultCache.addMarkerContainer(searchInput.getCacheString().toLowerCase(), markerResultContainer);
     }
     return markerResultContainer;
   }
@@ -308,13 +308,13 @@ public class Search extends HttpServlet {
   {
     // first, try to retrieve this result set from cache
     QS_VocabResultContainer vocabResultContainer
-      = vocabResultCache.getVocabContainer( searchInput.getSearchString() );
+      = vocabResultCache.getVocabContainer( searchInput.getCacheString() );
 
     // if not found in cache, generarate the result set and add to cache
     if (vocabResultContainer == null) {
         QS_VocabSearch vocabSearch = new QS_VocabSearch(stConfig);
         vocabResultContainer = new QS_VocabResultContainer(vocabSearch.search(searchInput));
-        vocabResultCache.addVocabContainer(searchInput.getSearchString(), vocabResultContainer);
+        vocabResultCache.addVocabContainer(searchInput.getCacheString(), vocabResultContainer);
     }
     return vocabResultContainer;
   }

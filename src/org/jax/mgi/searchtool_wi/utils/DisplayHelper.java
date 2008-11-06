@@ -99,7 +99,7 @@ public class DisplayHelper
   {
     String star = "<img src=" + stConfig.get("QUICKSEARCH_URL")
       + "darkStarSmall.gif>";
-    String scoreMouseOver = "return overlib('Score is based on similarity between your text and IDs, nomenclature, and vocabulary term text in MGIs database.<br/>" + star + star + star + " - perfect match between you search and matched text<br/>&nbsp;&nbsp;" + star + star + " - all words in your search appear in matched text<br/>&nbsp;&nbsp;&nbsp;&nbsp;" + star + " - some words in your search appear in matched text ', STICKY, CAPTION, 'Score', HAUTO, BELOW, WIDTH, 375, DELAY, 600, CLOSECLICK, CLOSETEXT, 'Close X')";
+    String scoreMouseOver = "return overlib('Score is based on similarity between your text and IDs, nomenclature, and vocabulary term text in MGIs database.<br/>" + star + star + star + " - perfect match between your search and matched text<br/>&nbsp;&nbsp;" + star + star + " - all words in your search appear in matched text<br/>&nbsp;&nbsp;&nbsp;&nbsp;" + star + " - some words in your search appear in matched text ', STICKY, CAPTION, 'Score', HAUTO, BELOW, WIDTH, 375, DELAY, 600, CLOSECLICK, CLOSETEXT, 'Close X')";
 
     return scoreMouseOver;
   }
@@ -475,8 +475,11 @@ public class DisplayHelper
 
   public String getMrkWhyMatchText (QS_MarkerResult markerResult)
   {
-    String linkText = "&nbsp;&nbsp;and " + (markerResult.getMatchCount() -1 ) + " more...";
-    return linkText;
+    if ( markerResult.getMatchCount() > 1 ) {
+        return "&nbsp;&nbsp;and " + (markerResult.getMatchCount() -1 ) + " more...";
+    }else {
+        return "&nbsp;&nbsp;and more detail...";
+    }
   }
 
   /**

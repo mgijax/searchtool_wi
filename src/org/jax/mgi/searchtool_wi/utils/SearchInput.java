@@ -26,6 +26,7 @@ public class SearchInput {
   private static Logger log = Logger.getLogger(SearchInput.class.getName());
 
   private String searchString = new String("");
+  private String cacheString = new String("");
   private List<String> zeroHitTokens   = new ArrayList<String>();
   private HashMap formParameters = new HashMap();
 
@@ -34,8 +35,8 @@ public class SearchInput {
   //-------------//
 
   public SearchInput(){}
-  public SearchInput(HttpServletRequest req){
-
+  public SearchInput(HttpServletRequest req)
+  {
     formParameters = new HashMap(req.getParameterMap());
 
     // Check for specific parameters, and take appropriate action
@@ -47,6 +48,13 @@ public class SearchInput {
         if (searchString == null){
             searchString = "";
         }
+    }
+
+    // setup cache string for result-set caching
+    cacheString =  searchString;
+    String[] excludeArray = getParameterValues("exclude");
+    for (String excludeItem : excludeArray) {
+        cacheString = cacheString + "_EXCLUDE" + excludeItem;
     }
   }
 
@@ -100,6 +108,12 @@ public class SearchInput {
     return returnValue;
   }
 
+  //----------------------------------------//
+  // Cache tring access for a given request
+  //----------------------------------------//
+  public String getCacheString() {
+      return cacheString;
+  }
 
   //------------------------------------------//
   // Parsed Tokens and IDs from Search String
@@ -153,8 +167,6 @@ public class SearchInput {
   public List getStemmedTokenizedLittleInputString () throws IOException {
       StemmedMGITokenCountAnalyzer tca = new StemmedMGITokenCountAnalyzer();
 
-      //log.info("TLCS For Normal Tokens: " + getTransformedLowerCaseString());
-
       ArrayList <String> tokens2 = new ArrayList <String>();
 
       String [] catcher = getTransformedLowerCaseString().split("\"");
@@ -172,8 +184,6 @@ public class SearchInput {
           else {
 
               ArrayList quotesTokens = AnalyzerUtils.getTokenList(tca, catcher[i]);
-
-              //log.info("Items in quotes: " + quotesTokens.size());
 
               if (quotesTokens.size() > 0) {
                   String quotesToken = "\"";
@@ -211,8 +221,6 @@ public class SearchInput {
   public List getTokenizedLittleInputString () throws IOException {
       MGITokenCountAnalyzer tca = new MGITokenCountAnalyzer();
 
-      //log.info("TLCS For Normal Tokens: " + getTransformedLowerCaseString());
-
       ArrayList <String> tokens2 = new ArrayList <String>();
 
       String [] catcher = getTransformedLowerCaseString().split("\"");
@@ -236,8 +244,6 @@ public class SearchInput {
           else {
 
               ArrayList quotesTokens = AnalyzerUtils.getTokenList(tca, catcher[i]);
-
-              //log.info("Items in quotes: " + quotesTokens.size());
 
               if (quotesTokens.size() > 0) {
                   String quotesToken = "\"";
@@ -281,14 +287,10 @@ public class SearchInput {
             // to first split it up
             // into its component parts.
 
-            String temp_string = catcher[i].replaceAll("[\\W&&[^:]]", " ");
-
-            //System.out.println("TEMP STRING: " + temp_string);
-
             subCatcher = catcher[i].split("\\s");
 
             for (int j = 0; j < subCatcher.length; j++) {
-                //System.out.println("Token: " + subCatcher[j] + " W/o Trailing Punct: " + removeTrailingPunct(subCatcher[j]));
+
                 String work_string = removeTrailingPunct(subCatcher[j]);
 
                 if (isPrefix(work_string))
@@ -339,6 +341,8 @@ public class SearchInput {
                         // Since its not an ID we replace all its puncutation with whitespace, and add
                         // it to the stream.
 
+                        //log.info("About to add a new set of tokens: |"+work_string.replaceAll("\\W", " ")+"|");
+                        
                         outString += " " + work_string.replaceAll("\\W", " ");
                     }
                 }
@@ -382,14 +386,12 @@ public class SearchInput {
               noPunctToken = removeTrailingPunct(temp_tokens[i]);
               if (noPunctToken != null && ! noPunctToken.equals("")&& ! noPunctToken.equals(" ") && ! isPrefix(noPunctToken)) {
                   tokens.add(noPunctToken);
-                  log.debug("Adding token to check: " + noPunctToken);
               }
 
           }
       }
       catch (Exception e) {
-          log.debug("***AnalyzerUtils.getTokenLis***");
-          e.printStackTrace();
+          log.error(e);
       }
 
       return tokens;
@@ -412,14 +414,13 @@ public class SearchInput {
                 if (! subCatcher[j].equals("")) {
                     String temp_transformed = removeTrailingPunct(subCatcher[j]);
                     if (temp_transformed != null && ! temp_transformed.equals("")) {
-                        log.info("Adding Token SPOT 3: |" + temp_transformed + "|");
-                        tokens.add(escapeString(temp_transformed));
+                        tokens.add(escapeString(temp_transformed, true));
                     }
                 }
             }
         }
         else {
-            tokens.add(escapeString(catcher[i].replaceAll("\\s+", " ").replaceAll("^\\s", "").replaceAll("\\s$", "")));
+            tokens.add(escapeString(catcher[i].replaceAll("\\s+", " ").replaceAll("^\\s", "").replaceAll("\\s$", ""),false));
         }
     }
 
@@ -445,19 +446,15 @@ public class SearchInput {
                  if (! subCatcher[j].equals("")) {
                      String temp_transformed = removeTrailingPunct(subCatcher[j]);
                      if (temp_transformed != null && ! temp_transformed.equals("")) {
-                         log.info("Adding Token SPOT 1: |" + temp_transformed + "|");
                          tokens.add(temp_transformed);
                      }
                  }
              }
          }
          else {
-             log.info("Adding Token SPOT2: |" + catcher[i].replaceAll("\\s+", " ").replaceAll("^\\s", "").replaceAll("\\s$", "") + "|");
              tokens.add(catcher[i].replaceAll("\\s+", " ").replaceAll("^\\s", "").replaceAll("\\s$", ""));
          }
      }
-
-     log.info("Token list size coming out of the searchInput: " + tokens.size());
 
      return tokens;
    }
@@ -530,7 +527,7 @@ public class SearchInput {
      * @return
      */
 
-    private String escapeString (String text)
+    private String escapeString (String text, Boolean preservePrefix)
     {
         String [] regex_patterns = {"\\\\", "\\!", "\\(", "\\)", "\\[", "\\]", "\\{", "\\}",
                 "\\+", "\\-", "\\&\\&", "\\|\\|", "\\*", "\\?", "\\:",
@@ -548,9 +545,10 @@ public class SearchInput {
             text = text.replaceAll(regex_patterns[i], replacement_patterns[i]);
         }
 
-        // Make sure prefix searches are intact!
-
-        text = text.replaceAll("\\\\\\*$", "*");
+        // Make sure prefix searches are intact, if they are intended to be as such.
+        if (preservePrefix) {
+            text = text.replaceAll("\\\\\\*$", "*");
+        }
 
         return text;
     }
@@ -677,7 +675,6 @@ public class SearchInput {
 
         stopPattern += ") .*";
 
-        //log.info("The stop pattern: "+ stopPattern);
         // Are there any stop words? Pad the searchstring with a space in order to catch
         // leading or trailing stopwords.
         return Pattern.matches(stopPattern, " " +searchString.toLowerCase()+ " ");

@@ -85,10 +85,7 @@ public class IndexAccessor {
         for (Iterator<String> tokenIter = tokens.iterator(); tokenIter
                 .hasNext();) {
             String token = (String) tokenIter.next();
-            //Term t = new Term(IndexConstants.COL_DATA, token.toLowerCase().replaceAll("\"", ""));
             Term t = new Term(IndexConstants.COL_DATA, token);
-
-            log.info("The AccID Query: " + t);
 
             TermQuery tq = new TermQuery(t);
             hits = searcher.search(tq);
@@ -128,30 +125,17 @@ public class IndexAccessor {
 
         List<String> tokens = si.getSpaceSepEscapedTrailingPunctRemovedList();
 
-        log.info("Token List Size: " + tokens.size());
-
         ArrayList<Hit> hitsList = new ArrayList<Hit>();
 
         for (Iterator<String> tokenIter = tokens.iterator(); tokenIter
                 .hasNext();) {
 
             String token = (String) tokenIter.next();
-            System.out.println("Symbol Token: |" + token + "|");
-
-            // This is the old, incorrect way for doing this.
-
-            //Term t = new Term(IndexConstants.COL_DATA, token.toLowerCase().replaceAll("\"", ""));
-            //Term t = new Term(IndexConstants.COL_DATA, token);
-
-            //TermQuery tq = new TermQuery(t);
+            log.debug("Search Symbol Exact Token: |" + token + "|");
 
             Query symbol_query = qp_big_token.parse(token);
 
-            System.out.println("The Symbol Query: " + symbol_query);
-
             hits = searcher.search(symbol_query);
-
-            System.out.println("The Symbol Hits: " + hits.length());
 
             for (Iterator<Hit> hitIter = hits.iterator(); hitIter.hasNext();) {
                 hitsList.add((Hit) hitIter.next());
@@ -165,31 +149,26 @@ public class IndexAccessor {
     public List<Hit> searchMarkerExactByBigToken(SearchInput si) throws Exception {
         IndexSearcher searcher = isc.getMarkerExactIndex();
 
-        List<String> tokens = si.getSpaceSepEscapedTrailingPunctRemovedList();
-        //List<String> tokens = si.getSpaceSepTrailingPunctRemovedList();
+        List<String> tokens = si.getSpaceSepTrailingPunctRemovedList();
         ArrayList<Hit> hitsList = new ArrayList<Hit>();
 
         for (Iterator<String> tokenIter = tokens.iterator(); tokenIter
                 .hasNext();) {
 
             String token = (String) tokenIter.next();
-            log.info("Marker Exact Token: " + token);
-
+            
             Term t = new Term(IndexConstants.COL_DATA, token);
 
             TermQuery tq = new TermQuery(t);
 
-            log.info("The Marker Exact Query: " + tq);
 
             hits = searcher.search(tq);
-
-            log.info("BIGTOKENHITS: " + hits.length());
 
             for (Iterator<Hit> hitIter = hits.iterator(); hitIter.hasNext();) {
                 hitsList.add((Hit) hitIter.next());
             }
         }
-
+        
         return hitsList;
     }
 
@@ -227,8 +206,6 @@ public class IndexAccessor {
 
             String token = tokenIter.next();
 
-            //log.debug("Token: " +token);
-
             Term t = new Term(IndexConstants.COL_DATA, token);
             TermQuery tq = new TermQuery(t);
             hits = searcher.search(tq);
@@ -253,7 +230,6 @@ public class IndexAccessor {
     public Hits searchOtherExact(String token) throws Exception {
 
         IndexSearcher searcher = isc.getOtherExactIndex();
-        // log.debug("Token: " +token);
 
         Term t = new Term(IndexConstants.COL_DATA, token);
         TermQuery tq = new TermQuery(t);
@@ -301,8 +277,6 @@ public class IndexAccessor {
             query_snow = qp_snow.parse(si_stemmed);
             bq.add(query_snow, BooleanClause.Occur.SHOULD);
         }
-
-        log.debug("Query:" + bq);
 
         hits = searcher.search(bq);
 
