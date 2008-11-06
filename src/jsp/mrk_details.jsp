@@ -55,7 +55,7 @@
   </td>
   <td class="whyMatchData" bgcolor="#ffffff">
     <span class="fontSize18 fontBold">
-      <a href="<%=javawi_url%>page=markerDetail&amp;key=<%=thisMarkerDisplay.getDbKey()%>">
+      <a href="<%=javawi_url%>WIFetch?page=markerDetail&amp;key=<%=thisMarkerDisplay.getDbKey()%>">
       <%=thisMarkerDisplay.getSymbol()%></a>
     </span>
     <br/>
@@ -230,7 +230,7 @@ for (Iterator iter = vocabMatches.iterator(); iter.hasNext();) {
     {%>
       </br>
       <span class="small fontItalic">
-       &nbsp;&nbsp;&nbsp;&nbsp;from its description
+       &nbsp;&nbsp;&nbsp;&nbsp;from its definition
       </span>
       <span class="small">
        : <%=thisMatch.getMatchedText()%>

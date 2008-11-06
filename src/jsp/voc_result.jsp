@@ -5,17 +5,18 @@
     QS_VocabResultContainer vocabResultContainer =
         (QS_VocabResultContainer)request.getAttribute("VocabResultContainer");
 
-    // derive needed data from passed request arrributes
-    Integer vocabStart = new Integer(0);
-    Integer vocabRange = new Integer(100);
+    // derive needed data from passed request attributes
+    Integer vocabStart = new Integer(1);   //default
+    Integer vocabRange = new Integer(100); //default
     if ( searchInput.hasFormParameter("vocabStart") ) {
         vocabStart = new Integer(searchInput.getParameter("vocabStart"));
     }
     if ( searchInput.hasFormParameter("vocabRange") ) {
         vocabRange = new Integer(searchInput.getParameter("vocabRange"));
     }
-    Integer vocabStop = vocabStart + vocabRange - 1;
-    if (vocabStart + vocabRange > vocabResultContainer.size() ) {
+
+    Integer vocabStop = vocabStart + vocabRange -1;
+    if (vocabStop > vocabResultContainer.size() ) {
         vocabStop = vocabResultContainer.size();
     }
 
@@ -47,9 +48,9 @@
   out.print("<table class='qsBucket' width='100%'><tr>");
   out.print("<td colspan='4' class='qsBucketHeader'>");
   out.print("Vocabulary Terms ");
-  out.print("<span class='small grayText'> Sorted by best match, showing " + (vocabStart + 1) + "-" + (vocabStop + 1) + " of "
-    + (vocabResultContainer.size() + 1) + "</span>&nbsp;&nbsp;&nbsp;&nbsp;");
-  if (vocabStart.intValue() > 0) {
+  out.print("<span class='small grayText'> Sorted by best match, showing " + (vocabStart) + "-" + (vocabStop) + " of "
+    + (vocabResultContainer.size()) + "</span>&nbsp;&nbsp;&nbsp;&nbsp;");
+  if (vocabStart.intValue() > 1) {
       out.print("<a class='small' href='Search.do?query=" + query + "&page=vocab&vocabStart="
         + (vocabStart - vocabRange) +"'>Previous</a> ");
   }
@@ -168,9 +169,9 @@
 </table>
 
 <%
-out.print("<span class='small grayText'> Showing " + (vocabStart + 1) + "-" + (vocabStop + 1) + " of "
-    + (vocabResultContainer.size() + 1) + "</span>&nbsp;&nbsp;&nbsp;&nbsp;");
-  if (vocabStart.intValue() > 0) {
+out.print("<span class='small grayText'> Showing " + (vocabStart) + "-" + (vocabStop) + " of "
+    + (vocabResultContainer.size()) + "</span>&nbsp;&nbsp;&nbsp;&nbsp;");
+  if (vocabStart.intValue() > 1) {
       out.print("<a class='small' href='Search.do?query=" + query + "&page=vocab&vocabStart="
         + (vocabStart - vocabRange) +"'>Previous</a> ");
   }

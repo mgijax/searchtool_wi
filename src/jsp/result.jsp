@@ -119,13 +119,12 @@
     </td>
     <td class='small'>
       <%=thisMarkerResult.getBestMatch().display()%>
-      <% if (displayHelper.needsMrkWhyMatchLink(thisMarkerResult) ) { %>
-        <a class="qsWhyMatchLink"
-          <%=displayHelper.getMarkerScoreMouseOver(thisMarkerResult)%>
-          href=<%=displayHelper.getMrkWhyMatchURL(thisMarkerResult, queryForward)%> >
-          <%=displayHelper.getMrkWhyMatchText(thisMarkerResult)%>
-        </a>
-      <% } %>
+
+      <a class="qsWhyMatchLink"
+        <%=displayHelper.getMarkerScoreMouseOver(thisMarkerResult)%>
+        href=<%=displayHelper.getMrkWhyMatchURL(thisMarkerResult, queryForward)%> >
+        <%=displayHelper.getMrkWhyMatchText(thisMarkerResult)%>
+      </a>
 
       <% if (debug) { %>
         <br/>result db key -> <%=thisMarkerResult.getDbKey()%>
