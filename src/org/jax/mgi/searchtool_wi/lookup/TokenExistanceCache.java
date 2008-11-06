@@ -168,23 +168,16 @@ public class TokenExistanceCache {
             bq.add(aQuery, BooleanClause.Occur.SHOULD);
             bq.add(eQuery, BooleanClause.Occur.SHOULD);
 
-            try
-            {
+            try {
                 Hits hits = is.search(bq);
 
-                log.info("loading token existance cache, hits: " + hits.length());
-                for (Iterator iter = hits.iterator(); iter.hasNext();)
-                {
-
+                log.info("loading token existance cache!");
+                for (Iterator iter = hits.iterator(); iter.hasNext();) {
                     Hit current = (Hit) iter.next();
                     tokenSet.add(current.get(IndexConstants.COL_DATA));
-                    //System.out.println("ID Added: " + current.get(IndexConstants.COL_DATA));
-                    //markerIDSet.add(current.get(IndexConstants.COL_DATA).toString());
-
                 }
             }
-            catch (Exception e)
-            {
+            catch (Exception e) {
                 log.error(e.getStackTrace().toString());
             }
 
@@ -216,10 +209,6 @@ public class TokenExistanceCache {
             log.error(e.getStackTrace().toString());
         }
 
-        log.info("Number of terms: " + tokenSet.size());
-/*        log.info("Number of Marker IDs: " + markerIDSet.size());
-        log.info("Number of Vocab IDs: " + vocabIDSet.size());
-*/
         log.info("TokenExistanceCache finished loading...");
 
     }

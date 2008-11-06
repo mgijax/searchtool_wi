@@ -173,7 +173,7 @@ public class OtherDisplayLookup
 
       log.info("OtherDisplayLookup loading...");
       isc = IndexSearcherContainer.getIndexSearcherContainer(stConfig);
-      log.info("Other Display Lookup finished loading...");
+      log.info("OtherDisplayLookup finished loading...");
       return;
   }
 

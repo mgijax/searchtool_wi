@@ -348,6 +348,7 @@ public class MarkerVocabSearchCache
         }
 
         loadNeeded = false;
+        log.info("MarkerVocabSearchCache finished loading...");
         return;
     }
 
