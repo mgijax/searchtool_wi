@@ -455,7 +455,13 @@ public String getTransformedLowerCaseStringOr() {
 }
 
 /**
- * Return a 
+ * Return a List of all the large tokens contained in the search string.
+ * 
+ * This is however unique in that it removes double quotes before 
+ * performing this operation.  As its intended usage is to be able 
+ * to tell us if individual words doesn't exists in the indexes, 
+ * with their punctuation intact.
+ * 
  * @return
  */
 
@@ -579,16 +585,16 @@ public String getTransformedLowerCaseStringOr() {
       return tokens;
     }
 
-  /**
+/*  *//**
   * Returns Count of Big Tokens in a given search string.
   * @return int - Count of the tokens in the given input string.
-  */
+  *//*
   public int getTokenCount() {
 
       List tokens = getTokenizedInputString();
 
       return tokens.size();
-  }
+  }*/
 
   /**
    * Returns Count of the little tokens in a given search string.
