@@ -210,14 +210,6 @@ public class SearchInput {
       return tokens2;
   }
 
-  public List getTokenizedInputString2 () throws IOException {
-      MGITokenCountAnalyzer tca = new MGITokenCountAnalyzer();
-
-      List tokens = AnalyzerUtils.getTokenList(tca, getEscapedLowerCaseSearchString());
-
-      return tokens;
-  }
-
   public List getTokenizedLittleInputString () throws IOException {
       MGITokenCountAnalyzer tca = new MGITokenCountAnalyzer();
 
@@ -461,22 +453,20 @@ public String getTransformedLowerCaseStringOr() {
     return outString.replaceAll("\\s+", " ").replaceAll("^\\s", "")
             .replaceAll("\\s$", "");
 }
-/**
-  * Returns tokenized list of parsed user's input string
-  * @return List - Tokenized list of parsed user's input string
-  */
-  public List getTokenizedInputString() {
 
-      //StemmedMGITokenCountAnalyzer tca = new StemmedMGITokenCountAnalyzer();
+/**
+ * Return a 
+ * @return
+ */
+
+  public List <String> getTokenizedInputString() {
+
       List<String> tokens = new ArrayList<String>();
 
       String work_string = this.searchString;
       String [] temp_tokens;
 
       try {
-
-          // This is the old way.
-          //tokens = AnalyzerUtils.getTokenList(tca, getTransformedLowerCaseString());
 
           work_string = searchString.replaceAll("\"", " ").toLowerCase();
 
@@ -504,7 +494,7 @@ public String getTransformedLowerCaseStringOr() {
   * Returns the uses input string broken on spaces, with items contained in quotes
   * remaining as intact tokens
   */
-  public List getEscapedLargeTokenList() {
+  public List <String> getEscapedLargeTokenList() {
     String[] catcher = this.searchString.toLowerCase().split("\"");
     String[] subCatcher;
     List <String> tokens = new ArrayList<String>();
@@ -535,7 +525,7 @@ public String getTransformedLowerCaseStringOr() {
    * punctuation removed, with items contained in quotes
    * remaining as intact tokens.
    */
-   public List getLargeTokenList() {
+   public List <String> getLargeTokenList() {
      String[] catcher = this.searchString.toLowerCase().split("\"");
      String[] subCatcher;
      List <String> tokens = new ArrayList<String>();

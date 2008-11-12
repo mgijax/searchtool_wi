@@ -323,7 +323,10 @@ public class IndexAccessor {
     }
 
     /**
-     * This is used in the token existance cache.
+     * Search for Other Objects by Whole term.
+     * 
+     * This is primarily used in the token existence cache.
+     * 
      * @param si
      * @return
      * @throws Exception
@@ -341,6 +344,13 @@ public class IndexAccessor {
 
     }
 
+    /**
+     * Search markers via small tokens, with an and search.
+     * @param si
+     * @return
+     * @throws Exception
+     */
+    
     public Hits searchMarkerAnd(SearchInput si) throws Exception {
         qp_snow.setDefaultOperator(QueryParser.Operator.AND);
         qp_pre.setDefaultOperator(QueryParser.Operator.AND);
@@ -349,6 +359,13 @@ public class IndexAccessor {
                 .getTransformedLowerCaseString());
     }
 
+    /**
+     * Search Markers via Small Tokens, with an or search.
+     * @param si
+     * @return
+     * @throws Exception
+     */
+    
     public Hits searchMarkerOr(SearchInput si) throws Exception {
         qp_snow.setDefaultOperator(QueryParser.Operator.OR);
         qp_pre.setDefaultOperator(QueryParser.Operator.OR);
@@ -358,7 +375,16 @@ public class IndexAccessor {
         
     }
 
-    public Hits searchMarker(String si, String si_stemmed) throws Exception {
+    /**
+     * This method does the work of searching markers by small tokens.
+     * Its currently wrapped by either searchMarkerAnd or searchMarkerOr
+     * @param si Unstemmed version of the transformed search string
+     * @param si_stemmed Stemmed version of the transformed search string
+     * @return
+     * @throws Exception
+     */
+    
+    private Hits searchMarker(String si, String si_stemmed) throws Exception {
         IndexSearcher searcher = isc.getMarkerInexactIndex();
 
         Query query_snow;
@@ -393,6 +419,14 @@ public class IndexAccessor {
         
     }
 
+    /**
+     * Search the vocabulary items via small tokens, and as an 
+     * And search.
+     * @param si SearchInput
+     * @return
+     * @throws Exception
+     */
+    
     public Hits searchVocabAnd(SearchInput si) throws Exception {
         qp_snow.setDefaultOperator(QueryParser.Operator.AND);
         qp_pre.setDefaultOperator(QueryParser.Operator.AND);
@@ -401,6 +435,14 @@ public class IndexAccessor {
                 .getTransformedLowerCaseString());
     }
 
+    /**
+     * Search the vocabulary items, via small tokens, and as an 
+     * Or search.
+     * @param si SearchInput
+     * @return
+     * @throws Exception
+     */
+    
     public Hits searchVocabOr(SearchInput si) throws Exception {
         qp_snow.setDefaultOperator(QueryParser.Operator.OR);
         qp_pre.setDefaultOperator(QueryParser.Operator.OR);
@@ -409,7 +451,17 @@ public class IndexAccessor {
                 .getTransformedLowerCaseStringOr());
     }
 
-    public Hits searchVocab(String si, String si_stemmed) throws Exception {
+    /**
+     * This method is what actually does the searching against the various
+     * vocabulary items.  Currently access to this is wrapped in either
+     * searchVocabAnd and searchVocabOr
+     * @param si Unstemmed version of the transformed search string
+     * @param si_stemmed Stemmed version of the transformed search string
+     * @return
+     * @throws Exception
+     */
+    
+    private Hits searchVocab(String si, String si_stemmed) throws Exception {
 
         IndexSearcher searcher = isc.getVocabInexact();
 
@@ -446,6 +498,13 @@ public class IndexAccessor {
         return hits;
     }
 
+    /**
+     * Search vocabulary by Whole Term
+     * @param si SearchInput
+     * @return Hits
+     * @throws Exception
+     */
+    
     public Hits searchVocabExactByWholeTerm(SearchInput si) throws Exception {
 
         IndexSearcher searcher = isc.getVocabExactIndex();
