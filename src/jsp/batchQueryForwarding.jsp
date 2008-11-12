@@ -14,10 +14,20 @@ function updateBatchTabForwardForm()
 };
 </script>
 
+<%  // Determine the max number to forward
+  int numToForward;
+  if (markerResultContainer.size() > 100) {
+    numToForward = 100;
+  }
+  else {
+    numToForward = markerResultContainer.size();
+  }
+%>
+
 <span class='small grayText'>
 Get more data for genome features 1 through
 </span>
-<input id="batchForwardSize" type="text" size="5" value='  100'></input>&nbsp;
+<input id="batchForwardSize" type="text" size="5" value='  <%=numToForward%>'></input>&nbsp;
 <span class='small grayText'>
 in
 </span>
@@ -27,9 +37,6 @@ in
 <input name='IDType' value='Symbol' type='hidden'>
 <input name='returnSet' value='Nomenclature' type='hidden'>
 <input name='returnSet' value='Location' type='hidden'>
-<input name='returnSet' value='Ensembl' type='hidden'>
-<input name='returnSet' value='EntrezGene' type='hidden'>
-<input name='returnSet' value='VEGA' type='hidden'>
 <input name='returnRad' value='None' type='hidden'>
 <input name='printFormat' value='toolbar' type='hidden'>
 <input name='column' value='1' type='hidden'>
@@ -44,9 +51,6 @@ in
 <input name='IDType' value='Symbol' type='hidden'>
 <input name='returnSet' value='Nomenclature' type='hidden'>
 <input name='returnSet' value='Location' type='hidden'>
-<input name='returnSet' value='Ensembl' type='hidden'>
-<input name='returnSet' value='EntrezGene' type='hidden'>
-<input name='returnSet' value='VEGA' type='hidden'>
 <input name='returnRad' value='None' type='hidden'>
 <input name='printFormat' value='dataDisplay' type='hidden'>
 <input name='column' value='1' type='hidden'>

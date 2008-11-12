@@ -155,7 +155,7 @@ for (Iterator iter = nomenMatches.iterator(); iter.hasNext();) {
     </span>
   </th>
   <th style='padding-left:15px;' width="94%">
-    Annotatied Term
+    Annotated Term
   </th>
 </tr>
 

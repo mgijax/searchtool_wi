@@ -107,7 +107,7 @@ public class QS_VocabSearch extends AbstractSearch {
     Hit hit;
     String vocabID;
 
-    Hits hits =  indexAccessor.searchVocabExact(searchInput);
+    Hits hits =  indexAccessor.searchVocabExactByWholeTerm(searchInput);
     logger.debug("VocabSearch.searchVocabExact hits -> " + hits.length());
     for (Iterator iter = hits.iterator(); iter.hasNext();)
     {
@@ -117,7 +117,7 @@ public class QS_VocabSearch extends AbstractSearch {
     }
 
     // search each token against vocab IDs
-    List idHits =  indexAccessor.searchVocabAccID(searchInput);
+    List idHits =  indexAccessor.searchVocabAccIDByLargeToken(searchInput);
     logger.debug("VocabSearch.searchVocabAccID hits -> " + idHits.size());
     for (Iterator hitIter = idHits.iterator(); hitIter.hasNext();)
     {

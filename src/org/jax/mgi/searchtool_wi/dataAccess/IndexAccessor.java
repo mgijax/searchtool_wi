@@ -50,7 +50,7 @@ public class IndexAccessor {
     private QueryParser qp_pre;
     private QueryParser qp_snow;
 
-    private QueryParser qp_big_token;
+    private QueryParser qp_large_token;
     private BooleanQuery bq = new BooleanQuery();
 
     private Configuration config;
@@ -66,20 +66,27 @@ public class IndexAccessor {
         qp_snow = new QueryParser(IndexConstants.COL_SDATA,
                 stemmed_mgi_analyzer);
         qp_pre = new QueryParser(IndexConstants.COL_DATA, mgi_analyzer);
-        qp_big_token = new QueryParser(IndexConstants.COL_DATA,
+        qp_large_token = new QueryParser(IndexConstants.COL_DATA,
                 new KeywordAnalyzer());
 
         qp_snow.setAllowLeadingWildcard(true);
         qp_pre.setAllowLeadingWildcard(true);
-        qp_big_token.setAllowLeadingWildcard(true);
+        qp_large_token.setAllowLeadingWildcard(true);
         BooleanQuery.setMaxClauseCount(100000);
         isc = IndexSearcherContainer.getIndexSearcherContainer(config);
     }
 
-    public List<Hit> searchMarkerAccID(SearchInput si) throws Exception {
+    /**
+     * Search for marker ID's by Large Tokens.
+     * @param si - A searchInput object
+     * @return A List of hits
+     * @throws Exception
+     */
+    
+    public List<Hit> searchMarkerAccIDByLargeToken(SearchInput si) throws Exception {
         IndexSearcher searcher = isc.getMarkerAccIDIndex();
 
-        List<String> tokens = si.getSpaceSepTrailingPunctRemovedList();
+        List<String> tokens = si.getLargeTokenList();
         ArrayList<Hit> hitsList = new ArrayList<Hit>();
 
         for (Iterator<String> tokenIter = tokens.iterator(); tokenIter
@@ -98,11 +105,37 @@ public class IndexAccessor {
         return hitsList;
     }
 
-    public List<Hit> searchMarkerVocabAccID(SearchInput si) throws Exception {
+    /**
+     * Search for marker ID's by Whole Term
+     * @param si
+     * @return
+     * @throws Exception
+     */
+    
+    public Hits searchMarkerAccIDByWholeTerm(SearchInput si) throws Exception {
+        IndexSearcher searcher = isc.getMarkerAccIDIndex();
+        Term t = new Term(IndexConstants.COL_DATA, si
+                .getWholeTermSearchString());
+        TermQuery tq = new TermQuery(t);
+
+        hits = searcher.search(tq);
+
+        return hits;
+    }
+    
+    /**
+     * Search Marker Related Vocabulary Acc ID's by the large tokens contained
+     * in the search string.
+     * @param si
+     * @return
+     * @throws Exception
+     */
+    
+    public List<Hit> searchMarkerVocabAccIDByLargeToken(SearchInput si) throws Exception {
 
         IndexSearcher searcher = isc.getMarkerVocabAccIDIndex();
 
-        List<String> tokens = si.getSpaceSepTrailingPunctRemovedList();
+        List<String> tokens = si.getLargeTokenList();
         ArrayList<Hit> hitsList = new ArrayList<Hit>();
 
         for (Iterator<String> tokenIter = tokens.iterator(); tokenIter
@@ -120,10 +153,37 @@ public class IndexAccessor {
         return hitsList;
     }
 
-    public List<Hit> searchMarkerSymbolExact(SearchInput si) throws Exception {
+    /**
+     * Search Marker Related Vocabulary Accession ID's by the Whole Term.
+     * @param si
+     * @return
+     * @throws Exception
+     */
+    
+    public Hits searchMarkerVocabAccIDByWholeTerm(SearchInput si) throws Exception {
+        IndexSearcher searcher = isc.getMarkerVocabAccIDIndex();
+        Term t = new Term(IndexConstants.COL_DATA, si
+                .getWholeTermSearchString());
+        TermQuery tq = new TermQuery(t);
+
+        hits = searcher.search(tq);
+
+        return hits;
+    }
+    
+    /**
+     * Search Marker Symbols By the Large Tokens contained in the search string.
+     * 
+     * Unlike other "Exact" searches, this one allows prefix searching to process.
+     * @param si
+     * @return
+     * @throws Exception
+     */
+    
+    public List<Hit> searchMarkerSymbolExactByLargeToken(SearchInput si) throws Exception {
         IndexSearcher searcher = isc.getMarkerSymbolIndex();
 
-        List<String> tokens = si.getSpaceSepEscapedTrailingPunctRemovedList();
+        List<String> tokens = si.getEscapedLargeTokenList();
 
         ArrayList<Hit> hitsList = new ArrayList<Hit>();
 
@@ -133,7 +193,7 @@ public class IndexAccessor {
             String token = (String) tokenIter.next();
             log.debug("Search Symbol Exact Token: |" + token + "|");
 
-            Query symbol_query = qp_big_token.parse(token);
+            Query symbol_query = qp_large_token.parse(token);
 
             hits = searcher.search(symbol_query);
 
@@ -145,11 +205,39 @@ public class IndexAccessor {
         return hitsList;
     }
 
+    /**
+     * Search marker symbols by whole term.  This currently does not allow
+     * the use of prefix searches.
+     * 
+     * @param si
+     * @return
+     * @throws Exception
+     */
+    
+    public Hits searchMarkerSymbolExactByWholeTerm(SearchInput si) throws Exception {
+        IndexSearcher searcher = isc.getMarkerSymbolIndex();
+        Term t = new Term(IndexConstants.COL_DATA, si
+                .getWholeTermSearchString());
+        TermQuery tq = new TermQuery(t);
 
-    public List<Hit> searchMarkerExactByBigToken(SearchInput si) throws Exception {
+        hits = searcher.search(tq);
+
+        return hits;
+    }
+    
+    /**
+     * Search marker non symbol nomenclature via large tokens contained in the search
+     * string.
+     * 
+     * @param si
+     * @return
+     * @throws Exception
+     */
+
+    public List<Hit> searchMarkerExactByLargeToken(SearchInput si) throws Exception {
         IndexSearcher searcher = isc.getMarkerExactIndex();
 
-        List<String> tokens = si.getSpaceSepTrailingPunctRemovedList();
+        List<String> tokens = si.getLargeTokenList();
         ArrayList<Hit> hitsList = new ArrayList<Hit>();
 
         for (Iterator<String> tokenIter = tokens.iterator(); tokenIter
@@ -161,7 +249,6 @@ public class IndexAccessor {
 
             TermQuery tq = new TermQuery(t);
 
-
             hits = searcher.search(tq);
 
             for (Iterator<Hit> hitIter = hits.iterator(); hitIter.hasNext();) {
@@ -172,33 +259,48 @@ public class IndexAccessor {
         return hitsList;
     }
 
-    public Hits searchMarkerExact(SearchInput si) throws Exception {
+    /**
+     * Search Marker non symbol nomenclature by Whole Term.
+     * @param si
+     * @return
+     * @throws Exception
+     */
+    
+    public Hits searchMarkerExactByWholeTerm(SearchInput si) throws Exception {
         IndexSearcher searcher = isc.getMarkerExactIndex();
         Term t = new Term(IndexConstants.COL_DATA, si
-                .getStrippedLowerCaseSearchString());
+                .getWholeTermSearchString());
         TermQuery tq = new TermQuery(t);
 
         hits = searcher.search(tq);
 
         return hits;
     }
-
-    public Hits searchMarkerVocabExact(SearchInput si) throws Exception {
+    
+    /**
+     * Search vocabulary nomenclature by whole term.
+     * @param si
+     * @return
+     * @throws Exception
+     */
+    
+    public Hits searchMarkerVocabExactByWholeTerm(SearchInput si) throws Exception {
 
         IndexSearcher searcher = isc.getMarkerVocabExactIndex();
         Term t = new Term(IndexConstants.COL_DATA, si
-                .getStrippedLowerCaseSearchString());
+                .getWholeTermSearchString());
         TermQuery tq = new TermQuery(t);
         hits = searcher.search(tq);
 
         return hits;
     }
 
-    public List searchOtherExact(SearchInput si) throws Exception {
+    
+    public List searchOtherExactByLargeToken(SearchInput si) throws Exception {
 
         IndexSearcher searcher = isc.getOtherExactIndex();
 
-        List<String> tokens = si.getSpaceSepTrailingPunctRemovedList();
+        List<String> tokens = si.getLargeTokenList();
         ArrayList<Hit> hitsList = new ArrayList<Hit>();
 
         for (Iterator<String> tokenIter = tokens.iterator(); tokenIter
@@ -227,7 +329,7 @@ public class IndexAccessor {
      * @throws Exception
      */
 
-    public Hits searchOtherExact(String token) throws Exception {
+    public Hits searchOtherExactByWholeTerm(String token) throws Exception {
 
         IndexSearcher searcher = isc.getOtherExactIndex();
 
@@ -251,8 +353,9 @@ public class IndexAccessor {
         qp_snow.setDefaultOperator(QueryParser.Operator.OR);
         qp_pre.setDefaultOperator(QueryParser.Operator.OR);
         bq = new BooleanQuery();
-        return searchMarker(si.getTransformedLowerCaseString(), si
-                .getTransformedLowerCaseString());
+        return searchMarker(si.getTransformedLowerCaseStringOr(), si
+                .getTransformedLowerCaseStringOr());
+        
     }
 
     public Hits searchMarker(String si, String si_stemmed) throws Exception {
@@ -260,33 +363,40 @@ public class IndexAccessor {
 
         Query query_snow;
         Query query_pre;
+        
+        // If we don't have a blank search string, set up the query.
+        
+        if (! si.equals("")) {
+            query_pre = qp_pre.parse(si);
+            bq.add(query_pre, BooleanClause.Occur.SHOULD);
 
-        query_pre = qp_pre.parse(si);
-        bq.add(query_pre, BooleanClause.Occur.SHOULD);
-
-        String[] temp = si.split("\\s");
-
-        Boolean flag = true;
-        for (int i = 0; i < temp.length; i++) {
-            if (temp[i].endsWith("*")) {
-                flag = false;
+            String[] temp = si.split("\\s");
+    
+            Boolean flag = true;
+            for (int i = 0; i < temp.length; i++) {
+                if (temp[i].endsWith("*")) {
+                    flag = false;
+                }
+            }
+    
+            if (flag) {
+                query_snow = qp_snow.parse(si_stemmed);
+                bq.add(query_snow, BooleanClause.Occur.SHOULD);
             }
         }
-
-        if (flag) {
-            query_snow = qp_snow.parse(si_stemmed);
-            bq.add(query_snow, BooleanClause.Occur.SHOULD);
-        }
-
+        
+        // Search, no matter what.
+        
         hits = searcher.search(bq);
-
+    
         return hits;
-
+        
     }
 
     public Hits searchVocabAnd(SearchInput si) throws Exception {
         qp_snow.setDefaultOperator(QueryParser.Operator.AND);
         qp_pre.setDefaultOperator(QueryParser.Operator.AND);
+        bq = new BooleanQuery();
         return searchVocab(si.getTransformedLowerCaseString(), si
                 .getTransformedLowerCaseString());
     }
@@ -294,8 +404,9 @@ public class IndexAccessor {
     public Hits searchVocabOr(SearchInput si) throws Exception {
         qp_snow.setDefaultOperator(QueryParser.Operator.OR);
         qp_pre.setDefaultOperator(QueryParser.Operator.OR);
-        return searchVocab(si.getTransformedLowerCaseString(), si
-                .getTransformedLowerCaseString());
+        bq = new BooleanQuery();
+        return searchVocab(si.getTransformedLowerCaseStringOr(), si
+                .getTransformedLowerCaseStringOr());
     }
 
     public Hits searchVocab(String si, String si_stemmed) throws Exception {
@@ -306,44 +417,50 @@ public class IndexAccessor {
         Query query_snow;
         Query query_pre;
 
-        String[] temp = si.split("\\s");
-
-        Boolean flag = true;
-        for (int i = 0; i < temp.length; i++) {
-            if (temp[i].endsWith("*")) {
-                flag = false;
+        // If the query string isn't blank, set up the query.
+        
+        if (! si.equals("")) {
+            
+            String[] temp = si.split("\\s");
+    
+            Boolean flag = true;
+            for (int i = 0; i < temp.length; i++) {
+                if (temp[i].endsWith("*")) {
+                    flag = false;
+                }
             }
+    
+            if (flag) {
+                query_snow = qp_snow.parse(si_stemmed);
+                bq.add(query_snow, BooleanClause.Occur.SHOULD);
+            }
+    
+            query_pre = qp_pre.parse(si);
+            bq.add(query_pre, BooleanClause.Occur.SHOULD);
         }
-
-        if (flag) {
-            query_snow = qp_snow.parse(si_stemmed);
-            bq.add(query_snow, BooleanClause.Occur.SHOULD);
-        }
-
-        query_pre = qp_pre.parse(si);
-        bq.add(query_pre, BooleanClause.Occur.SHOULD);
-
+        
+        // Search no matter what.
+        
         hits = searcher.search(bq);
-
+    
         return hits;
-
     }
 
-    public Hits searchVocabExact(SearchInput si) throws Exception {
+    public Hits searchVocabExactByWholeTerm(SearchInput si) throws Exception {
 
         IndexSearcher searcher = isc.getVocabExactIndex();
         Term t = new Term(IndexConstants.COL_DATA, si
-                .getStrippedLowerCaseSearchString());
+                .getWholeTermSearchString());
         TermQuery tq = new TermQuery(t);
 
         hits = searcher.search(tq);
         return hits;
     }
 
-    public List<Hit> searchVocabAccID(SearchInput si) throws Exception {
+    public List<Hit> searchVocabAccIDByLargeToken(SearchInput si) throws Exception {
         IndexSearcher searcher = isc.getVocabAccIDIndex();
 
-        List<String> tokens = si.getSpaceSepTrailingPunctRemovedList();
+        List<String> tokens = si.getLargeTokenList();
         ArrayList<Hit> hitsList = new ArrayList<Hit>();
 
         for (Iterator<String> tokenIter = tokens.iterator(); tokenIter
@@ -359,5 +476,16 @@ public class IndexAccessor {
         }
 
         return hitsList;
+    }
+    
+    public Hits searchVocabAccIDByWholeTerm(SearchInput si) throws Exception {
+        IndexSearcher searcher = isc.getVocabAccIDIndex();
+        Term t = new Term(IndexConstants.COL_DATA, si
+                .getWholeTermSearchString());
+        TermQuery tq = new TermQuery(t);
+
+        hits = searcher.search(tq);
+
+        return hits;
     }
 }

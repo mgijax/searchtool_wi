@@ -74,7 +74,7 @@ public class QS_OtherSearch extends AbstractSearch {
   {
     Hit hit;
 
-    List <Hit> hits =  indexAccessor.searchOtherExact(searchInput);
+    List <Hit> hits =  indexAccessor.searchOtherExactByLargeToken(searchInput);
 
     log.info("Other Exact Hits: " + hits.size());
 

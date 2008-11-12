@@ -25,17 +25,14 @@ import org.jax.mgi.shr.searchtool.IndexConstants;
  *
  * @is          Cache to check both the existence of given tokens.  This is a singleton.
  * @has         None
- * @does        Provides 4 boolean methods, hasToken, hasMarkerID, hasVocabID and
- *              hasOtherID
+ * @does        Provides a boolean methods, hasToken returning true if the
+ *              token exists in the cache.
  */
 
 public class TokenExistanceCache {
 
     private static final TokenExistanceCache theInstance = new TokenExistanceCache();
     private static HashSet<String> tokenSet = new HashSet<String>();
-/*    private static HashSet<String> markerIDSet = new HashSet<String>();
-    private static HashSet<String> vocabIDSet = new HashSet<String>();*/
-    /*private static HashSet<String> otherIDSet = new HashSet<String>();*/
     private static Logger log = Logger.getLogger(TokenExistanceCache.class.getName());
     private static IndexAccessor indexAccessor;
     private static IndexSearcherContainer isc;
@@ -74,57 +71,19 @@ public class TokenExistanceCache {
 
     public Boolean hasToken(String token) throws Exception {
         if (tokenSet.contains(token) ) {
-            //log.info("We are getting here! TRUE CASE");
             return true;
         } else {
-            //log.info("We are getting here! FALSE CASE");
             return lookupOther(token);
         }
     }
 
-/*    *//**
-     * Accepts as an argument a string to check whether or not its a marker
-     * related acc id.
-     *
-     * @param token
-     * @return Boolean
-     *//*
-
-    public Boolean hasMarkerID(String token) {
-        return markerIDSet.contains(token);
-    }
-
-    *//**
-     * Accepts as an argument a string to check whether or not its a vocab related
-     * acc id.
-     *
-     * @param token
-     * @return Boolean
-     *//*
-
-    public Boolean hasVocabID(String token) {
-        return vocabIDSet.contains(token);
-    }*/
-
-/*    *//**
-     * Accepts as an argument a string to check whether or not its an other related
-     * acc id.
-     *
-     * @param token
-     * @return Boolean
-     *//*
-
-    public Boolean hasOtherID(String token) {
-        return lookupOther(token);
-    }*/
 
     private Boolean lookupOther(String token) throws Exception {
 
-        Hits hit = indexAccessor.searchOtherExact(token);
+        Hits hit = indexAccessor.searchOtherExactByWholeTerm(token);
 
         if (hit != null && hit.length() > 0) {
             tokenSet.add(token);
-            //otherIDSet.add(token);
             return true;
         }
         return false;
@@ -142,8 +101,6 @@ public class TokenExistanceCache {
             while (te.next()) {
                 tokenSet.add(te.term().text());
             }
-
-            //log.info("I SHOULD have tokens now: " + tokenSet.size());
 
             // Marker Acc Id's
 
@@ -171,7 +128,6 @@ public class TokenExistanceCache {
             try {
                 Hits hits = is.search(bq);
 
-                log.info("loading token existance cache!");
                 for (Iterator iter = hits.iterator(); iter.hasNext();) {
                     Hit current = (Hit) iter.next();
                     tokenSet.add(current.get(IndexConstants.COL_DATA));
@@ -196,7 +152,6 @@ public class TokenExistanceCache {
                 {
                     Hit current = (Hit) iter.next();
                     tokenSet.add(current.get(IndexConstants.COL_DATA));
-                    //vocabIDSet.add(current.get(IndexConstants.COL_DATA).toString());
 
                 }
             }

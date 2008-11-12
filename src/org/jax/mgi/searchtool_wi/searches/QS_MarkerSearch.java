@@ -198,7 +198,7 @@ public class QS_MarkerSearch extends AbstractSearch
     String markerID;
 
     // search for matches of entire user input string
-    hits =  indexAccessor.searchMarkerExact(searchInput);
+    hits =  indexAccessor.searchMarkerExactByWholeTerm(searchInput);
     logger.debug("MarkerSearch.searchExactMatches number of hits ->"
         + hits.length());
     for (Iterator hitIter = hits.iterator(); hitIter.hasNext();)
@@ -209,7 +209,7 @@ public class QS_MarkerSearch extends AbstractSearch
     }
 
     // search each token against marker names/synonyms
-    List nameSynonymHits =  indexAccessor.searchMarkerExactByBigToken(searchInput);
+    List nameSynonymHits =  indexAccessor.searchMarkerExactByLargeToken(searchInput);
     logger.debug("MarkerSearch.searchMarkerExactByBigToken ->"
         + nameSynonymHits.size());
     for (Iterator hitIter = nameSynonymHits.iterator(); hitIter.hasNext();)
@@ -220,7 +220,7 @@ public class QS_MarkerSearch extends AbstractSearch
     }
 
     // search each token against marker IDs
-    List idHits =  indexAccessor.searchMarkerAccID(searchInput);
+    List idHits =  indexAccessor.searchMarkerAccIDByLargeToken(searchInput);
     logger.debug("MarkerSearch.searchMarkerAccID ->"
         + idHits.size());
     for (Iterator hitIter = idHits.iterator(); hitIter.hasNext();)
@@ -231,7 +231,7 @@ public class QS_MarkerSearch extends AbstractSearch
     }
 
     // search each token against marker symbols
-    List symbolHits =  indexAccessor.searchMarkerSymbolExact(searchInput);
+    List symbolHits =  indexAccessor.searchMarkerSymbolExactByLargeToken(searchInput);
     logger.debug("MarkerSearch.searchMarkerSymbolExact ->"
         + symbolHits.size());
     for (Iterator hitIter = symbolHits.iterator(); hitIter.hasNext();)
@@ -273,7 +273,7 @@ public class QS_MarkerSearch extends AbstractSearch
     Hits hits;
     String vocabID;
 
-    hits =  indexAccessor.searchMarkerVocabExact(searchInput);
+    hits =  indexAccessor.searchMarkerVocabExactByWholeTerm(searchInput);
     logger.debug("searchVocabExactMatches searchMarkerVocabExact ->" + hits.length());
     for (Iterator iter = hits.iterator(); iter.hasNext();)
     {
@@ -282,7 +282,7 @@ public class QS_MarkerSearch extends AbstractSearch
     }
 
     // search each token against vocab IDs
-    List idHits =  indexAccessor.searchMarkerVocabAccID(searchInput);
+    List idHits =  indexAccessor.searchMarkerVocabAccIDByLargeToken(searchInput);
     logger.debug("searchVocabExactMatches searchMarkerVocabAccID ->"
         + idHits.size());
     for (Iterator hitIter = idHits.iterator(); hitIter.hasNext();)
