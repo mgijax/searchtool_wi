@@ -32,7 +32,7 @@ public class MatchTypeScorer {
   // -------------//
 
   /**
-  * Hidded default constructor; needs the mapping
+  * Hidded default constructor; needs the score mapping
   */
   private MatchTypeScorer() {};
 
