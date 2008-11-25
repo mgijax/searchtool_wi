@@ -1,4 +1,3 @@
-<%@ page language="java" contentType="text/html" %>
 
 <%@include file="setup.jsp"%>
 
@@ -28,9 +27,31 @@
       displayLengthMarker = markerResultLength;
       needMoreMarkerLink = false;
   }
+  
   if (vocabResultLength < displayLengthVocab) {
       displayLengthVocab = vocabResultLength;
       needMoreVocabLink = false;
+  }
+  
+  // Get the number to display in the more link for markers
+  
+  int markerMoreLinkNumber;
+  
+  if (markerResultContainer.size() > 100) {
+    markerMoreLinkNumber = 100;
+  }
+  else {
+    markerMoreLinkNumber = markerResultContainer.size();
+  }
+  
+  // Get the number to display in the more link for vocab
+  
+  int vocabMoreLinkNumber;
+  if (vocabResultContainer.size() > 100) {
+    vocabMoreLinkNumber = 100;
+  }
+  else {
+    vocabMoreLinkNumber = vocabResultContainer.size();
   }
 
   // colors and color iteration
@@ -66,6 +87,9 @@
     out.print("<span class='small grayText'> no results</span>");
   }
 %>
+  <span onmouseover="<%=displayHelper.getHelpPopupMarkerBucket()%>" onmouseout="nd();">
+       <a class="helpCursor" href="#"><img src="<%=stConfig.get("QUICKSEARCH_URL")%>blue_info_icon.gif" border="0"/></a>
+  </span> 
   </td>
 </tr>
 
@@ -74,8 +98,8 @@
 
   <tr align=left valign=top >
     <th style='padding-right: 5px;padding-left:5px; text-align:right' width='%4'>
-      <span onmouseover="<%=displayHelper.getScoreMouseOver()%>" onmouseout="nd();">
-       &nbsp;&nbsp;<a class="helpPopUp" href="#">Score</a>
+      <span onmouseover="<%=displayHelper.getScoreMouseOverMarker()%>" onmouseout="nd();">
+       &nbsp;&nbsp;<a class="helpPopUp helpCursor" href="#">Score</a>
       </span>
     </th>
     <th style='padding-right: 5px;padding-left:5px;'>Type</th>
@@ -84,7 +108,7 @@
     <th style='padding-right: 5px;padding-left:5px; text-align:right;'>Chr</th>
     <th style='padding-right: 5px;padding-left:5px;' width='%40' >
       <span onmouseover="<%=displayHelper.getMarkerBestMatchMouseOver()%>" onmouseout="nd();">
-       <a class="helpPopUp" href="#">Best Match</a>
+       <a class="helpPopUp helpCursor" href="#">Best Match</a>
       </span>
     </th>
   </tr>
@@ -101,7 +125,7 @@
   <tr class='<%=rowClass%>'>
     <td style='text-align:right;'>
         <%=thisMarkerResult.getStarScore()%>
-        <% if(debug){out.print(thisMarkerResult.getScore());} %>
+        <% if(debug){out.print(thisMarkerResult.getDebugDisplay());} %>
     </td>
     <td class='small' >
         <%=thisMarkerDisplay.getMarkerType()%>
@@ -127,8 +151,9 @@
       </a>
 
       <% if (debug) { %>
-        <br/>result db key -> <%=thisMarkerResult.getDbKey()%>
+        <br/>match type -> <%=thisMarkerResult.getBestMatch().getDataType()%>
         <br/>match db key -> <%=thisMarkerResult.getBestMatch().getDbKey()%>
+        <br/>score -> <%=thisMarkerResult.getBestMatch().getScore()%>
       <% } %>
     </td>
   </tr>
@@ -139,7 +164,14 @@
   <tr style="background-color:#dfefff;">
     <td colspan=3>
     <% if (needMoreMarkerLink) { %>
-      &nbsp;&nbsp;&nbsp;<a href="Search.do?query=<%=displayHelper.getEncodedUrl(queryForward)%>&page=marker">Show first 100...</a>
+      &nbsp;&nbsp;&nbsp;<a href="Search.do?query=<%=displayHelper.getEncodedUrl(queryForward)%>&page=marker">Show 
+      <% if (markerMoreLinkNumber < 100) {
+            %>all<%
+         }
+         else {
+            %>first<%
+         }
+      %> <%=markerMoreLinkNumber%>...</a>
     <% } else { %>&nbsp;<% }%>
     </td>
     <td colspan=3>
@@ -174,6 +206,11 @@
   {
     out.print("<span class='small grayText'> no results");
   }
+  %>
+  <span onmouseover="<%=displayHelper.getHelpPopupVocabBucket()%>" onmouseout="nd();">
+       <a class="helpCursor" href="#"><img src="<%=stConfig.get("QUICKSEARCH_URL")%>blue_info_icon.gif" border="0"/></a>
+  </span> 
+  <%
   out.print("</td></tr>");
 
   // table column headings
@@ -182,8 +219,8 @@
 %>
   <tr align=left valign=top >
     <th style='padding-right: 5px;padding-left:5px; text-align:right' width='%4'>
-      <span onmouseover="<%=displayHelper.getScoreMouseOver()%>" onmouseout="nd();">
-       &nbsp;&nbsp;<a class="helpPopUp" href="#">Score</a>
+      <span onmouseover="<%=displayHelper.getScoreMouseOverVocab()%>" onmouseout="nd();">
+       &nbsp;&nbsp;<a class="helpPopUp helpCursor" href="#">Score</a>
       </span>
     </th>
     <th style='padding-right: 5px;padding-left:5px;'>Term</th>
@@ -191,7 +228,7 @@
     <th style='padding-right: 5px;padding-left:5px;' width='%40' >
       <span onmouseover="<%=displayHelper.getVocabBestMatchMouseOver()%>"
       onmouseout="nd();">
-      <a class="helpPopUp" href="#">Best Match</a>
+      <a class="helpPopUp helpCursor" href="#">Best Match</a>
       </span>
     </th>
   </tr>
@@ -208,7 +245,7 @@
 %>
     <td style='text-align:right;'>
         <%=thisVocabResult.getStarScore()%>
-        <% if(debug){out.print(thisVocabResult.getScore());} %>
+        <% if(debug){out.print(thisVocabResult.getDebugDisplay());} %>
     </td>
     <td>
 <%
@@ -280,7 +317,16 @@
   <tr style="background-color:#dfefff;">
         <td colspan=4>
         <% if (needMoreVocabLink) { %>
-          &nbsp;&nbsp;&nbsp;<a href="Search.do?query=<%=displayHelper.getEncodedUrl(queryForward)%>&page=vocab">Show first 100...</a>
+          &nbsp;&nbsp;&nbsp;<a href="Search.do?query=<%=displayHelper.getEncodedUrl(queryForward)%>&page=vocab">Show 
+          <%
+          if (vocabMoreLinkNumber < 100) {
+            %>all<%
+          }
+          else {
+            %>first<%
+          }
+          
+          %> <%=vocabMoreLinkNumber%>...</a>
         <% } else {%>&nbsp;<%} %>
         </td>
   </tr>
@@ -302,7 +348,13 @@
     out.print("<span class='small grayText'> no results");
   }
 
-  out.print("</td></tr>");
+  %>
+  <span onmouseover="<%=displayHelper.getHelpPopupOtherBucket()%>" onmouseout="nd();">
+       <a class="helpCursor" href="#"><img src="<%=stConfig.get("QUICKSEARCH_URL")%>blue_info_icon.gif" border="0"/></a>
+  </span>   
+  </td>
+  </tr>
+  <%
   if (otherResultContainer.size() != 0) {
     // table column headings
     out.print("<tr align=left valign=top >");
@@ -433,7 +485,11 @@
 </br></br>
 <table class='qsBucket' width='100%'>
 <tr>
-  <td class='qsBucketHeader'>Search MGI with Google</td>
+  <td class='qsBucketHeader'>Search MGI with Google
+  <span onmouseover="<%=displayHelper.getHelpPopupGoogleBucket()%>" onmouseout="nd();">
+       <a class="helpCursor" href="#"><img src="<%=stConfig.get("QUICKSEARCH_URL")%>blue_info_icon.gif" border="0"/></a>
+  </span> 
+  </td>
 </tr>
 <tr>
   <td>

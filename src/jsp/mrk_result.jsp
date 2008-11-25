@@ -61,7 +61,10 @@
     Genome Features
     <span class='small grayText'>
     Sorted by best match, showing <%=markerStart%> -
-    <%=markerStop%> of <%=markerResultContainer.size()%>&nbsp;&nbsp;&nbsp;
+    <%=markerStop%> of <%=markerResultContainer.size()%>
+    <span onmouseover="<%=displayHelper.getHelpPopupMarkerBucket()%>" onmouseout="nd();">
+       <a class="helpCursor" href="#"><img src="<%=stConfig.get("QUICKSEARCH_URL")%>blue_info_icon.gif" border="0"/></a>
+    </span>&nbsp;&nbsp;&nbsp;
     <%=previousLink%> <%=nextLink%>
     </span>
   </td>
@@ -69,8 +72,8 @@
 
   <tr align=left valign=top >
     <th style='padding-right: 5px;padding-left:5px; text-align:right' width='%4'>
-      <span onmouseover="<%=displayHelper.getScoreMouseOver()%>" onmouseout="nd();">
-       &nbsp;&nbsp;<a class="helpPopUp" href="#">Score</a>
+      <span onmouseover="<%=displayHelper.getScoreMouseOverMarker()%>" onmouseout="nd();">
+       &nbsp;&nbsp;<a class="helpPopUp helpCursor" href="#">Score</a>
       </span>
     </th>
     <th style='padding-right:5px;padding-left:5px;'>Type</th>
@@ -79,14 +82,13 @@
     <th style='text-align:right;padding-right:5px;padding-left:5px;'>Chr</th>
     <th style='padding-right:5px;padding-left:5px;' width='%40' >
       <span onmouseover="<%=displayHelper.getMarkerBestMatchMouseOver()%>" onmouseout="nd();">
-       <a class="helpPopUp" href="#">Best Match</a>
+       <a class="helpPopUp helpCursor" href="#">Best Match</a>
       </span>
     </th>
   </tr>
 
 <!-- Iterate through data rows -->
 <%
-  int rowCount = 0;
   for (Iterator iter
     = markerResultContainer.getHits(markerStart,markerStop).iterator();
     iter.hasNext();)
@@ -95,13 +97,11 @@
     thisMarkerResult    = (QS_MarkerResult)iter.next();
     thisMarkerDisplay   = markerDisplayCache.getMarker(thisMarkerResult);
     rowClass = bucketRowAlternator.getString();
-    rowCount++;
 %>
   <tr class='<%=rowClass%>'>
     <td style='text-align:right;'>
         <%=thisMarkerResult.getStarScore()%>
-        <% if(debug){out.print(thisMarkerResult.getScore());} %>
-        <% if(debug){out.print("<br/>C-> " + rowCount);} %>
+        <% if(debug){out.print(thisMarkerResult.getDebugDisplay());} %>
     </td>
     <td class='small' >
         <%=thisMarkerDisplay.getMarkerType()%>
@@ -119,18 +119,18 @@
     </td>
     <td class='small'>
       <%=thisMarkerResult.getBestMatch().display()%>
-      <% if (displayHelper.needsMrkWhyMatchLink(thisMarkerResult) ) { %>
-        <a class="qsWhyMatchLink"
-          <%=displayHelper.getMarkerScoreMouseOver(thisMarkerResult)%>
-          href=<%=displayHelper.getMrkWhyMatchURL(thisMarkerResult, queryForward)%> >
-          <%=displayHelper.getMrkWhyMatchText(thisMarkerResult)%>
-        </a>
-      <% } %>
+
+      <a class="qsWhyMatchLink"
+        <%=displayHelper.getMarkerScoreMouseOver(thisMarkerResult)%>
+        href=<%=displayHelper.getMrkWhyMatchURL(thisMarkerResult, queryForward)%> >
+        <%=displayHelper.getMrkWhyMatchText(thisMarkerResult)%>
+      </a>
 
       <% if (debug) { %>
         <br/>result db key -> <%=thisMarkerResult.getDbKey()%>
         <br/>match db key -> <%=thisMarkerResult.getBestMatch().getDbKey()%>
       <% } %>
+
     </td>
     </tr>
 <% } /* for each result */ %>

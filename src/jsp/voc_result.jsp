@@ -49,7 +49,13 @@
   out.print("<td colspan='4' class='qsBucketHeader'>");
   out.print("Vocabulary Terms ");
   out.print("<span class='small grayText'> Sorted by best match, showing " + (vocabStart) + "-" + (vocabStop) + " of "
-    + (vocabResultContainer.size()) + "</span>&nbsp;&nbsp;&nbsp;&nbsp;");
+    + (vocabResultContainer.size()) + "</span>");
+%>
+      <span onmouseover="<%=displayHelper.getHelpPopupVocabBucket()%>" onmouseout="nd();">
+           <a class="helpCursor" href="#"><img src="<%=stConfig.get("QUICKSEARCH_URL")%>blue_info_icon.gif" border="0"/></a>
+      </span> 
+      &nbsp;&nbsp;&nbsp;&nbsp; 
+<%    
   if (vocabStart.intValue() > 1) {
       out.print("<a class='small' href='Search.do?query=" + query + "&page=vocab&vocabStart="
         + (vocabStart - vocabRange) +"'>Previous</a> ");
@@ -58,20 +64,23 @@
       out.print("<a class='small' href='Search.do?query=" + query + "&page=vocab&vocabStart="
         + (vocabStart + vocabRange) +"'>Next</a>");
   }
-  out.print("</td></tr>");
-
 %>
+ 
+    </td>
+  </tr>
+
+
   <tr align=left valign=top >
     <th style='padding-right: 5px;padding-left:5px; text-align:right' width='%4'>
-      <span onmouseover="<%=displayHelper.getScoreMouseOver()%>" onmouseout="nd();">
-       &nbsp;&nbsp;<a class="helpPopUp" href="#">Score</a>
+      <span onmouseover="<%=displayHelper.getScoreMouseOverVocab()%>" onmouseout="nd();">
+       &nbsp;&nbsp;<a class="helpPopUp helpCursor" href="#">Score</a>
       </span>
     </th>
     <th style='padding-right: 5px;padding-left:5px;'>Term</th>
     <th style='padding-right: 5px;padding-left:5px;'>Associated Data</th>
     <th style='padding-right: 5px;padding-left:5px;' width='%40' >
       <span onmouseover="<%=displayHelper.getMarkerBestMatchMouseOver()%>" onmouseout="nd();">
-       <a class="helpPopUp" href="#">Best Match</a>
+       <a class="helpPopUp helpCursor" href="#">Best Match</a>
       </span>
     </th>
   </tr>

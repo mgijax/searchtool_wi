@@ -16,7 +16,7 @@
     /*width:60em;         /* IE centering workaround */
     /*margin-left: -30em; /* IE centering; set negative 1/2 width */
     white-space:nowrap;
-	padding-top:2px;
+    padding-top:2px;
     padding-bottom:2px;
     /*border: 1px solid #ccc;*/
 }
@@ -67,9 +67,6 @@
 /*
 * Match details header section.
 */
-
-
-
 .detailHeaderType {
     font-family: Verdana, Arial, Helvetica;
     font-variant: small-caps;
@@ -93,9 +90,6 @@
     font-variant: small-caps;
     font-size: 10px;
 }
-
-
-
 
 /*
 * QuickSearch "why did this match...?" pages
@@ -201,11 +195,11 @@
 
 .qsWhyMatchLink {
     background-color:#fafafa;
-	border-width: 1px;
-	border-style: solid;
-	border-color: #DFEFFF;
-	color: #000066;
-	font-style:italic;
+    border-width: 1px;
+    border-style: solid;
+    border-color: #DFEFFF;
+    color: #000066;
+    font-style:italic;
 }
 
 /*
@@ -220,6 +214,9 @@ a.helpPopUp:active
 a.helpPopUp:hover
 {color:#3300FF;text-decoration:none}
 
+/* Cursor Styles*/
+
+.helpCursor {cursor: help;}
 
 /* colors */
 .grayText {color: #666666;}

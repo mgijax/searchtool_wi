@@ -51,7 +51,6 @@
 <B>Vocab Detailed Matching Information</B>
 
 <%
-  out.print ("<br><br>" + displayHelper.wholeNormalQuery(searchInput));
   out.print ("<br><br>key: " + vocabResult.getDbKey() + " type: "
     + vocabResult.getVocabulary() + "<br/>Total score: " + vocabResult.getScore());
 

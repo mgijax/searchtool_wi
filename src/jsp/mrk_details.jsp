@@ -89,8 +89,8 @@ Symbol, Name, Synonym and Accession ID matches to your query
 
 <tr>
   <th style='padding-right:5px; padding-left:5px; text-align:right' width='%6'>
-    <span onmouseover="<%=displayHelper.getScoreMouseOver()%>" onmouseout="nd();">
-     &nbsp;&nbsp;<a class="helpPopUp" href="#">Score</a>
+    <span onmouseover="<%=displayHelper.getScoreMouseOverMarker()%>" onmouseout="nd();">
+     &nbsp;&nbsp;<a class="helpPopUp helpCursor" href="#">Score</a>
     </span>
   </th>
   <th style='padding-left:15px;' width="94%">
@@ -125,18 +125,6 @@ for (Iterator iter = nomenMatches.iterator(); iter.hasNext();) {
 <!--======================================================== Vocab Matches -->
 <% if (vocabMatches.size() != 0) {
 %>
-
-<!--
-<div class="whyMatchSectionHeader2" style="margin-bottom:1px;">
-  Term, Synonym, and Definition matches to your query that are annotated to
-  or associated with this gene or genome feature.
-</div>
-<div class="whyMatchSectionHeader2" style="margin-bottom:4px;">
-  Match may be to a "parent" term; MGI displays the "child" term annotated
-  to this gene or genome feature.
-</div>
--->
-
 <br/><table cellspacing="1" class="qsBucket" width="100%" border="0">
 
 <tr>
@@ -150,8 +138,8 @@ for (Iterator iter = nomenMatches.iterator(); iter.hasNext();) {
 
 <tr>
   <th style='padding-right:5px; padding-left:5px; text-align:right' width='%6'>
-    <span onmouseover="<%=displayHelper.getScoreMouseOver()%>" onmouseout="nd();">
-     &nbsp;&nbsp;<a class="helpPopUp" href="#">Score</a>
+    <span onmouseover="<%=displayHelper.getScoreMouseOverMarker()%>" onmouseout="nd();">
+     &nbsp;&nbsp;<a class="helpPopUp helpCursor" href="#">Score</a>
     </span>
   </th>
   <th style='padding-left:15px;' width="94%">
@@ -165,10 +153,12 @@ for (Iterator iter = vocabMatches.iterator(); iter.hasNext();) {
   VocabDisplay vocDisplay = vocabDisplayCache.getVocab(thisMatch);
   VocabDisplay parentVocDisplay = vocabDisplayCache.getParentVocab(thisMatch);
   rowClass = bucketRowAlternator.getString();
+  if (debug) {matchScore="(" + thisMatch.getScore().toString() + ")";}
 %>
   <tr class="<%=rowClass%>">
   <td style='text-align:right;'>
     <%=displayHelper.getMatchStarScore(thisMatch)%>
+    <%=matchScore%>
   </td>
   <td style='padding-left:15px;'>
 

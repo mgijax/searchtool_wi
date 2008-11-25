@@ -1,9 +1,11 @@
 <table border=0>
 <tr>
 <td width="1%">
+  <span onmouseover="<%=displayHelper.getHelpIconPopup()%>" onmouseout="nd();">
   <a href="<%=userdocs_url%>searchtool_help.shtml">
     <img src="<%=webshare_url%>/images/help_small_transp.gif" alt="help" border="0">
   </a>
+  </span>
 </td>
 
 <td width="24%">&nbsp;</td>
@@ -22,7 +24,7 @@
     Reset
   </span>
   <span class="qsButton" style="margin-left:40px;"
-    onClick='window.open("<%=mgihome_url%>feedback/feedback_form.cgi?subject=foo")'>
+    onClick='window.open("<%=mgihome_url%>feedback/feedback_form.cgi?subject=Quick Search")'>
     Your Input Welcome
   </span>
 
