@@ -223,7 +223,7 @@ public class SearchInput {
           if (i % 2 == 0) {
               String [] subCatcher = catcher[i].split("\\s");
               for (int j = 0; j < subCatcher.length; j++) {
-                  if (isPrefix(subCatcher[j])) {
+/*                  if (isPrefix(subCatcher[j])) {
                       tokens.add(subCatcher[j]);
                   }
                   else
@@ -231,7 +231,8 @@ public class SearchInput {
                       // check the word against the analyzer to see if its removed somehow
     
                       tokens.addAll(AnalyzerUtils.getTokenList(tca, subCatcher[j]));
-                  }
+                  }*/
+                  tokens.add(subCatcher[j]);
               }
           }
 
@@ -603,13 +604,32 @@ public class SearchInput {
    */
    public int getFilteredSmallTokenCount() {
 
-       String temp_string = trimWhitespace(getTransformedLowerCaseStringOr().replaceAll("\\W", " "));
-
-       String [] tokens = temp_string.split("\\s");
-
-       return tokens.length;
+       return getFilteredSmallTokenList().length;
    }
 
+   public String [] getFilteredSmallTokenList()
+   {
+       String temp_string = trimWhitespace(getTransformedLowerCaseStringOr().replaceAll("\\W", " "));
+
+       return temp_string.split("\\s");
+   }
+   
+   /**
+    * Returns Count of the little tokens in a given search string.
+    * @return int - Count of the tokens in the given input string.
+    */
+    public int getSmallTokenCount() {
+
+        return getSmallTokenList().length;
+    }
+   
+    public String [] getSmallTokenList()
+    {
+        String temp_string = trimWhitespace(getTransformedLowerCaseString().replaceAll("\\W", " "));
+
+        return temp_string.split("\\s");
+    }
+    
 
   /** Return a transformed search string.
   * @return String representation of the search string, with all extra spaces
@@ -620,12 +640,48 @@ public class SearchInput {
       return trimWhitespace(this.searchString.replaceAll("\"", "").toLowerCase());
   }
 
+  public String getEscapedWholeTermSearchString()
+  {
+          String[] catcher = this.searchString.toLowerCase().split("\"");
+          String[] subCatcher;
+          //List <String> tokens = new ArrayList<String>();
+          
+          String queryString = ""; 
+
+          for (int i = 0; i < catcher.length; i++)
+          {
+              if (i % 2 == 0) {
+                  subCatcher = catcher[i].split("\\s");
+                  for (int j = 0; j < subCatcher.length; j++) {
+                      if (! subCatcher[j].equals("")) {
+                          String temp_transformed = removeTrailingPunct(subCatcher[j]);
+                          if (temp_transformed != null && ! temp_transformed.equals("")) {
+                              queryString += " " + escapeString(temp_transformed, true);
+                          }
+                      }
+                  }
+              }
+              else {
+                  queryString += " \"" + escapeString(catcher[i],false) +"\"";
+              }
+          }
+
+          return trimWhitespace(queryString);
+      
+      //return escapeString(trimWhitespace(this.searchString.replaceAll("\"", "").toLowerCase()), true);
+  }
+  
   public Boolean hasQuotes () {
       String pattern = ".*\".*";
 
       return Pattern.matches(pattern, searchString);
   }
 
+  /**
+   * Does the search string have a prefix search?
+   * @return Boolean
+   */
+  
     public Boolean hasPrefix () {
         // transform everything to lowercase
 
@@ -652,18 +708,28 @@ public class SearchInput {
         return false;
     }
 
+    /**
+     * Does the search string have a Boolean keyword in it?
+     * @return Boolean
+     */
+    
     public Boolean hasBoolean() {
         String pattern = ".* (AND|OR|NOT) .*";
 
         return Pattern.matches(pattern, searchString);
     }
 
-    // Construct the stop list pattern, and do some regex with it.
-    // it MAY make more sense to do this only ONCE.  I need to think
-    // about this a bit.
+    /**
+     * Does the search string have stopwords?
+     * @return Boolean
+     */
 
     public Boolean hasStopWords() {
 
+        // Construct the stop list pattern, and do some regex with it.
+        // it MAY make more sense to do this only ONCE.  I need to think
+        // about this a bit.
+        
         String [] stopList = StopAnalyzer.ENGLISH_STOP_WORDS;
 
         String stopPattern =".* (";
@@ -686,6 +752,28 @@ public class SearchInput {
     }
 
     /**
+     * Check to see if we have any excluded small tokens in our stream.
+     * 
+     * If so we will return true.
+     * @return Boolean
+     */
+    
+    public Boolean hasExcludedWords() {
+        
+        String [] smallTokens = getSmallTokenList();
+        
+        for (int i = 0; i < smallTokens.length; i++) {
+            if (Pattern.matches("[a-zA-z]", smallTokens[i])) {
+                return true;
+            }
+            if (Pattern.matches("[0-9]{1,2}", smallTokens[i])) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    /**
      * Escape all lucene characters from a given string.
      * @param text
      * @return
@@ -695,6 +783,16 @@ public class SearchInput {
         return text.replaceAll("\\s+", " ").replaceAll("^\\s", "")
                 .replaceAll("\\s$", "");
     }
+    
+    /**
+     * Escape the lucene relevant special characters from the search string.
+     * 
+     * @param text The String to be escaped
+     * @param preservePrefix If this is set to true, we preserve prefix 
+     * searches.  If its false they get escaped just like anything else.
+     * 
+     * @return
+     */
     
     private String escapeString (String text, Boolean preservePrefix)
     {
@@ -720,6 +818,13 @@ public class SearchInput {
     
         return text;
     }
+    
+    /**
+     * Is the string an recognized valid accession id?
+     * @param token The string to check
+     * @return Boolean
+     */
+    
     private Boolean isID (String token)
     {
 
@@ -752,12 +857,24 @@ public class SearchInput {
 
         return false;
     }
+    
+    /** 
+     * Remove any number of trailing punctuation from the search string.
+     * @param token The String to remove punctuation from.
+     * @return The transformed string.
+     */
 
     private String removeTrailingPunct(String token)
     {
         return token.replaceAll("[.,:#;]+$", "");
     }
 
+    /**
+     * Is this string a prefix search?
+     * @param token The String to check.
+     * @return Boolean
+     */
+    
     private Boolean isPrefix (String token)
     {
         String regex_pattern =".*\\*$";

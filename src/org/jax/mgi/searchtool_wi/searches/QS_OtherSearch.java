@@ -1,17 +1,23 @@
 package org.jax.mgi.searchtool_wi.searches;
 
+// Standard Java Classes
 import java.util.*;
 import java.io.IOException;
 
-import org.apache.lucene.index.CorruptIndexException;
+// MGI Shared Classes
+import org.jax.mgi.shr.config.Configuration;
+
+// Logging
 import org.apache.log4j.Logger;
+
+// Lucene Classes
 import org.apache.lucene.search.*;
-import org.apache.lucene.document.*;
+
+// Quick Search Specific
 import org.jax.mgi.searchtool_wi.matches.OtherMatch;
 import org.jax.mgi.searchtool_wi.matches.OtherMatchFactory;
 import org.jax.mgi.searchtool_wi.results.QS_OtherResult;
 import org.jax.mgi.searchtool_wi.utils.SearchInput;
-import org.jax.mgi.shr.config.Configuration;
 import org.jax.mgi.shr.searchtool.IndexConstants;
 
 /**
@@ -42,9 +48,9 @@ public class QS_OtherSearch extends AbstractSearch {
     super(c);
   }
 
-  //-----------------------------//
-  // Over-ridden Abstract Method //
-  //-----------------------------//
+  //----------------------------------------//
+  // Over-ridden Abstract gatherData Method //
+  //----------------------------------------//
 
   /**
   * gatherData() is an over-ridden method from the AbstractSearch class, and
@@ -73,14 +79,11 @@ public class QS_OtherSearch extends AbstractSearch {
     throws Exception
   {
     Hit hit;
-
     List <Hit> hits =  indexAccessor.searchOtherExactByLargeToken(searchInput);
-
     log.info("Other Exact Hits: " + hits.size());
 
     for (Iterator <Hit> iter = hits.iterator(); iter.hasNext();)
     {
-
         // get the hit, and build a match
         hit = iter.next();
         handleOtherExactHit(hit);
@@ -89,16 +92,10 @@ public class QS_OtherSearch extends AbstractSearch {
   }
 
   private void handleOtherExactHit (Hit hit)
-    throws CorruptIndexException, IOException
+    throws Exception
   {
     QS_OtherResult otherResult;
     OtherMatch otherMatch;
-
-/*    log.debug("===================================================");
-    log.debug("Got here for a match!");
-    log.debug("db_key: " + hit.get(IndexConstants.COL_DB_KEY));
-    log.debug("data_type: " + hit.get(IndexConstants.COL_DATA_TYPE));
-    log.debug("===================================================");*/
 
     // info about the result
     otherResult = getOther(hit.get(IndexConstants.COL_DB_KEY), hit.get(IndexConstants.COL_DATA_TYPE));

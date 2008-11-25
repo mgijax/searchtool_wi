@@ -18,9 +18,6 @@ public class QS_OtherResult extends AbstractResult {
   // exact matches to this vocab term
   private ArrayList<OtherMatch> exactMatches = new ArrayList<OtherMatch>();
 
-  // to sort the matches
-  private MatchSorter matchSorter = new MatchSorter();
-
   // best scores
   private Float derivedScore = new Float(0.0);
   private Float bestExactMatchScore = new Float(0.0);
@@ -28,9 +25,6 @@ public class QS_OtherResult extends AbstractResult {
   private Float term_score = new Float(0.0);
   private Float exact_score = new Float(0.0);
   private Boolean has_exact = false;
-
-  // best match
-  private AbstractMatch bestMatch;
 
   // lookup for gathering display string, so we can order alpha-numerically
   private static OtherDisplayLookup otherDisplayLookup = OtherDisplayLookup.getOtherDisplayLookup();
@@ -54,6 +48,11 @@ public class QS_OtherResult extends AbstractResult {
   // secondary sort
   public String getAlphaSortBy() {
       return getBestMatch().getMatchedText();
+  }
+
+  // best match for this result
+  public AbstractMatch getBestMatch() {
+    return bestMatch;
   }
 
   // finalization tasks
@@ -101,11 +100,5 @@ public class QS_OtherResult extends AbstractResult {
   public Boolean hasExact() {
       return has_exact;
   }
-
-  // Best Match
-
-  public AbstractMatch getBestMatch() {
-      return bestMatch;
-    }
 
 }

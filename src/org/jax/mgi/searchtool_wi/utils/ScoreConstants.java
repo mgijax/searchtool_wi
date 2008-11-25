@@ -32,23 +32,27 @@ public class ScoreConstants {
     return markerExactScoreMap;
   }
 
-  private static final Float ME_ACCID_MRK_SCORE         = new Float(10000.0);
-  private static final Float ME_ACCID_ALL_SCORE         = new Float(9900.1);
-  private static final Float ME_ACCID_ORTHO_SCORE       = new Float(9800.0);
-  private static final Float ME_SYMBOL_SCORE            = new Float(9700.1);
-  private static final Float ME_NAME_SCORE              = new Float(9700.0);
-  private static final Float ME_OLD_SYMBOL_SCORE        = new Float(9600.1);
-  private static final Float ME_OLD_NAME_SCORE          = new Float(9600.0);
-  private static final Float ME_SYNONYM_SCORE           = new Float(9500.0);
-  private static final Float ME_ALL_SYMBOL_SCORE        = new Float(9400.2);
-  private static final Float ME_ALL_NAME_SCORE          = new Float(9400.1);
-  private static final Float ME_ALL_SYNONYM_SCORE       = new Float(9400.0);
-  private static final Float ME_ORTHO_HUM_SYMBOL_SCORE  = new Float(9300.4);
-  private static final Float ME_ORTHO_RAT_SYMBOL_SCORE  = new Float(9300.3);
-  private static final Float ME_ORTHO_SYMBOL_SCORE      = new Float(9300.2);
-  private static final Float ME_ORTHO_NAME_SCORE        = new Float(9300.1);
-  private static final Float ME_ORTHO_SYNONYM_SCORE     = new Float(9300.0);
-  private static final Float ME_DEFAULT                 = new Float(9000.0);
+  private static final Float ME_ACCID_MRK_SCORE         = new Float(37.0);
+  private static final Float ME_ACCID_ALL_SCORE         = new Float(36.0);
+  private static final Float ME_ACCID_ORTHO_SCORE       = new Float(35.0);
+  private static final Float ME_SYMBOL_SCORE            = new Float(34.0);
+  private static final Float ME_NAME_SCORE              = new Float(33.0);
+  private static final Float ME_OLD_SYMBOL_SCORE        = new Float(32.0);
+  private static final Float ME_OLD_NAME_SCORE          = new Float(31.0);
+  private static final Float ME_SYNONYM_SCORE           = new Float(30.0);
+  private static final Float ME_ALL_SYMBOL_SCORE        = new Float(22.0);
+  private static final Float ME_ALL_NAME_SCORE          = new Float(21.0);
+  private static final Float ME_ALL_SYNONYM_SCORE       = new Float(20.0);
+  private static final Float ME_ORTHO_HUM_SYMBOL_SCORE  = new Float(14.0);
+  private static final Float ME_ORTHO_RAT_SYMBOL_SCORE  = new Float(13.0);
+  private static final Float ME_ORTHO_SYMBOL_SCORE      = new Float(12.0);
+  private static final Float ME_ORTHO_NAME_SCORE        = new Float(11.0);
+  private static final Float ME_ORTHO_SYNONYM_SCORE     = new Float(10.0);
+  private static final Float ME_VOC_ACCID_SCORE         = new Float(7.0);
+  private static final Float ME_VOC_TERM_SCORE          = new Float(6.0);
+  private static final Float ME_VOC_SYNONYM_SCORE       = new Float(5.0);
+  private static final Float ME_VOC_NOTE_SCORE          = new Float(4.0);
+  private static final Float ME_DEFAULT                 = new Float(0.0);
 
   private static Map markerExactScoreMap = loadMarkerExactScoreMap();
   private static final Map loadMarkerExactScoreMap() {
@@ -69,6 +73,10 @@ public class ScoreConstants {
     scoreMap.put(IndexConstants.ORTHOLOG_SYMBOL,        ME_ORTHO_SYMBOL_SCORE);
     scoreMap.put(IndexConstants.ORTHOLOG_NAME,          ME_ORTHO_NAME_SCORE);
     scoreMap.put(IndexConstants.ORTHOLOG_SYNONYM,       ME_ORTHO_SYNONYM_SCORE);
+    scoreMap.put(IndexConstants.VOC_ACCESSION_ID,       ME_VOC_ACCID_SCORE);
+    scoreMap.put(IndexConstants.VOCAB_TERM,             ME_VOC_TERM_SCORE);
+    scoreMap.put(IndexConstants.VOCAB_SYNONYM,          ME_VOC_SYNONYM_SCORE);
+    scoreMap.put(IndexConstants.VOCAB_NOTE,             ME_VOC_NOTE_SCORE);
     scoreMap.put("default",                             ME_DEFAULT);
     return scoreMap;
   }
@@ -99,6 +107,9 @@ public class ScoreConstants {
   private static final Float MA_ORTHO_SYMBOL_ADD     = new Float(102.3);
   private static final Float MA_ORTHO_NAME_ADD       = new Float(102.2);
   private static final Float MA_ORTHO_SYNONYM_ADD    = new Float(102.1);
+  private static final Float MA_VOC_TERM_ADD         = new Float(101.3);
+  private static final Float MA_VOC_SYNONYM_ADD      = new Float(101.2);
+  private static final Float MA_VOC_NOTE_ADD         = new Float(101.1);
   private static final Float MA_DEFAULT              = new Float(100.0);
 
   private static Map mrkAndScoreMap = loadMrkAndScoreMap();
@@ -216,18 +227,18 @@ public class ScoreConstants {
   }
 
   // Vocab Exact Additive Match Scores (VE)
-  public static final Float VE_VOC_ACCID_BOOST     = new Float(10.0);
-  public static final Float VE_VOC_TERM_BOOST      = new Float(9.99);
-  public static final Float VE_VOC_SYNONYM_BOOST   = new Float(9.98);
-  public static final Float VE_VOC_NOTE_BOOST      = new Float(9.97);
+  public static final Float VE_VOC_ACCID_BOOST     = new Float(5.0);
+  public static final Float VE_VOC_TERM_BOOST      = new Float(4.0);
+  public static final Float VE_VOC_SYNONYM_BOOST   = new Float(3.0);
+  public static final Float VE_VOC_NOTE_BOOST      = new Float(2.0);
 
   private static Map vocabExactScoreMap = loadVocabExactScoreMap();
   private static Map loadVocabExactScoreMap() {
     Map scoreMap = new HashMap();
-    scoreMap.put(IndexConstants.ACCESSION_ID, VE_VOC_ACCID_BOOST);
-    scoreMap.put(IndexConstants.VOCAB_TERM, VE_VOC_TERM_BOOST);
-    scoreMap.put(IndexConstants.VOCAB_SYNONYM, VE_VOC_SYNONYM_BOOST);
-    scoreMap.put(IndexConstants.VOCAB_NOTE, VE_VOC_NOTE_BOOST);
+    scoreMap.put(IndexConstants.ACCESSION_ID,   VE_VOC_ACCID_BOOST);
+    scoreMap.put(IndexConstants.VOCAB_TERM,     VE_VOC_TERM_BOOST);
+    scoreMap.put(IndexConstants.VOCAB_SYNONYM,  VE_VOC_SYNONYM_BOOST);
+    scoreMap.put(IndexConstants.VOCAB_NOTE,     VE_VOC_NOTE_BOOST);
     return scoreMap;
   }
 
@@ -239,17 +250,82 @@ public class ScoreConstants {
   * Return vocab match score map
   * @return map (typeValue -> score to add)
   */
-  public static Map getVocabScoreMap() {
+  public static Map getVocabInexactScoreMap() {
     return vocabScoreMap;
   }
+
+  // Vocab Inexact Additive Match Scores (VI)
+  public static final Float VI_VOC_TERM_BOOST      = new Float(0.3);
+  public static final Float VI_VOC_SYNONYM_BOOST   = new Float(0.2);
+  public static final Float VI_VOC_NOTE_BOOST      = new Float(0.1);
 
   private static Map vocabScoreMap = loadVocabScoreMap();
   private static Map loadVocabScoreMap() {
     Map scoreMap = new HashMap();
-    scoreMap.put(IndexConstants.VOCAB_TERM, ZERO_SCORE);
-    scoreMap.put(IndexConstants.VOCAB_SYNONYM, ZERO_SCORE);
-    scoreMap.put(IndexConstants.VOCAB_NOTE, ZERO_SCORE);
+    scoreMap.put(IndexConstants.VOCAB_TERM,     VI_VOC_TERM_BOOST);
+    scoreMap.put(IndexConstants.VOCAB_SYNONYM,  VI_VOC_SYNONYM_BOOST);
+    scoreMap.put(IndexConstants.VOCAB_NOTE,     VI_VOC_NOTE_BOOST);
     return scoreMap;
   }
+
+  //-------------------------------------------------//
+  // Marker Result Type Modifiers
+  //-------------------------------------------------//
+
+  /**
+  * Return map containing type boosting
+  * @return map (typeValue -> boost to add)
+  */
+  public static Map getMarkerResultBoostMap() {
+    return markerResultBoostMap;
+  }
+
+  private static final Float MR_ACCID_MRK_BOOST         = new Float(37.0);
+  private static final Float MR_ACCID_ALL_BOOST         = new Float(36.0);
+  private static final Float MR_ACCID_ORTHO_BOOST       = new Float(35.0);
+  private static final Float MR_SYMBOL_BOOST            = new Float(34.0);
+  private static final Float MR_NAME_BOOST              = new Float(33.0);
+  private static final Float MR_OLD_SYMBOL_BOOST        = new Float(32.0);
+  private static final Float MR_OLD_NAME_BOOST          = new Float(31.0);
+  private static final Float MR_SYNONYM_BOOST           = new Float(30.0);
+  private static final Float MR_ALL_SYMBOL_BOOST        = new Float(22.0);
+  private static final Float MR_ALL_NAME_BOOST          = new Float(21.0);
+  private static final Float MR_ALL_SYNONYM_BOOST       = new Float(20.0);
+  private static final Float MR_ORTHO_HUM_SYMBOL_BOOST  = new Float(14.0);
+  private static final Float MR_ORTHO_RAT_SYMBOL_BOOST  = new Float(13.0);
+  private static final Float MR_ORTHO_SYMBOL_BOOST      = new Float(12.0);
+  private static final Float MR_ORTHO_NAME_BOOST        = new Float(11.0);
+  private static final Float MR_ORTHO_SYNONYM_BOOST     = new Float(10.0);
+  private static final Float MR_VOC_ACCID_BOOST         = new Float(7.0);
+  private static final Float MR_VOC_TERM_BOOST          = new Float(6.0);
+  private static final Float MR_VOC_SYNONYM_BOOST       = new Float(5.0);
+  private static final Float MR_VOC_NOTE_BOOST          = new Float(4.0);
+
+  private static Map markerResultBoostMap = loadMarkerResultBoostMap();
+  private static final Map loadMarkerResultBoostMap() {
+    Map boostMap = new HashMap();
+    boostMap.put(IndexConstants.ACCESSION_ID,           MR_ACCID_MRK_BOOST);
+    boostMap.put(IndexConstants.ALLELE_ACCESSION_ID,    MR_ACCID_ALL_BOOST);
+    boostMap.put(IndexConstants.ORTH_ACCESSION_ID,      MR_ACCID_ORTHO_BOOST);
+    boostMap.put(IndexConstants.MARKER_SYMBOL,          MR_SYMBOL_BOOST);
+    boostMap.put(IndexConstants.MARKER_NAME,            MR_NAME_BOOST);
+    boostMap.put(IndexConstants.OLD_MARKER_SYMBOL,      MR_OLD_SYMBOL_BOOST);
+    boostMap.put(IndexConstants.OLD_MARKER_NAME,        MR_OLD_NAME_BOOST);
+    boostMap.put(IndexConstants.MARKER_SYNOYNM,         MR_SYNONYM_BOOST);
+    boostMap.put(IndexConstants.ALLELE_SYMBOL,          MR_ALL_SYMBOL_BOOST);
+    boostMap.put(IndexConstants.ALLELE_SYNONYM,         MR_ALL_SYNONYM_BOOST);
+    boostMap.put(IndexConstants.ALLELE_NAME,            MR_ALL_NAME_BOOST);
+    boostMap.put(IndexConstants.ORTHOLOG_SYMBOL_HUMAN,  MR_ORTHO_HUM_SYMBOL_BOOST);
+    boostMap.put(IndexConstants.ORTHOLOG_SYMBOL_RAT,    MR_ORTHO_RAT_SYMBOL_BOOST);
+    boostMap.put(IndexConstants.ORTHOLOG_SYMBOL,        MR_ORTHO_SYMBOL_BOOST);
+    boostMap.put(IndexConstants.ORTHOLOG_NAME,          MR_ORTHO_NAME_BOOST);
+    boostMap.put(IndexConstants.ORTHOLOG_SYNONYM,       MR_ORTHO_SYNONYM_BOOST);
+    boostMap.put(IndexConstants.VOC_ACCESSION_ID,       MR_VOC_ACCID_BOOST);
+    boostMap.put(IndexConstants.VOCAB_TERM,             MR_VOC_TERM_BOOST);
+    boostMap.put(IndexConstants.VOCAB_SYNONYM,          MR_VOC_SYNONYM_BOOST);
+    boostMap.put(IndexConstants.VOCAB_NOTE,             MR_VOC_NOTE_BOOST);
+    return boostMap;
+  }
+
 
 }

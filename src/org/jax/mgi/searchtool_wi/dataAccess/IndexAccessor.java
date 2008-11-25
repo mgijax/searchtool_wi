@@ -33,8 +33,14 @@ import org.jax.mgi.shr.searchtool.StemmedMGIAnalyzer;
  *
  * @author mhall
  *
+ * @has Various Analyzers, an IndexSearcherContained, and Queries.
+ * 
+ * These are used in the various searches to complete the task of searching 
+ * a given data source.
  *
- *
+ * @does This object encapsulates all the various searches into a single 
+ * interface.  The interface consistently takes a SearchInput object, with 
+ * the exception of some very special cases. 
  */
 
 public class IndexAccessor {
@@ -44,13 +50,13 @@ public class IndexAccessor {
     private Analyzer standard_analyzer = new StandardAnalyzer();
     private Analyzer mgi_analyzer = new MGIAnalyzer();
     private Analyzer stemmed_mgi_analyzer = new StemmedMGIAnalyzer();
-    private PerFieldAnalyzerWrapper perField_analyzer = new PerFieldAnalyzerWrapper(
-            standard_analyzer);
+    private PerFieldAnalyzerWrapper perField_analyzer = 
+        new PerFieldAnalyzerWrapper(standard_analyzer);
 
     private QueryParser qp_pre;
     private QueryParser qp_snow;
-
     private QueryParser qp_large_token;
+    
     private BooleanQuery bq = new BooleanQuery();
 
     private Configuration config;
@@ -60,19 +66,35 @@ public class IndexAccessor {
     private Hits hits = null;
 
     public IndexAccessor(Configuration stConfig) {
+        
+        // Set up the per field analyzer wrapper.  This is used for inexact
+        // searches.
+        
         perField_analyzer.addAnalyzer("data", mgi_analyzer);
         perField_analyzer.addAnalyzer("sdata", stemmed_mgi_analyzer);
+        
         config = stConfig;
+        
+        // Set up the various query parsers.  They are each used to generate
+        // specific queries based upon a search string that has been passed to 
+        // them.
+        
         qp_snow = new QueryParser(IndexConstants.COL_SDATA,
                 stemmed_mgi_analyzer);
         qp_pre = new QueryParser(IndexConstants.COL_DATA, mgi_analyzer);
         qp_large_token = new QueryParser(IndexConstants.COL_DATA,
                 new KeywordAnalyzer());
 
+        // Override some of the default lucene behaviors for query parsers.
+        
         qp_snow.setAllowLeadingWildcard(true);
         qp_pre.setAllowLeadingWildcard(true);
         qp_large_token.setAllowLeadingWildcard(true);
+        qp_large_token.setDefaultOperator(QueryParser.Operator.AND);
         BooleanQuery.setMaxClauseCount(100000);
+        
+        // Initialize the reference to the IndexSearcherContainer singleton.
+        
         isc = IndexSearcherContainer.getIndexSearcherContainer(config);
     }
 
@@ -83,7 +105,8 @@ public class IndexAccessor {
      * @throws Exception
      */
     
-    public List<Hit> searchMarkerAccIDByLargeToken(SearchInput si) throws Exception {
+    public List<Hit> searchMarkerAccIDByLargeToken(SearchInput si) 
+        throws Exception {
         IndexSearcher searcher = isc.getMarkerAccIDIndex();
 
         List<String> tokens = si.getLargeTokenList();
@@ -112,7 +135,8 @@ public class IndexAccessor {
      * @throws Exception
      */
     
-    public Hits searchMarkerAccIDByWholeTerm(SearchInput si) throws Exception {
+    public Hits searchMarkerAccIDByWholeTerm(SearchInput si) 
+        throws Exception {
         IndexSearcher searcher = isc.getMarkerAccIDIndex();
         Term t = new Term(IndexConstants.COL_DATA, si
                 .getWholeTermSearchString());
@@ -160,7 +184,8 @@ public class IndexAccessor {
      * @throws Exception
      */
     
-    public Hits searchMarkerVocabAccIDByWholeTerm(SearchInput si) throws Exception {
+    public Hits searchMarkerVocabAccIDByWholeTerm(SearchInput si) 
+        throws Exception {
         IndexSearcher searcher = isc.getMarkerVocabAccIDIndex();
         Term t = new Term(IndexConstants.COL_DATA, si
                 .getWholeTermSearchString());
@@ -180,7 +205,8 @@ public class IndexAccessor {
      * @throws Exception
      */
     
-    public List<Hit> searchMarkerSymbolExactByLargeToken(SearchInput si) throws Exception {
+    public List<Hit> searchMarkerSymbolExactByLargeToken(SearchInput si) 
+        throws Exception {
         IndexSearcher searcher = isc.getMarkerSymbolIndex();
 
         List<String> tokens = si.getEscapedLargeTokenList();
@@ -206,22 +232,23 @@ public class IndexAccessor {
     }
 
     /**
-     * Search marker symbols by whole term.  This currently does not allow
-     * the use of prefix searches.
+     * Search marker symbols by whole term.  This also allows the use of prefix
+     * searches.
      * 
      * @param si
      * @return
      * @throws Exception
      */
     
-    public Hits searchMarkerSymbolExactByWholeTerm(SearchInput si) throws Exception {
+    public Hits searchMarkerSymbolExactByWholeTerm(SearchInput si) 
+        throws Exception {
         IndexSearcher searcher = isc.getMarkerSymbolIndex();
-        Term t = new Term(IndexConstants.COL_DATA, si
-                .getWholeTermSearchString());
-        TermQuery tq = new TermQuery(t);
+        
+        Query whole_symbol_query = 
+            qp_large_token.parse(si.getEscapedWholeTermSearchString());
 
-        hits = searcher.search(tq);
-
+        hits = searcher.search(whole_symbol_query);
+        
         return hits;
     }
     
@@ -234,7 +261,8 @@ public class IndexAccessor {
      * @throws Exception
      */
 
-    public List<Hit> searchMarkerExactByLargeToken(SearchInput si) throws Exception {
+    public List<Hit> searchMarkerExactByLargeToken(SearchInput si) 
+        throws Exception {
         IndexSearcher searcher = isc.getMarkerExactIndex();
 
         List<String> tokens = si.getLargeTokenList();
@@ -516,6 +544,15 @@ public class IndexAccessor {
         return hits;
     }
 
+    /**
+     * Search vocabulary accession id's by large tokens contained in the search
+     * string.
+     * 
+     * @param si The searchinput object.
+     * @return A List of Hit objects
+     * @throws Exception
+     */
+    
     public List<Hit> searchVocabAccIDByLargeToken(SearchInput si) throws Exception {
         IndexSearcher searcher = isc.getVocabAccIDIndex();
 
@@ -536,6 +573,13 @@ public class IndexAccessor {
 
         return hitsList;
     }
+    
+    /**
+     * Search vocabulary accession id's by whole search string.
+     * @param si The searchinput object.
+     * @return A hits object.
+     * @throws Exception
+     */
     
     public Hits searchVocabAccIDByWholeTerm(SearchInput si) throws Exception {
         IndexSearcher searcher = isc.getVocabAccIDIndex();

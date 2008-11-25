@@ -23,7 +23,8 @@ import org.jax.mgi.shr.searchtool.IndexConstants;
  *
  * @author      mhall
  *
- * @is          Cache to check both the existence of given tokens.  This is a singleton.
+ * @is          Cache to check the existence of given tokens.  This is a 
+ *              singleton.
  * @has         None
  * @does        Provides a boolean methods, hasToken returning true if the
  *              token exists in the cache.
@@ -77,9 +78,21 @@ public class TokenExistanceCache {
         }
     }
 
-
+    /**
+     * This is used internally to lookup an other (non marker, non vocab)
+     * accession Id, only if all else has failed.  Once it has been looked up
+     * once, it is stored in cache from that point forward.
+     * @param token
+     * @return
+     * @throws Exception
+     */
+    
     private Boolean lookupOther(String token) throws Exception {
 
+        // Currently this is the only spot that the indexAccessor breaks
+        // the API of accepting a SearchInput only.  Perhaps I should 
+        // tweak this so the public facing api is more consistent.
+        
         Hits hit = indexAccessor.searchOtherExactByWholeTerm(token);
 
         if (hit != null && hit.length() > 0) {
@@ -89,6 +102,13 @@ public class TokenExistanceCache {
         return false;
     }
 
+    /**
+     * Load up the cache with the tokens from the various data sources.
+     * This takes a bit to initialize, over 25 seconds added to the servers
+     * startup time.
+     * @param stConfig
+     */
+    
     private static void load(Configuration stConfig) {
 
         log.info("TokenExistanceCache Loading....");
@@ -106,20 +126,27 @@ public class TokenExistanceCache {
 
             IndexSearcher is = isc.getMarkerAccIDIndex();
 
-            Term markerKey = new Term(IndexConstants.COL_DATA_TYPE, IndexConstants.ACCESSION_ID);
+            Term markerKey = new Term(IndexConstants.COL_DATA_TYPE, 
+                    IndexConstants.ACCESSION_ID);
             TermQuery mQuery = new TermQuery(markerKey);
 
-            Term orthKey = new Term(IndexConstants.COL_DATA_TYPE, IndexConstants.ORTH_ACCESSION_ID);
+            Term orthKey = new Term(IndexConstants.COL_DATA_TYPE, 
+                    IndexConstants.ORTH_ACCESSION_ID);
             TermQuery oQuery = new TermQuery(orthKey);
 
-            Term alleleKey = new Term(IndexConstants.COL_DATA_TYPE, IndexConstants.ALLELE_ACCESSION_ID);
+            Term alleleKey = new Term(IndexConstants.COL_DATA_TYPE, 
+                    IndexConstants.ALLELE_ACCESSION_ID);
             TermQuery aQuery = new TermQuery(alleleKey);
 
-            Term esCellKey = new Term(IndexConstants.COL_DATA_TYPE, IndexConstants.ES_ACCESSION_ID);
+            Term esCellKey = new Term(IndexConstants.COL_DATA_TYPE, 
+                    IndexConstants.ES_ACCESSION_ID);
             TermQuery eQuery = new TermQuery(esCellKey);
 
             BooleanQuery bq = new BooleanQuery();
 
+            // Join all of the queries together in an or query.  This in effect
+            // pulls out all of the data for all of these types.
+            
             bq.add(mQuery, BooleanClause.Occur.SHOULD);
             bq.add(oQuery, BooleanClause.Occur.SHOULD);
             bq.add(aQuery, BooleanClause.Occur.SHOULD);
@@ -141,7 +168,8 @@ public class TokenExistanceCache {
 
             is = isc.getVocabAccIDIndex();
 
-            Term vocabKey = new Term(IndexConstants.COL_DATA_TYPE, IndexConstants.ACCESSION_ID);
+            Term vocabKey = new Term(IndexConstants.COL_DATA_TYPE, 
+                    IndexConstants.ACCESSION_ID);
 
             TermQuery vQuery = new TermQuery(vocabKey);
 

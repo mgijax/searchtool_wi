@@ -39,6 +39,14 @@ public abstract class AbstractMatch {
   // unique key provided by the index; used as join-point between indexes
   private String uniqueKey;
 
+  // tiering flags
+  boolean isTier1 = false;
+  boolean isTier2 = false;
+  boolean isTier3 = false;
+
+  // derived values
+  Float derivedScore;
+
   //----------------//
   // Basic Accessors
   //----------------//
@@ -148,6 +156,29 @@ public abstract class AbstractMatch {
     if (s != null) {uniqueKey = s;}
   }
 
+  // --------//
+  // Tiering
+  // --------//
+
+  public boolean isTier1() {
+    return isTier1;
+  }
+  public void flagAsTier1() {
+   isTier1 = true;
+  }
+  public boolean isTier2() {
+    return isTier2;
+  }
+  public void flagAsTier2() {
+   isTier2 = true;
+  }
+  public boolean isTier3() {
+    return isTier3;
+  }
+  public void flagAsTier3() {
+   isTier3 = true;
+  }
+
   //---------//
   // Sorting
   //---------//
@@ -168,8 +199,21 @@ public abstract class AbstractMatch {
   * Return the derived score of this match (search score + additive score)
   * @return Float - the score
   */
-  public Float getScore() {
-    return (searchScore * luceneWeight) + additiveScore;
+  public Float getScore()
+  {
+    if (derivedScore == null)
+    {
+        int tierScore = 0;
+        if (isTier1) {
+            tierScore = 100000;
+        }else if (isTier2) {
+            tierScore = 10000;
+        }else if (isTier3) {
+            tierScore = 1000;
+        }
+        derivedScore = (searchScore * luceneWeight) + additiveScore + tierScore;
+    }
+    return derivedScore;
   }
 
   //---------------//
@@ -300,7 +344,11 @@ public abstract class AbstractMatch {
   public boolean isAccID() {
 
     boolean isAccID = false;
-    if ( this.dataType.equals(IndexConstants.ACCESSION_ID) ) {
+    if ( this.dataType.equals(IndexConstants.ACCESSION_ID)
+      || this.dataType.equals(IndexConstants.VOC_ACCESSION_ID)
+      || this.dataType.equals(IndexConstants.ALLELE_ACCESSION_ID)
+      || this.dataType.equals(IndexConstants.ORTH_ACCESSION_ID)
+      || this.dataType.equals(IndexConstants.ES_ACCESSION_ID)) {
         isAccID = true;
     }
     return isAccID;

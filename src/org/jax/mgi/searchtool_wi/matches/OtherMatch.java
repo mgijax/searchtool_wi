@@ -17,9 +17,9 @@ public class OtherMatch extends AbstractMatch {
   // --------//
 
   // Data & Values specific to an "Other" Match
-  private String organism = "";
-  private String acc_key = "";
-  private String preferred = "";
+  private String organism   = "";
+  private String acc_key    = "";
+  private String preferred  = "";
   private String logical_db = "";
 
   // ----------------//
@@ -28,7 +28,6 @@ public class OtherMatch extends AbstractMatch {
 
   /**
   * Returns the organism key of the object hit
-  *
   * @return String - the organism key
   */
   public String getOrganism() {
@@ -37,9 +36,7 @@ public class OtherMatch extends AbstractMatch {
 
   /**
   * Set organism key of the object hit
-  *
-  * @param String -
-  *                the organism key
+  * @param String - the organism key
   */
   public void setOrganism(String s) {
     organism = s;
@@ -47,7 +44,6 @@ public class OtherMatch extends AbstractMatch {
 
   /**
   * Returns the accession key of the object hit
-  *
   * @return String - the accession key
   */
   public String getAccKey() {
@@ -56,9 +52,7 @@ public class OtherMatch extends AbstractMatch {
 
   /**
   * Sets the accession key of the object hit
-  *
-  * @param String -
-  *                the accession key
+  * @param String - the accession key
   */
   public void setAccKey(String s) {
     acc_key = s;

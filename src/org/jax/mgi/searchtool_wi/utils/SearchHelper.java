@@ -10,10 +10,8 @@ import org.jax.mgi.shr.searchtool.IndexConstants;
 
 /**
 * @module SearchHelper
-* @author pf
 *
-* The SearchHelper object provides utility methods for searches
-*
+* The SearchHelper object provides utility methods to aid searches
 */
 public class SearchHelper
 {

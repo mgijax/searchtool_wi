@@ -11,6 +11,7 @@ import org.jax.mgi.searchtool_wi.matches.MarkerMatch;
 import org.jax.mgi.searchtool_wi.matches.MatchSorter;
 import org.jax.mgi.searchtool_wi.matches.MarkerMatch;
 import org.jax.mgi.searchtool_wi.matches.MarkerVocabMatch;
+import org.jax.mgi.searchtool_wi.utils.ScoreConstants;
 import org.jax.mgi.shr.config.Configuration;
 
 public class QS_MarkerResult extends AbstractResult {
@@ -22,16 +23,12 @@ public class QS_MarkerResult extends AbstractResult {
   // number of total matches
   private int matchCount;
 
-  // to sort the matches
-  private MatchSorter matchSorter = new MatchSorter();
 
   // list of high-level types of matches
   private List allNomenMatches;
   private List allVocMatches;
 
   // lists of specific types of matches
-  private ArrayList<MarkerMatch> exactMarkerMatches
-    = new ArrayList<MarkerMatch>();
   private  ArrayList<MarkerMatch> nomenMatches
     = new ArrayList<MarkerMatch>();
   private ArrayList<MarkerVocabMatch> adMatches
@@ -53,9 +50,9 @@ public class QS_MarkerResult extends AbstractResult {
   private Float derivedScore    = new Float(0.0);
   private Float bestVocabScore  = new Float(0.0);
   private Float bestNomenScore  = new Float(0.0);
+  private Map   resultBoostMap  = ScoreConstants.getMarkerResultBoostMap();
 
-  // best match
-  private AbstractMatch bestMatch;
+  // matches
   private MarkerVocabMatch bestVocabMatch;
   private MarkerMatch bestNomenMatch;
 
@@ -90,13 +87,15 @@ public class QS_MarkerResult extends AbstractResult {
     return markerDisplayCache.getMarker(this).getSymbol().toLowerCase();
   }
 
+  // best match for this result
+  public AbstractMatch getBestMatch() {
+    return bestMatch;
+  }
+
   // finalization tasks
   public void finalizeResult() {
 
     // sort our match arrays
-    if (exactMarkerMatches.size() > 0) {
-        Collections.sort(exactMarkerMatches, matchSorter);
-    }
     if (nomenMatches.size() > 0) {
         Collections.sort(nomenMatches, matchSorter);
     }
@@ -143,50 +142,42 @@ public class QS_MarkerResult extends AbstractResult {
         bestMatch = bestNomenMatch;
     }
 
+    // match count
+    matchCount = getAllMarkerVocabMatches().size()
+               + getAllMarkerNomenMatches().size();
+
     // derive the score for this result object
-    if ( this.hasExactInputStrMatch() ){
-        derivedScore = new Float(200000); // Exact match to entire input
+    if ( this.bestMatch.isTier1() ){
+        derivedScore = new Float(100000);
+        derivedScore += getBestMatchTypeBoost(); //flat type boost
     }
-    else if ( this.hasExactInputTokenMatch() ){
-        derivedScore = new Float(100000); // Exact to space-delin user input
+    else if ( this.bestMatch.isTier2() ){
+        derivedScore = new Float(10000);
+        derivedScore += this.bestMatch.getScore(); //use score of best match
+    }
+    else if ( this.bestMatch.isTier3() ){
+        derivedScore = new Float(1000);
+        derivedScore += getBestMatchTypeBoost(); //flat type boost
     }
     else{  // if no exact matches, than score by best match
         derivedScore = bestMatch.getScore();
     }
-
-    matchCount = getAllMarkerVocabMatches().size()
-               + getAllMarkerNomenMatches().size();
-
   }
 
-  // -----------//
-  // Best Match
-  // -----------//
-  public AbstractMatch getBestMatch() {
-    return bestMatch;
-  }
+  // -------------------------//
+  // Best Match Type Boosting
+  // -------------------------//
 
-
-  // ----------------//
-  // Exact Matches
-  // ----------------//
-
-  public void addExactMatch(MarkerMatch mem) {
-    exactMarkerMatches.add(mem);
-    handledNomenMatches.add( mem.getUniqueKey() );
-  }
-
-  public List getExactMatches() {
-    return exactMarkerMatches;
-  }
-
-  public boolean hasExactMatches() {
-    boolean b = false;
-    if (exactMarkerMatches.size() > 0) {
-        b = true;
+  public Float getBestMatchTypeBoost()
+  {
+    Float matchTypeBoost = new Float(0.0);
+    String matchType = getBestMatch().getDataType();
+    if (resultBoostMap.containsKey(matchType)) {
+        matchTypeBoost = (Float)resultBoostMap.get(matchType);
     }
-    return b;
+    return matchTypeBoost;
   }
+
 
   // ----------------//
   // Marker Matches
@@ -195,6 +186,7 @@ public class QS_MarkerResult extends AbstractResult {
   public void addNomenMatch(MarkerMatch nm) {
     if (!handledNomenMatches.contains( nm.getUniqueKey() ) ) {
         nomenMatches.add(nm);
+        handledNomenMatches.add( nm.getUniqueKey() );
     }
   }
 
@@ -292,7 +284,6 @@ public class QS_MarkerResult extends AbstractResult {
   public List getAllMarkerNomenMatches() {
     if (allNomenMatches == null) {
       allNomenMatches = new ArrayList();
-      allNomenMatches.addAll(exactMarkerMatches);
       allNomenMatches.addAll(nomenMatches);
       Collections.sort(allNomenMatches, matchSorter);
     }

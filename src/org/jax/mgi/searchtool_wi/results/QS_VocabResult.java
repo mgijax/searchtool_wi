@@ -33,9 +33,6 @@ public class QS_VocabResult extends AbstractResult {
   // inexact matches to this vocab term
   private ArrayList<VocabMatch> inexactMatches = new ArrayList<VocabMatch>();
 
-  // to sort the matches
-  private MatchSorter matchSorter = new MatchSorter();
-
   // scoring
   private Float derivedScore = new Float(0.0);
   private Float bestExactMatchScore = new Float(0.0);
@@ -45,9 +42,6 @@ public class QS_VocabResult extends AbstractResult {
   private Float exact_score = new Float(0.0);
   private Boolean has_annot = false;
   private Boolean has_exact = false;
-
-  // best match
-  private AbstractMatch bestMatch;
 
   // -------------//
   // Constructor //
@@ -68,6 +62,11 @@ public class QS_VocabResult extends AbstractResult {
   // secondary sort
   public String getAlphaSortBy() {
       return vocabDisplayCache.getVocab(this).getName();
+  }
+
+  // best match for this result
+  public AbstractMatch getBestMatch() {
+    return bestMatch;
   }
 
   // finalization tasks
@@ -91,13 +90,6 @@ public class QS_VocabResult extends AbstractResult {
 
       derivedScore = bestExactMatchScore + bestInexactScoreScore;
 
-  }
-
-  // -----------//
-  // Best Match
-  // -----------//
-  public AbstractMatch getBestMatch() {
-    return bestMatch;
   }
 
   // ------------//

@@ -23,7 +23,7 @@ import org.jax.mgi.shr.searchtool.IndexConstants;
 * @author mhall
 */
 
-/**  The OtherDisplayCache object provides a presistent, in-memory container
+/**  The OtherDisplayCache object provides a persistent, in-memory container
 *   for search tool related display data.
 *
 * @is a singleton for holding other display data
@@ -93,6 +93,11 @@ public class OtherDisplayLookup
     // Data Retrieval Methods
     /////////////////////////
 
+    /**
+     * Return the otherDisplay information if its in the cache, if not look it
+     * up, and add it to the cache, and then return it.
+     */
+    
     public OtherDisplay getOther(QS_OtherResult otherResult)
     {
         OtherDisplay thisOtherDisplay = (OtherDisplay)otherCacheMap.get(otherResult.getDbKey()+"::"+otherResult.getDataType());
@@ -107,6 +112,14 @@ public class OtherDisplayLookup
         return thisOtherDisplay;
     }
 
+    /**
+     * Perform a search into the other display index to grab a specific item
+     * via its db key and type.
+     * @param dbKey
+     * @param type
+     * @return
+     */
+    
     private OtherDisplay lookupOther(String dbKey, String type)
     {
 

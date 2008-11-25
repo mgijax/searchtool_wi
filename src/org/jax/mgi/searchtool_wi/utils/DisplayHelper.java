@@ -5,20 +5,14 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.text.NumberFormat;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.KeywordAnalyzer;
 import org.apache.lucene.analysis.snowball.SnowballAnalyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
-import org.apache.lucene.queryParser.QueryParser;
-import org.apache.lucene.search.BooleanClause;
-import org.apache.lucene.search.BooleanQuery;
-import org.apache.lucene.search.Query;
 import org.jax.mgi.searchtool_wi.dataAccess.IndexReaderContainer;
 import org.jax.mgi.searchtool_wi.lookup.MarkerDisplay;
 import org.jax.mgi.searchtool_wi.lookup.MarkerDisplayCache;
@@ -28,7 +22,6 @@ import org.jax.mgi.searchtool_wi.matches.AbstractMatch;
 import org.jax.mgi.searchtool_wi.results.QS_MarkerResult;
 import org.jax.mgi.searchtool_wi.results.QS_VocabResult;
 import org.jax.mgi.shr.config.Configuration;
-
 import org.jax.mgi.shr.searchtool.IndexConstants;
 import org.jax.mgi.shr.searchtool.MGIAnalyzer;
 import org.jax.mgi.shr.searchtool.StemmedMGIAnalyzer;
@@ -88,20 +81,118 @@ public class DisplayHelper
 
   //---------------------------------------------------------- OverLib Pop-ups
 
-  public String getOverlibUserDocString() {
+  public String getUserDocAnchorString() {
     return "<div class=\\\'detailRowType\\\'>See <a href=\\\'"
       + stConfig.get("USERDOCS_URL")
       + "searchtool_help.shtml\\\'>Using the Quick Search Tool</a> "
       + "for more information and examples.</div>";
   }
 
-  public String getScoreMouseOver()
+  public String getScoreMouseOverMarker()
   {
     String star = "<img src=" + stConfig.get("QUICKSEARCH_URL")
       + "darkStarSmall.gif>";
-    String scoreMouseOver = "return overlib('Score is based on similarity between your text and IDs, nomenclature, and vocabulary term text in MGIs database.<br/>" + star + star + star + " - perfect match between your search and matched text<br/>&nbsp;&nbsp;" + star + star + " - all words in your search appear in matched text<br/>&nbsp;&nbsp;&nbsp;&nbsp;" + star + " - some words in your search appear in matched text ', STICKY, CAPTION, 'Score', HAUTO, BELOW, WIDTH, 375, DELAY, 600, CLOSECLICK, CLOSETEXT, 'Close X')";
+
+    String scoreMouseOver = "return overlib('Score is based on similarity "
+      + "between your text and IDs, nomenclature, and vocabulary term "
+      + "text in MGI\\\'s database.<br/>"
+      + star + star + star + star
+      + " - exact match between your search and matched text<br/>&nbsp;"
+      + "&nbsp;" + star + star + star
+      + " - all terms in your search appear in the matched text<br/>&nbsp;"
+      + "&nbsp;&nbsp;&nbsp;" + star + star
+      + " - one term in your search matched a genome feature symbol "
+      + "or accession ID exactly<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+      + star + " - not all terms in your search appear in matched text'"
+      + ", STICKY, CAPTION, 'Score', HAUTO, BELOW, WIDTH, 375, DELAY, "
+      + "600, CLOSECLICK, CLOSETEXT, 'Close X')";
 
     return scoreMouseOver;
+  }
+
+  public String getScoreMouseOverVocab()
+  {
+    String star = "<img src=" + stConfig.get("QUICKSEARCH_URL")
+      + "darkStarSmall.gif>";
+
+    String scoreMouseOver = "return overlib('Score is based on similarity "
+      + "between your text and IDs, nomenclature, and vocabulary term "
+      + "text in MGI\\\'s database.<br/>"
+      + star + star + star + star
+      + " - exact match between your search and matched text<br/>&nbsp;"
+      + "&nbsp;" + star + star + star
+      + " - all words in your search appear in matched text<br/>"
+      + "&nbsp;&nbsp;&nbsp;"+ star + star
+      + " - one term in your search matched a vocabulary term accession ID exactly<br/>&nbsp;"
+      + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + star
+      + " - not all words in your search appear in matched text'"
+      + ", STICKY, CAPTION, 'Score', HAUTO, BELOW, WIDTH, 375, DELAY, "
+      + "600, CLOSECLICK, CLOSETEXT, 'Close X')";
+
+    return scoreMouseOver;
+  }
+
+  public String getHelpPopupMarkerBucket()
+  {
+    String helpPopup = "return overlib('<div class=detailRowType>"
+      + "This list includes genes, QTL, cytogenetic markers, "
+      + "and other genome features whose name, symbol, synonym, or accession "
+      + "ID matched some or all of your search text.<br/><br/>This list also "
+      + "includes genome features associated with vocabulary terms matching "
+      + "your search text. <br/><br/></div>"
+      + getUserDocAnchorString() + "', STICKY, CAPTION, "
+      + "'Genome Features', HAUTO, BELOW, WIDTH, 375, DELAY, "
+      + "600, CLOSECLICK, CLOSETEXT, 'Close X')";
+
+    return helpPopup;
+  }
+
+  public String getHelpPopupVocabBucket()
+  {
+    String helpPopup = "return overlib('<div class=detailRowType>"
+      + "Use the vocabulary terms listed here "
+      + "<ul>"
+      + "<li>to learn MGI\\\'s official terms</li>"
+      + "<li>to focus on detailed research topics</li>"
+      + "<li>to explore related research areas</li>"
+      + "<li>to investigate alternative areas</li>"
+      + "</ul></div>"
+      + getUserDocAnchorString() + "', STICKY, CAPTION, "
+      + "'Vocabulary Terms', HAUTO, BELOW, WIDTH, 375, DELAY, "
+      + "600, CLOSECLICK, CLOSETEXT, 'Close X')";
+
+    return helpPopup;
+  }
+
+  public String getHelpPopupOtherBucket()
+  {
+    String helpPopup = "return overlib('<div class=detailRowType>This "
+      + "section includes links to "
+      + "alleles, sequences, orthology relationships, SNPs and other "
+      + "results whose accession ID matched an item in your search "
+      + "text.</div>" + getUserDocAnchorString() + "', STICKY, CAPTION, "
+      + "'Other Results By ID', HAUTO, BELOW, WIDTH, 375, DELAY, "
+      + "600, CLOSECLICK, CLOSETEXT, 'Close X')";
+
+    return helpPopup;
+  }
+
+  public String getHelpPopupGoogleBucket()
+  {
+    String helpPopup = "return overlib('<div class=detailRowType>Use Google to search for your text "
+      + "on MGI\\\'s web pages including:"
+      + "<ul>"
+      + "<li>FAQs</li>"
+      + "<li>Help pages</li>"
+      + "<li>Reference abstracts</li>"
+      + "<li>Phenotypic details for alleles</li>"
+      + "<li>Image captions</li>"
+      + "<li>...and other pages</li>"
+      + "</ul></div>" + getUserDocAnchorString() +"', STICKY, CAPTION, "
+      + "'Search MGI with Google', HAUTO, BELOW, WIDTH, 375, DELAY, "
+      + "600, CLOSECLICK, CLOSETEXT, 'Close X')";
+
+    return helpPopup;
   }
 
   public String getVocabBestMatchMouseOver() {
@@ -110,7 +201,7 @@ public class DisplayHelper
       + "to vocabulary terms, synonyms, and"
       + " definitions based on text similarity to your search text.  Not "
       + "displaying subterms of matched terms.</div>"
-      + getOverlibUserDocString();
+      + getUserDocAnchorString();
 
     String bestMatchMouseOver = "return overlib('"
       + message
@@ -126,7 +217,7 @@ public class DisplayHelper
       + "vocabulary term, ID or nomenclature.  Displayed vocabulary terms may be "
       + "subterms of the best matching term, e.g., query matched &quot;hippocampus"
       + "&quot; and subterm associated with the genome feature is &quot;dentate gyrus&quot;.</div>"
-      + getOverlibUserDocString();
+      + getUserDocAnchorString();
 
     String bestMatchMouseOver = "return overlib('"
       + message
@@ -136,26 +227,39 @@ public class DisplayHelper
     return bestMatchMouseOver;
   }
 
+  public String getHelpIconPopup()
+  {
+    String helpPopup = "return overlib('<div class=detailRowType>"
+      + "<ul>"
+      + "<li>Under Construction</li>"
+      + "</ul></div>" + getUserDocAnchorString() +"', STICKY, CAPTION, "
+      + "'Search MGI with Google', HAUTO, BELOW, WIDTH, 375, DELAY, "
+      + "600, CLOSECLICK, CLOSETEXT, 'Close X')";
+
+    return helpPopup;
+  }
+
+
   //------------------------------------------------------- Search Detail Info
 
-  public String getWhyMatchSearchDetails (SearchInput si) throws IOException{
-      // The top part of the message text will ALWAYS appear, so simply construct it.
+  public String getWhyMatchSearchDetails (SearchInput si) throws IOException
+  {
+    // The top part of the message text will ALWAYS appear, so simply construct it.
 
-      String topMessageText = "<div class='small'>" +getSearchTermDisplay(si)
-                  + " " + getStemmedSearchTermDisplay(si) + "</div>";
+    String topMessageText = "<div class='small'>" +getSearchTermDisplay(si)
+                + " " + getStemmedSearchTermDisplay(si) + "</div>";
 
-      String bottomMessageText = "";
+    String bottomMessageText = "";
 
-      bottomMessageText += getZeroHitTokensString(si);
+    bottomMessageText += getZeroHitTokensString(si);
 
-      // The bottom part of the message text is only brought back if a missing large
-      // token is found.  So we want to suppress its div if that's the case.
+    // The bottom part of the message text is only brought back if a missing large
+    // token is found.  So we want to suppress its div if that's the case.
+    if (!bottomMessageText.equals("")) {
+        bottomMessageText = "<div class='small'>" + bottomMessageText + "</div>";
+    }
 
-      if (!bottomMessageText.equals("")) {
-          bottomMessageText = "<div class='small'>" + bottomMessageText + "</div>";
-      }
-
-      return topMessageText + bottomMessageText;
+    return topMessageText + bottomMessageText;
   }
 
  /**
@@ -166,48 +270,48 @@ public class DisplayHelper
 
   public String getZeroHitTokensString(SearchInput si) {
 
-      String messageText ="";
+        String messageText = "";
 
-      String warningIcon = "<img src=" + stConfig.get("QUICKSEARCH_URL")
-      + "redwarning.gif style='vertical-align: middle'>";
+        String warningIcon = "<img src=" + stConfig.get("QUICKSEARCH_URL")
+                + "redwarning.gif style='vertical-align: middle'>";
 
-      List<String> zeroHitTokens = si.getZeroHitTokens();
+        List<String> zeroHitTokens = si.getZeroHitTokens();
 
-      // First Check to see if we have zero token hits:
-      // If we do we need to display something slightly different on the link section.
+        // First Check to see if we have zero token hits:
+        // If we do we need to display something slightly different on the link
+        // section.
 
+        if (zeroHitTokens.size() > 0) {
+            messageText += "<span>" + warningIcon
+                    + "</span><span style='margin-bottom: 100px;'>Could not "
+                    + "find the independant term(s): "
+                    + "<span class='redText'>";
 
-      if (zeroHitTokens.size() > 0) {
-          messageText += "<span>"
-                  + warningIcon
-                  + "</span><span style='margin-bottom: 100px;'>Could not find the term(s): "
-                  +	"<span class='redText'>";
+            // The first word that we print out needs no comma, so set a flag
+            // to keep track.
 
-          // The first word that we print out needs no comma, so set a flag to
-          // keep track.
+            int first = 0;
 
-          int first = 0;
+            for (Iterator<String> iter = zeroHitTokens.iterator(); iter
+                    .hasNext();) {
+                String token = (String) iter.next();
 
-          for (Iterator<String> iter = zeroHitTokens.iterator(); iter
-                  .hasNext();) {
-              String token = (String) iter.next();
+                // Print out the message
 
-              // Print out the message
+                if (first == 0) {
+                    messageText += superscript(token.replaceAll("\\\\", ""));
+                    first = 1;
+                } else {
+                    messageText += "</span>, <span class='redText'>"
+                            + superscript(token.replaceAll("\\\\", ""));
+                }
+            }
+            // Close out the span.
+            messageText += "</span>.</span>";
+        }
 
-              if (first == 0) {
-                  messageText += superscript(token.replaceAll("\\\\", ""));
-                  first = 1;
-              } else {
-                  messageText += "</span>, <span class='redText'>"
-                          + superscript(token.replaceAll("\\\\", ""));
-              }
-          }
-          // Close out the span.
-          messageText += "</span>.</span>";
-      }
-
-      return messageText;
-  }
+        return messageText;
+    }
 
   public String getSearchTermDisplay (SearchInput si) throws IOException{
       // Display the search terms
@@ -398,15 +502,18 @@ public class DisplayHelper
 
         // Display the stop words message.
 
-        if (si.hasStopWords()) {
+        if (si.hasStopWords() || si.hasExcludedWords()) {
             text += "<div class=\\\'detailRowType\\\'><span class=\\\'detailHeaderType\\\'>" +
-            		"Stop Words</span><br>The search tries to match common words like " +
+            		"Excluded Terms</span><br>The search excludes common words like " +
             		"<span class=\\\'italic\\\'>the</span>, " +
             		"<span class=\\\'italic\\\'>and</span>, " +
             		"<span class=\\\'italic\\\'>of</span>, " +
-            		"or <span class=\\\'italic\\\'>with</span> only " +
-            		"in current symbols and names for mouse genome features, " +
-            		"or in phrases using quotation marks.</div>";
+            		"or <span class=\\\'italic\\\'>with</span> " +
+            		"except in current symbols and names for mouse " +
+            		"genome features, or in phrases using quotation marks.  " +
+            		"The search also excludes numbers between 0 and 99, " +
+            		"and single letters when they do not return relevant " +
+            		"results</div>";
         }
 
 
@@ -443,7 +550,7 @@ public class DisplayHelper
             "Case</span><br>Searches are not case sensitive; searching for embryo," +
             " Embryo, or eMbRyO will return the same results.</div>";
 
-        text += getOverlibUserDocString();
+        text += getUserDocAnchorString();
 
         text += "</div>";
 
@@ -456,15 +563,6 @@ public class DisplayHelper
 
 
   //------------------------------------------------------- Marker "Why Match"
-
-  public boolean needsMrkWhyMatchLink (QS_MarkerResult markerResult)
-  {
-    boolean needsLink = false;
-    if (markerResult.getMatchCount() > 1) {
-        needsLink = true;
-    }
-    return needsLink;
-  }
 
   public String getMrkWhyMatchURL (QS_MarkerResult mResult, String query)
   {
@@ -483,23 +581,22 @@ public class DisplayHelper
   }
 
   /**
-   * Helper method that creates a tooltip for the markerbucket.
-   * @param markerResult The markerResult we want to create the tooltip for.
-   * @return A An anchor tag, containing the overlib javascript to create the tooltip.
-   */
-
+  * Helper method that creates a tooltip for the markerbucket.
+  * @param markerResult The markerResult we want to create the tooltip for.
+  * @return A An anchor tag, containing the overlib javascript to create the tooltip.
+  */
   public static String getMarkerScoreMouseOver (QS_MarkerResult markerResult)
   {
     MarkerDisplay markerDisplay = markerDisplayCache.getMarker(markerResult);
 
-    int nomenMatches        = markerResult.getAllMarkerNomenMatches().size();
-    int adMatches           = markerResult.getAdMatches().size();
-    int mpMatches           = markerResult.getMpMatches().size();
-    int goMatches           = markerResult.getGoMatches().size();
-    int omimMatches         = markerResult.getOmimMatches().size();
-    int omimOrthoMatches    = markerResult.getOmimOrthoMatches().size();
-    int pirsfMatches        = markerResult.getPirsfMatches().size();
-    int ipMatches           = markerResult.getIpMatches().size();
+    int nomenMatches     = markerResult.getAllMarkerNomenMatches().size();
+    int adMatches        = markerResult.getAdMatches().size();
+    int mpMatches        = markerResult.getMpMatches().size();
+    int goMatches        = markerResult.getGoMatches().size();
+    int omimMatches      = markerResult.getOmimMatches().size();
+    int omimOrthoMatches = markerResult.getOmimOrthoMatches().size();
+    int pirsfMatches     = markerResult.getPirsfMatches().size();
+    int ipMatches        = markerResult.getIpMatches().size();
 
     String caption = "see matches for " + markerDisplay.getSymbol(); // + MarkerDisplay.getSymbol
     String contents = "";
@@ -532,7 +629,7 @@ public class DisplayHelper
 
     String scoreOverlib = "onMouseOver=\"return overlib('" + contents
       + "', CAPTION, '" + caption
-      + "', RIGHT, BELOW, WIDTH, 200, DELAY, 200, TIMEOUT, 3000);\" onMouseOut=\"nd();\" ";
+      + "', RIGHT, BELOW, WIDTH, 200, DELAY, 200);\" onMouseOut=\"nd();\" ";
 
     return scoreOverlib;
   }
@@ -596,15 +693,14 @@ public class DisplayHelper
   {
     String commaDelimString = new String("");
 
-    for (Iterator i = c.iterator(); i.hasNext(); ) {
+    for (Iterator i = c.iterator(); i.hasNext(); )
+    {
         String nextValue = (String)i.next();
-
         if (nextValue != null) {
             if (!commaDelimString.equals("")) {
                     commaDelimString = commaDelimString + ", ";
             }
-
-        commaDelimString = commaDelimString + nextValue;
+            commaDelimString = commaDelimString + nextValue;
         }
     }
 
@@ -634,13 +730,9 @@ public class DisplayHelper
   */
   public static String superscript (String s, String start, String stop)
   {
-    if (s == null){
-        return null;            // no source string
-    }
-
-    if ((start == null) || (stop == null)){
-        return s;               // no start/stop string
-    }
+    // shortcut logic if there's nothing to do
+    if (s == null){return null;}  // no source string
+    if ((start == null) || (stop == null)){return s;} // no start/stop string
 
     // Otherwise, find the first instance of 'start' and 'stop' in 's'.
     // If either does not appear, then short-circuit and just return 's'
@@ -694,10 +786,11 @@ public class DisplayHelper
     return encodedurl;
   }
 
-  /** convert string representation of int, adding commas
-   * @param string value of the integer
-   * @return string value of the interger, with commas added
-   */
+  /**
+  * Convert string representation of int, adding commas
+  * @param string value of the integer
+  * @return string value of the interger, with commas added
+  */
   public static String commaFormatIntStr (String numIn)
   {
     String numOut;
@@ -730,7 +823,8 @@ public class DisplayHelper
     return strOut;
   }
 
-  /** Shorted the displayed score shorted for readability
+  /**
+  * Shorted the displayed score shorted for readability
   * @param s the source of the score
   * @return String no more than 5 characters long
   */
@@ -743,7 +837,8 @@ public class DisplayHelper
     return newF.toString().substring(0,5);
   }
 
-  /** Visual representation of match's score
+  /**
+  * Visual representation of match's score
   * @param match - match to score
   * @return String - HTML for displaying this matches representative score
   */
@@ -752,11 +847,14 @@ public class DisplayHelper
     String star = "<img src='" + stConfig.get("QUICKSEARCH_URL")
       + "darkStarSmall.gif' width='9' height='8'>";
 
-    if ( match.getScore() > 1000 ) {
+    if ( match.isTier1()) {
+        return star + star + star + star;
+    }
+    else if ( match.isTier2()){
         return star + star + star;
     }
-    else if ( match.getScore() > 100 ){
-        return star + star;
+    else if ( match.isTier3()){
+        return star  + star;
     }
     return star;
   }

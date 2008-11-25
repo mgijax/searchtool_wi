@@ -4,12 +4,14 @@ package org.jax.mgi.searchtool_wi.searches;
 import java.util.*;
 import java.io.IOException;
 
+// MGI Shared Classes
+import org.jax.mgi.shr.config.Configuration;
+
 // Logging
 import org.apache.log4j.Logger;
 
 // Lucene Classes
 import org.apache.lucene.search.*;
-import org.apache.lucene.index.CorruptIndexException;
 
 // Quick Search Specific
 import org.jax.mgi.searchtool_wi.matches.VocabMatch;
@@ -19,10 +21,6 @@ import org.jax.mgi.searchtool_wi.results.QS_VocabResult;
 import org.jax.mgi.searchtool_wi.utils.SearchInput;
 import org.jax.mgi.searchtool_wi.utils.ScoreConstants;
 import org.jax.mgi.shr.searchtool.IndexConstants;
-
-// MGI Shared Classes
-import org.jax.mgi.shr.config.Configuration;
-
 
 /**
 * This concrete search is responsible for gathering all data required for
@@ -52,8 +50,8 @@ public class QS_VocabSearch extends AbstractSearch {
   // Match Type Scorers we'll need to score the matches
   MatchTypeScorer vocabExactTypeScorer =
     new MatchTypeScorer(ScoreConstants.getVocabExactScoreMap() );
-  MatchTypeScorer vocabTypeScorer =
-    new MatchTypeScorer(ScoreConstants.getVocabScoreMap() );
+  MatchTypeScorer vocabInexactTypeScorer =
+    new MatchTypeScorer(ScoreConstants.getVocabInexactScoreMap() );
 
   //--------------//
   // Constructors
@@ -63,9 +61,9 @@ public class QS_VocabSearch extends AbstractSearch {
     super(c);
   }
 
-  //-----------------------------//
-  // Over-ridden Abstract Method //
-  //-----------------------------//
+  //----------------------------------------//
+  // Over-ridden Abstract gatherData Method //
+  //----------------------------------------//
 
   /**
   * gatherData() is an over-ridden method from the AbstractSearch class, and
@@ -84,6 +82,9 @@ public class QS_VocabSearch extends AbstractSearch {
 
     searchVocabAnd(si);
     timer.record("Vocab - 'AND' Search Done");
+
+    searchVocabLargeToken(si);
+    timer.record("Vocab - LargeToken Search Done");
 
     searchVocabOr(si);
     timer.record("Vocab - 'OR' Search Done");
@@ -106,43 +107,75 @@ public class QS_VocabSearch extends AbstractSearch {
   {
     Hit hit;
     String vocabID;
+    VocabMatch vocabMatch;
+    QS_VocabResult vocabResult;
 
+    // execute the search
     Hits hits =  indexAccessor.searchVocabExactByWholeTerm(searchInput);
-    logger.debug("VocabSearch.searchVocabExact hits -> " + hits.length());
+    logger.debug("VocabSearch.searchVocabExactByWholeTerm hits -> " + hits.length());
+
+    // for each hit, make a match and assign it to a result
     for (Iterator iter = hits.iterator(); iter.hasNext();)
     {
         // get the hit, and build a match
         hit = (Hit) iter.next();
-        handleVocabExactHit(hit);
-    }
 
-    // search each token against vocab IDs
+        // score/flag match
+        vocabMatch = vocabMatchFactory.getMatch(hit);
+        vocabMatch.flagAsTier1();
+        vocabExactTypeScorer.addScore(vocabMatch);
+
+        // assign the match to the correct result
+        vocabResult = getVocabResult(
+            hit.get(IndexConstants.COL_DB_KEY),
+            hit.get(IndexConstants.COL_VOCABULARY));
+        vocabResult.addExactMatch(vocabMatch);
+    }
+  }
+
+
+  //----------------------------//
+  // Search Large Token Matches
+  //----------------------------//
+
+  /**
+  * Searches for LargeTokens.  Iterates through results, adding a match
+  * for each hit finds
+  */
+  private void searchVocabLargeToken(SearchInput searchInput)
+    throws Exception
+  {
+    Hit hit;
+    String vocabID;
+    VocabMatch vocabMatch;
+    QS_VocabResult vocabResult;
+
+    // execute the search
     List idHits =  indexAccessor.searchVocabAccIDByLargeToken(searchInput);
-    logger.debug("VocabSearch.searchVocabAccID hits -> " + idHits.size());
+    logger.debug("VocabSearch.searchVocabAccIDByLargeToken hits -> " + idHits.size());
+
+    // for each hit, make a match and assign it to a result
     for (Iterator hitIter = idHits.iterator(); hitIter.hasNext();)
     {
         // get the hit, and build a match
         hit = (Hit) hitIter.next();
-        handleVocabExactHit(hit);
+
+        // generate/score/flag match
+        vocabMatch = vocabMatchFactory.getMatch(hit);
+        vocabExactTypeScorer.addScore(vocabMatch);
+        if (searchInput.getLargeTokenCount() == 1) {
+            vocabMatch.flagAsTier1();
+        }
+        else {vocabMatch.flagAsTier3();}
+
+        // assign the match to the correct result
+        vocabResult = getVocabResult(
+            hit.get(IndexConstants.COL_DB_KEY),
+            hit.get(IndexConstants.COL_VOCABULARY));
+        vocabResult.addExactMatch(vocabMatch);
     }
   }
 
-  private void handleVocabExactHit (Hit hit)
-    throws Exception
-  {
-    VocabMatch vocabMatch;
-    QS_VocabResult vocabResult;
-
-    // get and/or make a vocabResult, and assign this match to it
-    vocabMatch = vocabMatchFactory.getMatch(hit);
-    vocabExactTypeScorer.addScore(vocabMatch);
-    vocabMatch.addScore(ScoreConstants.VOC_EXACT_BOOST); //for an exact match
-
-    vocabResult = getVocabResult(
-        hit.get(IndexConstants.COL_DB_KEY),
-        hit.get(IndexConstants.COL_VOCABULARY));
-    vocabResult.addExactMatch(vocabMatch);
-  }
 
   //-----------------------//
   // Search Inexact Matches
@@ -159,16 +192,19 @@ public class QS_VocabSearch extends AbstractSearch {
     QS_VocabResult vocabResult;
     VocabMatch vocabMatch;
 
+    // execute the search
     Hits hits =  indexAccessor.searchVocabAnd(si);
     logger.debug("VocabSearch.searchVocabAnd hits -> " + hits.length());
+
+    // for each hit, make a match and assign it to a result
     for (Iterator iter = hits.iterator(); iter.hasNext();)
     {
         // get the hit, build a match, and score the match
         hit = (Hit) iter.next();
         vocabMatch = vocabMatchFactory.getMatch(hit);
         handledDocIDs.add( vocabMatch.getLuceneDocID() );
-        vocabMatch.addScore(ScoreConstants.VOC_AND_BOOST); // for an 'AND' match
-        vocabTypeScorer.addScore(vocabMatch);
+        vocabMatch.flagAsTier2();
+        vocabInexactTypeScorer.addScore(vocabMatch);
 
         // get/make a vocabResult, and assign this match to it
         vocabResult = getVocabResult(
@@ -189,8 +225,11 @@ public class QS_VocabSearch extends AbstractSearch {
     QS_VocabResult vocabResult;
     VocabMatch vocabMatch;
 
+    // execute the search
     Hits hits =  indexAccessor.searchVocabOr(si);
     logger.debug("VocabSearch.searchVocabOr hits -> " + hits.length());
+
+    // for each hit, make a match and assign it to a result
     for (Iterator iter = hits.iterator(); iter.hasNext();)
     {
         hit = (Hit) iter.next();
@@ -200,7 +239,7 @@ public class QS_VocabSearch extends AbstractSearch {
         {
             // build a match, and score the match
             vocabMatch = vocabMatchFactory.getMatch(hit);
-            vocabTypeScorer.addScore(vocabMatch);
+            vocabInexactTypeScorer.addScore(vocabMatch);
 
             // get/make a vocabResult, and assign this match to it
             vocabResult = getVocabResult(
