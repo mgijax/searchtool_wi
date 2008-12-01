@@ -1,15 +1,14 @@
 package org.jax.mgi.searchtool_wi.lookup;
 
-import java.util.*;
+import java.util.HashMap;
 
 import org.apache.log4j.Logger;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.IndexReader;
 import org.jax.mgi.searchtool_wi.dataAccess.IndexReaderContainer;
-import org.jax.mgi.searchtool_wi.exception.CacheNotLoadedException;
+import org.jax.mgi.searchtool_wi.exception.QuickSearchException;
 import org.jax.mgi.searchtool_wi.results.QS_MarkerResult;
 import org.jax.mgi.shr.config.Configuration;
-
 import org.jax.mgi.shr.searchtool.IndexConstants;
 
 //////////////////////////////////////////////////////////////////////////////
@@ -18,7 +17,7 @@ import org.jax.mgi.shr.searchtool.IndexConstants;
 * @author pf
 */
 
-/**  The MarkerDisplayCache object provides a presistent, in-memory container
+/**  The MarkerDisplayCache object provides a persistent, in-memory container
 *   for search tool related display data.
 *
 * @is a singleton for holding marker display data
@@ -70,15 +69,13 @@ public class MarkerDisplayCache
         return _theInstance;
     }
 
-    public static MarkerDisplayCache getMarkerDisplayCache()
-    {
-        if (loadNeeded)
-        {
-            throw new CacheNotLoadedException("You tried use an unintialized MarkerDisplayCache," +
-                " it must first be initialized with a config object.");
-        }
-        else
-        {
+    public static MarkerDisplayCache getMarkerDisplayCache() {
+        if (loadNeeded) {
+            throw new QuickSearchException(
+                    "You tried use an unintialized MarkerDisplayCache,"
+                            + " it must first be initialized with a config "
+                            + "object.");
+        } else {
             return _theInstance;
         }
     }

@@ -1,19 +1,20 @@
 package org.jax.mgi.searchtool_wi.lookup;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Iterator;
 
 import org.apache.log4j.Logger;
-import org.apache.lucene.search.*;
-import org.apache.lucene.analysis.*;
-import org.apache.lucene.queryParser.*;
-import org.apache.lucene.document.*;
-import org.apache.lucene.index.*;
-
-// home-grown classes
+import org.apache.lucene.document.Document;
+import org.apache.lucene.index.Term;
+import org.apache.lucene.search.BooleanClause;
+import org.apache.lucene.search.BooleanQuery;
+import org.apache.lucene.search.Hit;
+import org.apache.lucene.search.Hits;
+import org.apache.lucene.search.IndexSearcher;
+import org.apache.lucene.search.TermQuery;
 import org.jax.mgi.searchtool_wi.dataAccess.IndexSearcherContainer;
-import org.jax.mgi.searchtool_wi.exception.LookupInvalidException;
+import org.jax.mgi.searchtool_wi.exception.QuickSearchException;
 import org.jax.mgi.searchtool_wi.results.QS_OtherResult;
-import org.jax.mgi.searchtool_wi.servlet.Search;
 import org.jax.mgi.shr.config.Configuration;
 import org.jax.mgi.shr.searchtool.IndexConstants;
 
@@ -78,18 +79,16 @@ public class OtherDisplayLookup
 
     public static OtherDisplayLookup getOtherDisplayLookup()
     {
-        if (loadNeeded)
-        {
-            throw new LookupInvalidException("You tried use an unintialized Other DisplayCache," +
-                " it must first be initialized with a config object.");
-        }
-        else
-        {
+        if (loadNeeded) {
+            throw new QuickSearchException("You tried use an unintialized "
+                    + "Other DisplayCache,"
+                    + " it must first be initialized with a config object.");
+        } else {
             return _theInstance;
         }
     }
 
-    /////////////////////////
+    // ///////////////////////
     // Data Retrieval Methods
     /////////////////////////
 

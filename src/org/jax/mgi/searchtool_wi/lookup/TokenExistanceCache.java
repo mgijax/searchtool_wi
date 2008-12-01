@@ -32,9 +32,11 @@ import org.jax.mgi.shr.searchtool.IndexConstants;
 
 public class TokenExistanceCache {
 
-    private static final TokenExistanceCache theInstance = new TokenExistanceCache();
+    private static final TokenExistanceCache theInstance = 
+        new TokenExistanceCache();
     private static HashSet<String> tokenSet = new HashSet<String>();
-    private static Logger log = Logger.getLogger(TokenExistanceCache.class.getName());
+    private static Logger log = 
+        Logger.getLogger(TokenExistanceCache.class.getName());
     private static IndexAccessor indexAccessor;
     private static IndexSearcherContainer isc;
     private static IndexReaderContainer irc;
@@ -49,7 +51,8 @@ public class TokenExistanceCache {
      * @return TokenExistanceCache
      */
 
-    public static TokenExistanceCache getTokenExistanceCache(Configuration config) {
+    public static TokenExistanceCache 
+        getTokenExistanceCache(Configuration config) {
 
         // Setup the instance of the object.
 
@@ -89,9 +92,10 @@ public class TokenExistanceCache {
     
     private Boolean lookupOther(String token) throws Exception {
 
-        // Currently this is the only spot that the indexAccessor breaks
-        // the API of accepting a SearchInput only.  Perhaps I should 
-        // tweak this so the public facing api is more consistent.
+        // This is the only spot in the IndexAccessor api that breaks
+        // the model of only accepting search inputs.  This is done
+        // for simplicities sake at this level, since we are already dealing
+        // with items at a token level.
         
         Hits hit = indexAccessor.searchOtherExactByWholeTerm(token);
 

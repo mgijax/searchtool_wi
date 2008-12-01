@@ -1,24 +1,27 @@
 package org.jax.mgi.searchtool_wi.lookup;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.IndexReader;
 import org.jax.mgi.searchtool_wi.dataAccess.IndexReaderContainer;
-import org.jax.mgi.searchtool_wi.exception.CacheNotLoadedException;
 import org.jax.mgi.shr.config.Configuration;
-
 import org.jax.mgi.shr.searchtool.IndexConstants;
 
-/**  The MarkerVocabSearchCache object provides a presistent, in-memory
-*   container for search tool related display data.
+/**  
+* The MarkerVocabSearchCache object provides a persistent, in-memory
+* container for search tool related display data.
 *
 * @is a singleton for holding vocab display data
 * @has vocab display data
 * @does
 *
 */
+
 public class MarkerVocabSearchCache
 {
     // Set up the logger
