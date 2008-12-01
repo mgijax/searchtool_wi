@@ -5,13 +5,16 @@ import org.apache.lucene.index.IndexReader;
 import org.jax.mgi.shr.config.Configuration;
 
 /**
- *
+ * 
  * @author mhall
+ * 
  * @is A singleton container, which supplies an IndexReaders to objects
- *     requesting them.
+ * requesting them.
+ * 
  * @has Various IndexReaders
+ * 
  * @does Upon initialization creates the only copies of the various index
- *       readers, and passees them out upon request.
+ * readers, and passees them out upon request.
  */
 
 public class IndexReaderContainer {
@@ -25,16 +28,33 @@ public class IndexReaderContainer {
     private IndexReader markerVocabDagReader = null;
     private IndexReader nonIDTokenReader = null;
 
-    private static Logger log = Logger.getLogger(IndexReaderContainer.class.getName());
+    private static Logger log = 
+        Logger.getLogger(IndexReaderContainer.class.getName());
 
     private static String baseDir = null;
 
+    /**
+     * Private default constructor, this object is a singleton, so you never 
+     * construct it!
+     */
+    
     private IndexReaderContainer() {
     }
 
-    public static IndexReaderContainer getIndexReaderContainer(Configuration stConfig) {
+    /**
+     * Singleton calling method, that returns the instance of the IRC
+     * @param stConfig
+     * @return The one and only instance of the IRC.
+     */
+    
+    public static IndexReaderContainer getIndexReaderContainer(
+            Configuration stConfig) {
+        
         baseDir = stConfig.get("INDEX_DIR");
 
+        // If the Marker Exact Reader is null, we are uninitialized.  So
+        // go ahead and initialize all of the readers.
+        
         if (instance.markerExactReader == null) {
             instance.setMarkerExactReader(baseDir + "markerExact/index");
             instance.setMarkerInexactReader(baseDir + "markerInexact/index");
@@ -48,63 +68,138 @@ public class IndexReaderContainer {
         return instance;
     }
 
+    /**
+     * Get the Marker Exact IndexReader
+     * @return An IndexReader
+     */
+    
     public IndexReader getMarkerExactReader() {
         return markerExactReader;
     }
 
+    /**
+     * Set the Marker Exact IndexReader
+     * @param path - The path to the index.
+     */
+    
     private void setMarkerExactReader(String path) {
-        markerExactReader = getReader(path);
+        markerExactReader = setReader(path);
     }
 
+    /**
+     * Get the Marker Inexact IndexReader
+     * @return An IndexReader
+     */
+    
     public IndexReader getMarkerInexactReader() {
         return markerInexactReader;
     }
 
+    /**
+     * Set the Marker Inexact IndexReader
+     * @param path - The path to the index.
+     */
+    
     private void setMarkerInexactReader(String path) {
-        markerInexactReader = getReader(path);
+        markerInexactReader = setReader(path);
     }
 
+    /**
+     * Get the Vocab Exact IndexReader
+     * @return An IndexReader
+     */
+    
     public IndexReader getVocabExactReader() {
         return vocabExactReader;
     }
 
+    /**
+     * Set the Vocab Exact IndexReader
+     * @param path - The path to the index.
+     */
+    
     private void setVocabExactReader(String path) {
-        vocabExactReader = getReader(path);
+        vocabExactReader = setReader(path);
     }
 
+    /**
+     * Get the Vocab Dag IndexReader
+     * @return An IndexReader
+     */
+    
     public IndexReader getVocabDisplayReader() {
         return vocabDisplayReader;
     }
 
+    /**
+     * Set the Vocab Display IndexReader
+     * @param path - The path to the index.
+     */
+    
     private void setVocabDisplayReader(String path) {
-        vocabDisplayReader = getReader(path);
+        vocabDisplayReader = setReader(path);
     }
 
+    /**
+     * Get the Marker Display IndexReader
+     * @return An IndexReader
+     */
+    
     public IndexReader getMarkerDisplayReader() {
         return markerDisplayReader;
     }
 
+    /**
+     * Set the Marker Display IndexReader
+     * @param path - The path to the index.
+     */
+    
     private void setMarkerDisplayReader(String path) {
-        markerDisplayReader = getReader(path);
+        markerDisplayReader = setReader(path);
     }
 
+    /**
+     * Get the Marker Vocab Dag IndexReader
+     * @return An IndexReader
+     */
+    
     public IndexReader getMarkerVocabDagReader() {
         return markerVocabDagReader;
     }
 
+    /**
+     * Set the Marker Vocab Dag IndexReader
+     * @param path - The path to the index.
+     */
+    
     private void setMarkerVocabDagReader(String path) {
-        markerVocabDagReader = getReader(path);
+        markerVocabDagReader = setReader(path);
     }
 
+    /**
+     * Get the Non ID Token IndexReader
+     * @return An IndexReader
+     */
+    
     public IndexReader getNonIDTokenReader() {
         return nonIDTokenReader;
     }
 
+    /**
+     * Set the Non ID Token IndexReader
+     * @param path - The path to the index.
+     */
+    
     private void setNonIDTokenReader(String path) {
-        nonIDTokenReader = getReader(path);
+        nonIDTokenReader = setReader(path);
     }
 
-    private IndexReader getReader(String path) {
+    /**
+     * Generic setReader that all the more specific set methods use.
+     * @return An IndexReader
+     */
+    
+    private IndexReader setReader(String path) {
         IndexReader ir = null;
         try {
             ir = IndexReader.open(path);
