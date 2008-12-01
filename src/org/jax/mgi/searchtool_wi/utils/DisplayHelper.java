@@ -81,6 +81,10 @@ public class DisplayHelper
 
   //---------------------------------------------------------- OverLib Pop-ups
 
+  /**
+   * Create the standard "Using the Quick Search Tool" anchor
+   */
+  
   public String getUserDocAnchorString() {
     return "<div class=\\\'detailRowType\\\'>See <a href=\\\'"
       + stConfig.get("USERDOCS_URL")
@@ -88,6 +92,12 @@ public class DisplayHelper
       + "for more information and examples.</div>";
   }
 
+  /**
+   * Create the tool tip popup for the score column in the marker bucket.
+   * 
+   * @return String containing a formatted overlib call.
+   */
+  
   public String getScoreMouseOverMarker()
   {
     String star = "<img src=" + stConfig.get("QUICKSEARCH_URL")
@@ -110,6 +120,12 @@ public class DisplayHelper
     return scoreMouseOver;
   }
 
+  /**
+   * Create the tool tip popup for the score column in the vocab bucket.
+   * 
+   * @return String containing a formatted overlib call.
+   */
+  
   public String getScoreMouseOverVocab()
   {
     String star = "<img src=" + stConfig.get("QUICKSEARCH_URL")
@@ -132,6 +148,12 @@ public class DisplayHelper
     return scoreMouseOver;
   }
 
+  /**
+   * Create the tool tip popup for the marker bucket.
+   * 
+   * @return String containing a formatted overlib call.
+   */
+  
   public String getHelpPopupMarkerBucket()
   {
     String helpPopup = "return overlib('<div class=detailRowType>"
@@ -147,6 +169,12 @@ public class DisplayHelper
     return helpPopup;
   }
 
+  /**
+   * Create the tool tip popup for the vocab bucket.
+   * 
+   * @return String containing a formatted overlib call.
+   */
+  
   public String getHelpPopupVocabBucket()
   {
     String helpPopup = "return overlib('<div class=detailRowType>"
@@ -164,6 +192,12 @@ public class DisplayHelper
     return helpPopup;
   }
 
+  /**
+   * Create the tool tip popup for the Other Bucket
+   * 
+   * @return String containing a formatted overlib call.
+   */
+  
   public String getHelpPopupOtherBucket()
   {
     String helpPopup = "return overlib('<div class=detailRowType>This "
@@ -177,6 +211,12 @@ public class DisplayHelper
     return helpPopup;
   }
 
+  /**
+   * Create the tool tip popup for the Google Bucket.
+   * 
+   * @return String containing a formatted overlib call.
+   */
+  
   public String getHelpPopupGoogleBucket()
   {
     String helpPopup = "return overlib('<div class=detailRowType>Use Google to search for your text "
@@ -195,6 +235,13 @@ public class DisplayHelper
     return helpPopup;
   }
 
+  /**
+   * Creates the tool tip popup when the "Best Match" column is hovered over
+   * in the vocab bucket.
+   * 
+   * @return String containing a formatted overlib call.
+   */
+  
   public String getVocabBestMatchMouseOver() {
 
     String message = "<div class=\\\'detailRowType\\\'>Displaying matches "
@@ -211,12 +258,21 @@ public class DisplayHelper
     return bestMatchMouseOver;
   }
 
+  /**
+   * Creates the tool tip popup when the "Best Match" column is hovered over
+   * on the marker bucket.
+   * 
+   * @return String containing a formatted overlib call.
+   */
+  
   public String getMarkerBestMatchMouseOver() {
 
-    String message = "<div class=\\\'detailRowType\\\'>For each genome feature, displaying the most relevant associated "
-      + "vocabulary term, ID or nomenclature.  Displayed vocabulary terms may be "
-      + "subterms of the best matching term, e.g., query matched &quot;hippocampus"
-      + "&quot; and subterm associated with the genome feature is &quot;dentate gyrus&quot;.</div>"
+    String message = "<div class=\\\'detailRowType\\\'>For each genome" 
+      +	" feature, displaying the most relevant associated"
+      + " vocabulary term, ID or nomenclature.  Displayed vocabulary terms may" 
+      + " be subterms of the best matching term, e.g., query matched" 
+      +	" &quot;hippocampus&quot; and subterm associated with the" 
+      +	" genome feature is &quot;dentate gyrus&quot;.</div>"
       + getUserDocAnchorString();
 
     String bestMatchMouseOver = "return overlib('"
@@ -227,13 +283,68 @@ public class DisplayHelper
     return bestMatchMouseOver;
   }
 
+  /**
+   * Returns a popup that appears when the help icon is hovered over.
+   * 
+   * @return String containing a formatted overlib call.
+   */
+  
   public String getHelpIconPopup()
   {
-    String helpPopup = "return overlib('<div class=detailRowType>"
-      + "<ul>"
-      + "<li>Under Construction</li>"
-      + "</ul></div>" + getUserDocAnchorString() +"', STICKY, CAPTION, "
-      + "'Search MGI with Google', HAUTO, BELOW, WIDTH, 375, DELAY, "
+      
+    String helpPopup = "return overlib('<div>"
+      + "You can:<ul style=\\\'margin-top:0px; margin-left:10px;"
+      + " padding-left:7px; line-height:1.35;\\\'>"
+      + "<li style=\\\'font-size:1.1em;\\\'>Search for genome" 
+      + " features by name, symbol, synonym, ortholog, allele, or accession" 
+      + " ID:</li>"
+      + "<ul style=\\\'margin-left:30px; padding-left:0px;\\\'>"
+      + "<li>p53 protein cell cycle DNA damage</li>"
+      + "<li>Notch1</li>"
+      +	"<li>NM_053172</li>"
+      + "<li>AT3</li>"
+      + "</ul>"
+      + "<li style=\\\'font-size:1.1em;\\\'>Search for genome"
+      + " features and vocabulary terms by keywords or accession ID. Use" 
+      + " several keywords to find the most relevant results:</li>"
+      + "<ul style=\\\'margin-left:30px; padding-left:0px;\\\'>"
+      + "<li>GO:0004713</li>"
+      + "<li>resistance to fatty liver development</li>" 
+      +	"<li>vitamin D receptor</li>" 
+      +	"<li>lymphocyte function antigen immunodeficiency</li>" 
+      + "</ul>"
+      + "<li style=\\\'font-size:1.1em;\\\'>Use asterisks (*) for wildcards" 
+      + " at the end of partial words or genomic symbols:</li>"
+      + "<ul style=\\\'margin-left:30px; padding-left:0px;\\\'>"
+      + "<li>Pax*</li>"
+      + "<li>embr* development</li>" 
+      +	"<li>hippocamp* pyramid* cell layer</li>"
+      + "</ul>"
+      + "<li style=\\\'font-size:1.1em;\\\'>Use quotation marks" 
+      + " (&quot; &quot;) to indicate phrases:</li>"
+      + "<ul style=\\\'margin-left:30px; padding-left:0px;\\\'>"
+      + "<li>&quot;hair follicle&quot; development</li>" 
+      +	"<li>&quot;amyotrophic lateral sclerosis&quot;</li>" 
+      +	"</ul>"
+      + "<li style=\\\'font-size:1.1em;\\\'>Use"
+      + " angle brackets to indicate superscript:</li>"   
+      + "<ul style=\\\'margin-left:30px; padding-left:0px;\\\'>"
+      + "<li>Pax6<10Neu> for Pax6" 
+      +	"<sup style=\\\'font-size:0.8em;\\\'>10Neu</sup></li>" 
+      +	"</ul>"
+      + "<li style=\\\'font-size:1.1em;\\\'>Mix IDs, symbols, and" 
+      + " keywords in a list:</li>"  
+      + "<ul style=\\\'margin-left:30px; padding-left:0px;\\\'>"  
+      + "<li>Nmt2, NM_013627, Acbd7, hair follicle development</li>"
+      + "</ul>"
+      + "</ul></div>" 
+      + "Advanced searches are listed under the Search menu.<BR/>" 
+      +	"See <a href=\\\'" 
+      + stConfig.get("USERDOCS_URL") 
+      + "searchtool_help.shtml\\\'>"
+      +	"Using the Quick Search Tool</a> for more information."
+      + "', STICKY, CAPTION, "
+      + "'Quick Search Tips', HAUTO, BELOW, WIDTH, 450, DELAY, "
       + "600, CLOSECLICK, CLOSETEXT, 'Close X')";
 
     return helpPopup;
@@ -242,6 +353,10 @@ public class DisplayHelper
 
   //------------------------------------------------------- Search Detail Info
 
+  /**
+   * Create the Why did we match section, this is common across several pages.
+   */
+  
   public String getWhyMatchSearchDetails (SearchInput si) throws IOException
   {
     // The top part of the message text will ALWAYS appear, so simply construct it.
@@ -313,6 +428,13 @@ public class DisplayHelper
         return messageText;
     }
 
+  /**
+   * Returns the terms the user searched for.
+   * @param si
+   * @return Formatted string containing the users search terms.
+   * @throws IOException
+   */
+  
   public String getSearchTermDisplay (SearchInput si) throws IOException{
       // Display the search terms
 
@@ -339,48 +461,59 @@ public class DisplayHelper
       return text;
   }
 
-  public String getStemmedSearchTermDisplay(SearchInput si) throws IOException{
-      // Display the stemmed search terms, if applicable
+  /**
+   * Creates a stemmed version of the users search string, with any removed 
+   * words having been removed.
+   * 
+   * @param si
+   * @return Formatted String containing the users stemmed search.
+   * @throws IOException
+   */
+  
+  public String getStemmedSearchTermDisplay(SearchInput si)
+            throws IOException {
+        // Display the stemmed search terms, if applicable
 
-      String text = "";
+        String text = "";
 
-      List<String> stemmedTokenizedInputString = si.getStemmedTokenizedLittleInputString();
+        List<String> stemmedTokenizedInputString = si
+                .getStemmedTokenizedLittleInputString();
 
-      if (stemmedTokenizedInputString.size() > 0 && !si.hasPrefix()) {
-          text += "<span>Also searched for: <span class=\"italic\">";
+        if (stemmedTokenizedInputString.size() > 0 && !si.hasPrefix()) {
+            text += "<span>Also searched for: <span class=\"italic\">";
 
-          for (Iterator<String> iter = stemmedTokenizedInputString.iterator(); iter
-                  .hasNext();) {
-              String token = (String) iter.next();
-              if (token.contains("\"")) {
-                  String[] catcher = token.split("\"");
+            for (Iterator<String> iter = stemmedTokenizedInputString.iterator(); iter
+                    .hasNext();) {
+                String token = (String) iter.next();
+                if (token.contains("\"")) {
+                    String[] catcher = token.split("\"");
 
-                  String[] subCatcher = catcher[1].split("\\s");
+                    String[] subCatcher = catcher[1].split("\\s");
 
-                  String newToken = "&quot;";
+                    String newToken = "&quot;";
 
-                  for (int j = 0; j < subCatcher.length; j++) {
-                      if (j == 0) {
-                          newToken += subCatcher[j] + "-";
-                      } else {
-                          newToken += " " + subCatcher[j] + "-";
-                      }
+                    for (int j = 0; j < subCatcher.length; j++) {
+                        if (j == 0) {
+                            newToken += subCatcher[j] + "-";
+                        } else {
+                            newToken += " " + subCatcher[j] + "-";
+                        }
 
-                  }
+                    }
 
-                  newToken += "&quot;";
-                  text += " " + newToken;
+                    newToken += "&quot;";
+                    text += " " + newToken;
 
-              } else {
-                  text += " " + token.replaceAll("\"", "&quot;") + "-";
-              }
-          }
+                } else {
+                    text += " " + token.replaceAll("\"", "&quot;") + "-";
+                }
+            }
 
-          text += ".</span><span>";
-      }
+            text += ".</span><span>";
+        }
 
-      return text;
-  }
+        return text;
+    }
 
 
   /**
@@ -413,7 +546,8 @@ public class DisplayHelper
         List<String> tokenizedInputString = si.getTokenizedLittleInputString();
 
         if (tokenizedInputString.size() > 0) {
-            text += "<div class=\\\'detailRowType\\\'><span class=\\\'detailHeaderType\\\'>" +
+            text += "<div class=\\\'detailRowType\\\'>" +
+            		"<span class=\\\'detailHeaderType\\\'>" +
             		"Search Terms ";
 
             if (zeroHitTokens.size() > 0) {
@@ -462,7 +596,8 @@ public class DisplayHelper
 
         // Display the stemmed search terms, if applicable
 
-        List<String> stemmedTokenizedInputString = si.getStemmedTokenizedLittleInputString();
+        List<String> stemmedTokenizedInputString = 
+            si.getStemmedTokenizedLittleInputString();
 
         if (stemmedTokenizedInputString.size() > 0 && !si.hasPrefix()) {
             text += "<div class=\\\'detailRowType\\\'><span class=\\\'detailHeaderType\\\'>" +
@@ -503,17 +638,17 @@ public class DisplayHelper
         // Display the stop words message.
 
         if (si.hasStopWords() || si.hasExcludedWords()) {
-            text += "<div class=\\\'detailRowType\\\'><span class=\\\'detailHeaderType\\\'>" +
-            		"Excluded Terms</span><br>The search excludes common words like " +
-            		"<span class=\\\'italic\\\'>the</span>, " +
-            		"<span class=\\\'italic\\\'>and</span>, " +
-            		"<span class=\\\'italic\\\'>of</span>, " +
-            		"or <span class=\\\'italic\\\'>with</span> " +
-            		"except in current symbols and names for mouse " +
-            		"genome features, or in phrases using quotation marks.  " +
-            		"The search also excludes numbers between 0 and 99, " +
-            		"and single letters when they do not return relevant " +
-            		"results</div>";
+            text += "<div class=\\\'detailRowType\\\'><span class=\\\'detailHeaderType\\\'>"
+                    + "Excluded Terms</span><br>The search excludes common words like "
+                    + "<span class=\\\'italic\\\'>the</span>, "
+                    + "<span class=\\\'italic\\\'>and</span>, "
+                    + "<span class=\\\'italic\\\'>of</span>, "
+                    + "or <span class=\\\'italic\\\'>with</span> "
+                    + "except in current symbols and names for mouse "
+                    + "genome features, or in phrases using quotation marks.  "
+                    + "The search also excludes numbers between 0 and 99, "
+                    + "and single letters when they do not return relevant "
+                    + "results</div>";
         }
 
 
