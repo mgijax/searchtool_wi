@@ -29,7 +29,7 @@
 </context-param>
 
 <context-param>
-  <param-name>teplateLoc</param-name>
+  <param-name>templateLoc</param-name>
   <param-value>
     /usr/local/mgi/live/mgiconfig/web/
   </param-value>
