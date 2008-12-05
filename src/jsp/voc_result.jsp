@@ -25,7 +25,12 @@
         = new StringAlternator( "qsBucketRow1", "qsBucketRow2" );
 %>
 
+<!--======================================================== Open the Page -->
 <%=webTemplate.getTemplateHeadHtml()%>
+
+<meta name="robots" content="NOINDEX">
+<title>MGI Quick Search Results</title>
+
 <script>
 </script>
 <%=webTemplate.getTemplateBodyStartHtml()%>
@@ -53,9 +58,9 @@
 %>
       <span onmouseover="<%=displayHelper.getHelpPopupVocabBucket()%>" onmouseout="nd();">
            <a class="helpCursor" href="#"><img src="<%=stConfig.get("QUICKSEARCH_URL")%>blue_info_icon.gif" border="0"/></a>
-      </span> 
-      &nbsp;&nbsp;&nbsp;&nbsp; 
-<%    
+      </span>
+      &nbsp;&nbsp;&nbsp;&nbsp;
+<%
   if (vocabStart.intValue() > 1) {
       out.print("<a class='small' href='Search.do?query=" + query + "&page=vocab&vocabStart="
         + (vocabStart - vocabRange) +"'>Previous</a> ");
@@ -65,7 +70,7 @@
         + (vocabStart + vocabRange) +"'>Next</a>");
   }
 %>
- 
+
     </td>
   </tr>
 
@@ -107,76 +112,71 @@
     </td>
     <td>
 <%
-        // column 1 (term)
-        out.print("<span class='matchDisplayableType small'>"
-          + thisVocabDisplay.getTypeDisplay() + "</span> : ");
-        if (thisVocabDisplay.getVocabType().equals(IndexConstants.OMIM_TYPE_NAME))
-        {
-        out.print("<a href='"
-            + stConfig.get("JAVAWI_URL") + "WIFetch?page=humanDisease&key="
-            + thisVocabDisplay.getDbKey() + "'>"
-            + thisVocabDisplay.getName() + "</a>");
-        }
-        else if (thisVocabDisplay.getVocabType().equals(IndexConstants.AD_TYPE_NAME))
-        {
-        out.print("<a href='"
-            + stConfig.get("WI_URL") + "searches/anatdict.cgi?id="
-            + thisVocabDisplay.getDbKey() + "'>"
-            + thisVocabDisplay.getName() + "</a>");
-        }
-        else if (thisVocabDisplay.getVocabType().equals(IndexConstants.GO_TYPE_NAME))
-        {
-        out.print("<a href='"
-            + stConfig.get("WI_URL") + "searches/GO.cgi?id="
-            + thisVocabDisplay.getAcc_id() + "'>"
-            + thisVocabDisplay.getName() + "</a>");
-        }
-        else if (thisVocabDisplay.getVocabType().equals(IndexConstants.PIRSF_TYPE_NAME))
-        {
-        out.print("<a href='"
-            + stConfig.get("JAVAWI_URL") + "WIFetch?page=pirsfDetail&key="
-            + thisVocabDisplay.getDbKey() + "'>"
-            + thisVocabDisplay.getName() + "</a>");
-        }
-        else if (thisVocabDisplay.getVocabType().equals(IndexConstants.INTERPRO_TYPE_NAME))
-        {
-          out.print(thisVocabDisplay.getName() + "");
-        }
-        else
-        {
-        out.print("<a href='"
-            + stConfig.get("WI_URL") + "searches/Phat.cgi?id="
-            + thisVocabDisplay.getAcc_id() + "'>"
-            + thisVocabDisplay.getName() + "</a>");
-        }
-        out.print("</td>");
+    // column 1 (term)
+    out.print("<span class='matchDisplayableType small'>"
+      + thisVocabDisplay.getTypeDisplay() + "</span> : ");
+    if (thisVocabDisplay.getVocabType().equals(IndexConstants.OMIM_TYPE_NAME))
+    {
+    out.print("<a href='"
+        + stConfig.get("JAVAWI_URL") + "WIFetch?page=humanDisease&key="
+        + thisVocabDisplay.getDbKey() + "'>"
+        + thisVocabDisplay.getName() + "</a>");
+    }
+    else if (thisVocabDisplay.getVocabType().equals(IndexConstants.AD_TYPE_NAME))
+    {
+    out.print("<a href='"
+        + stConfig.get("WI_URL") + "searches/anatdict.cgi?id="
+        + thisVocabDisplay.getDbKey() + "'>"
+        + thisVocabDisplay.getName() + "</a>");
+    }
+    else if (thisVocabDisplay.getVocabType().equals(IndexConstants.GO_TYPE_NAME))
+    {
+    out.print("<a href='"
+        + stConfig.get("WI_URL") + "searches/GO.cgi?id="
+        + thisVocabDisplay.getAcc_id() + "'>"
+        + thisVocabDisplay.getName() + "</a>");
+    }
+    else if (thisVocabDisplay.getVocabType().equals(IndexConstants.PIRSF_TYPE_NAME))
+    {
+    out.print("<a href='"
+        + stConfig.get("JAVAWI_URL") + "WIFetch?page=pirsfDetail&key="
+        + thisVocabDisplay.getDbKey() + "'>"
+        + thisVocabDisplay.getName() + "</a>");
+    }
+    else if (thisVocabDisplay.getVocabType().equals(IndexConstants.INTERPRO_TYPE_NAME))
+    {
+      out.print(thisVocabDisplay.getName() + "");
+    }
+    else
+    {
+    out.print("<a href='"
+        + stConfig.get("WI_URL") + "searches/Phat.cgi?id="
+        + thisVocabDisplay.getAcc_id() + "'>"
+        + thisVocabDisplay.getName() + "</a>");
+    }
+    out.print("</td>");
 
-        // column 3 (associations)
-        out.print ("<td class='small'>"+displayHelper.vocabAnnotation(thisVocabResult)+"</td>");
+    // column 3 (associations)
+    out.print ("<td class='small'>"+displayHelper.vocabAnnotation(thisVocabResult)+"</td>");
 
-        // column 4 (Why match?)
-        out.print("<td class='small'><div style='float:left;'>");
-        out.print( thisVocabResult.getBestMatch().display() );
+    // column 4 (Why match?)
+    out.print("<td class='small'><div style='float:left;'>");
+    out.print( thisVocabResult.getBestMatch().display() );
 
-        if (debug) {
-        out.print("</div><a style='float:right;' href='Search.do?query=" + query + "&page=vocabDetails&vocabKey="
-            + thisVocabResult.getDbKey() + "&vocabType="
-            + thisVocabResult.getVocabulary()+"'><i>more..</i></a>");
-        }
-        out.print("</td>");
+    if (debug) {
+    out.print("</div><a style='float:right;' href='Search.do?query=" + query + "&page=vocabDetails&vocabKey="
+        + thisVocabResult.getDbKey() + "&vocabType="
+        + thisVocabResult.getVocabulary()+"'><i>more..</i></a>");
+    }
+    out.print("</td>");
 
 
-        out.print("</tr>");
+    out.print("</tr>");
 
     }
 %>
   <tr style="background-color:#dfefff;">
-        <td colspan=4>
-            &nbsp;
-        </td>
-  </tr>
-</table>
-
+    <td colspan=4>
 <%
 out.print("<span class='small grayText'> Showing " + (vocabStart) + "-" + (vocabStop) + " of "
     + (vocabResultContainer.size()) + "</span>&nbsp;&nbsp;&nbsp;&nbsp;");
@@ -189,4 +189,8 @@ out.print("<span class='small grayText'> Showing " + (vocabStart) + "-" + (vocab
         + (vocabStart + vocabRange) +"'>Next</a>");
   }
 %>
+    </td>
+  </tr>
+</table>
+
 <%=webTemplate.getTemplateBodyStopHtml()%>

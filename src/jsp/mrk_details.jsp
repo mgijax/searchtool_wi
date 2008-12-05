@@ -28,8 +28,13 @@
     String matchScore = "";
 %>
 
+
 <!--======================================================== Open the Page -->
 <%=webTemplate.getTemplateHeadHtml()%>
+
+<meta name="robots" content="NOINDEX">
+<title>MGI Quick Search Results</title>
+
 <script>
 </script>
 <%=webTemplate.getTemplateBodyStartHtml()%>
@@ -38,14 +43,14 @@
 <!--========================================================== Page Header -->
 <div id="detailTitleBarWrapper">
   <span class="fontSize22 fontBold">
-    All Matches for <%=thisMarkerDisplay.getSymbol()%>
+    All Matches for <%=displayHelper.superscript(thisMarkerDisplay.getSymbol())%>
   </span>
 </div>
 
 <%=displayHelper.getWhyMatchSearchDetails(searchInput)%>
 
-<!--========================================================== Marker Info -->
 
+<!--========================================================== Marker Info -->
 <table bgcolor="#DFEFFF" cellspacing="2" width="100%">
 <tr align="left" valign="top">
   <td class="whyMatchData" align="right" bgcolor="#DFEFFF" width="8%">
@@ -56,7 +61,7 @@
   <td class="whyMatchData" bgcolor="#ffffff">
     <span class="fontSize18 fontBold">
       <a href="<%=javawi_url%>WIFetch?page=markerDetail&amp;key=<%=thisMarkerDisplay.getDbKey()%>">
-      <%=thisMarkerDisplay.getSymbol()%></a>
+      <%=displayHelper.superscript(thisMarkerDisplay.getSymbol())%></a>
     </span>
     <br/>
     <span class="fontBold"><%=thisMarkerDisplay.getName()%></span>
@@ -70,12 +75,6 @@
 <!--======================================================== Nomen Matches -->
 <% if (nomenMatches.size() != 0) {
 %>
-
-<!--
-<div class="whyMatchSectionHeader2" style="margin-bottom:4px;">
-Symbol, Name, Synonym and Accession ID matches to your query
-</div>
--->
 
 <br/><table cellspacing="1" class="qsBucket" width="100%" border="0">
 

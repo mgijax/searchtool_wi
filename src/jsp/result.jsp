@@ -27,25 +27,25 @@
       displayLengthMarker = markerResultLength;
       needMoreMarkerLink = false;
   }
-  
+
   if (vocabResultLength < displayLengthVocab) {
       displayLengthVocab = vocabResultLength;
       needMoreVocabLink = false;
   }
-  
+
   // Get the number to display in the more link for markers
-  
+
   int markerMoreLinkNumber;
-  
+
   if (markerResultContainer.size() > 100) {
     markerMoreLinkNumber = 100;
   }
   else {
     markerMoreLinkNumber = markerResultContainer.size();
   }
-  
+
   // Get the number to display in the more link for vocab
-  
+
   int vocabMoreLinkNumber;
   if (vocabResultContainer.size() > 100) {
     vocabMoreLinkNumber = 100;
@@ -62,9 +62,14 @@
 
 <!--======================================================== Open the Page -->
 <%=webTemplate.getTemplateHeadHtml()%>
+
+<meta name="robots" content="NOINDEX">
+<title>MGI Quick Search Results</title>
+
 <script>
 </script>
 <%=webTemplate.getTemplateBodyStartHtml()%>
+
 <%@include file="page_header.jsp"%>
 
 <!--======================================================== Marker Bucket -->
@@ -89,7 +94,7 @@
 %>
   <span onmouseover="<%=displayHelper.getHelpPopupMarkerBucket()%>" onmouseout="nd();">
        <a class="helpCursor" href="#"><img src="<%=stConfig.get("QUICKSEARCH_URL")%>blue_info_icon.gif" border="0"/></a>
-  </span> 
+  </span>
   </td>
 </tr>
 
@@ -164,7 +169,7 @@
   <tr style="background-color:#dfefff;">
     <td colspan=3>
     <% if (needMoreMarkerLink) { %>
-      &nbsp;&nbsp;&nbsp;<a href="Search.do?query=<%=displayHelper.getEncodedUrl(queryForward)%>&page=marker">Show 
+      &nbsp;&nbsp;&nbsp;<a href="Search.do?query=<%=displayHelper.getEncodedUrl(queryForward)%>&page=marker">Show
       <% if (markerMoreLinkNumber < 100) {
             %>all<%
          }
@@ -209,7 +214,7 @@
   %>
   <span onmouseover="<%=displayHelper.getHelpPopupVocabBucket()%>" onmouseout="nd();">
        <a class="helpCursor" href="#"><img src="<%=stConfig.get("QUICKSEARCH_URL")%>blue_info_icon.gif" border="0"/></a>
-  </span> 
+  </span>
   <%
   out.print("</td></tr>");
 
@@ -317,7 +322,7 @@
   <tr style="background-color:#dfefff;">
         <td colspan=4>
         <% if (needMoreVocabLink) { %>
-          &nbsp;&nbsp;&nbsp;<a href="Search.do?query=<%=displayHelper.getEncodedUrl(queryForward)%>&page=vocab">Show 
+          &nbsp;&nbsp;&nbsp;<a href="Search.do?query=<%=displayHelper.getEncodedUrl(queryForward)%>&page=vocab">Show
           <%
           if (vocabMoreLinkNumber < 100) {
             %>all<%
@@ -325,7 +330,7 @@
           else {
             %>first<%
           }
-          
+
           %> <%=vocabMoreLinkNumber%>...</a>
         <% } else {%>&nbsp;<%} %>
         </td>
@@ -351,7 +356,7 @@
   %>
   <span onmouseover="<%=displayHelper.getHelpPopupOtherBucket()%>" onmouseout="nd();">
        <a class="helpCursor" href="#"><img src="<%=stConfig.get("QUICKSEARCH_URL")%>blue_info_icon.gif" border="0"/></a>
-  </span>   
+  </span>
   </td>
   </tr>
   <%
@@ -488,7 +493,7 @@
   <td class='qsBucketHeader'>Search MGI with Google
   <span onmouseover="<%=displayHelper.getHelpPopupGoogleBucket()%>" onmouseout="nd();">
        <a class="helpCursor" href="#"><img src="<%=stConfig.get("QUICKSEARCH_URL")%>blue_info_icon.gif" border="0"/></a>
-  </span> 
+  </span>
   </td>
 </tr>
 <tr>

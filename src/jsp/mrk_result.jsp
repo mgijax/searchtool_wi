@@ -45,10 +45,16 @@
     MarkerDisplay thisMarkerDisplay; //pulled from cache for given marker6
 %>
 
+<!--======================================================== Open the Page -->
 <%=webTemplate.getTemplateHeadHtml()%>
+
+<meta name="robots" content="NOINDEX">
+<title>MGI Quick Search Results</title>
+
 <script>
 </script>
 <%=webTemplate.getTemplateBodyStartHtml()%>
+
 <%@include file="page_header.jsp"%>
 
 
@@ -136,10 +142,14 @@
 <% } /* for each result */ %>
 
   <tr style="background-color:#dfefff;">
-    <td colspan=3>
-        &nbsp;
+    <td colspan=4>
+      <span class='small grayText'>
+      Showing <%=markerStart%> -
+      <%=markerStop%> of <%=markerResultContainer.size()%>&nbsp;&nbsp;&nbsp;
+      <%=previousLink%> <%=nextLink%>
+      </span>
     </td>
-    <td colspan=3>
+    <td colspan=2>
       <div style='float:right; display:none;' id='bqf'>
                <%@include file="batchQueryForwarding.jsp"%>
       </div>
@@ -148,14 +158,6 @@
   </tr>
 
 </table>
-
-<div style='height:2em;position:absolute;width:100%;'>
-  <span class='small grayText'>
-  Showing <%=markerStart%> -
-  <%=markerStop%> of <%=markerResultContainer.size()%>&nbsp;&nbsp;&nbsp;
-  <%=previousLink%> <%=nextLink%>
-  </span>
-</div>
 
 <br/>
 <br/>

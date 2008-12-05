@@ -76,7 +76,7 @@ public class Search extends HttpServlet {
     markerDisplayCache = MarkerDisplayCache.getMarkerDisplayCache(stConfig);
     vocabDisplayCache = VocabDisplayCache.getVocabDisplayCache(stConfig);
     otherDisplayLookup = OtherDisplayLookup.getOtherDisplayLookup(stConfig);
-    webTemplate = new WebTemplate(getServletContext().getInitParameter("teplateLoc"));
+    webTemplate = new WebTemplate(getServletContext().getInitParameter("templateLoc"));
     webTemplate.addCss("searchTool.css");
     webTemplate.addJs("searchTool.js");
 
