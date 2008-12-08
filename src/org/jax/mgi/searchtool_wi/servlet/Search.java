@@ -286,23 +286,39 @@ public class Search extends HttpServlet {
   // Result Retrieval
   //------------------//
 
+  /**
+  * encapsulation of marker result container retrieval
+  */
   private QS_MarkerResultContainer getMarkerResults(SearchInput searchInput)
     throws Exception
   {
     // first, try to retrieve this result set from cache
     QS_MarkerResultContainer markerResultContainer
-      = markerResultCache.getMarkerContainer( searchInput.getCacheString().toLowerCase() );
+      = markerResultCache.getMarkerContainer( searchInput.getCacheString() );
 
-    // if not found in cache, generarate the result set and add to cache
+    // if a filter has been submitted, bypass cache
+    if (searchInput.hasFilter()) {
+        markerResultContainer = null;
+    }
+
+    // if not found in cache (or we cleared it), generarate the result set
     if (markerResultContainer == null) {
         QS_MarkerSearch markerSearch = new QS_MarkerSearch(stConfig);
         markerResultContainer = new QS_MarkerResultContainer(markerSearch.search(searchInput));
-        markerResultCache.addMarkerContainer(searchInput.getCacheString().toLowerCase(), markerResultContainer);
     }
+
+    // and add to servlet-level cache if a filter was not submitted
+    if (!searchInput.hasFilter()) {
+        markerResultCache.addMarkerContainer(searchInput.getCacheString(), markerResultContainer);
+    }
+
     return markerResultContainer;
   }
 
 
+  /**
+  * encapsulation of vocab result container retrieval
+  */
   private QS_VocabResultContainer getVocabResults(SearchInput searchInput)
     throws Exception
   {

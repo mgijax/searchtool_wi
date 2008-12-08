@@ -108,7 +108,6 @@
     <td style='text-align:right;'>
         <%=thisVocabResult.getStarScore()%>
         <% if(debug){out.print(thisVocabResult.getScore());} %>
-        <% if(debug){out.print(rowCount);} %>
     </td>
     <td>
 <%
