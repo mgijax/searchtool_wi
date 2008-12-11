@@ -11,10 +11,6 @@
 */
 
 #qsPageHeader {
-    /*position:absolute;*/
-    /*left: 50%;
-    /*width:60em;         /* IE centering workaround */
-    /*margin-left: -30em; /* IE centering; set negative 1/2 width */
     white-space:nowrap;
     padding-top:2px;
     padding-bottom:2px;
@@ -51,12 +47,9 @@
 #qsExamples {
     position:relative;
     text-align:center;
-    left: 50%;
-    width:86em;         /* IE centering workaround */
-    margin-left: -43em; /* IE centering; set negative 1/2 width */
     color: #666666;
     clear: right;
-    padding-top:-1px;
+    margin-top: -2px;
     padding-bottom:5px;
     font-size:10px;
 }
@@ -149,6 +142,7 @@
     font-family: Verdana,Arial,Helvetica;
     font-size: 12px;
     width:%100;
+    min-width:900px;
 }
 .qsBucket th{
     font-size: 12px;
@@ -202,11 +196,6 @@
     font-style:italic;
 }
 
-/*
-* Generic classes; To be moved into a central CSS (mgi.css probably)
-*/
-
-
 a.helpPopUp:link
 {color:#000010;text-decoration:none}
 a.helpPopUp:active
@@ -214,8 +203,11 @@ a.helpPopUp:active
 a.helpPopUp:hover
 {color:#3300FF;text-decoration:none}
 
-/* Cursor Styles*/
+/*
+* Generic classes; To be moved into a central CSS (mgi.css probably)
+*/
 
+/* Cursor Styles*/
 .helpCursor {cursor: help;}
 
 /* colors */

@@ -39,7 +39,7 @@
 </tr>
 </table>
 
-<div id="qsExamples">Examples:&nbsp;&nbsp;embry*&nbsp;develop*&nbsp;&nbsp;&nbsp;&nbsp;NM_013627&nbsp;&nbsp;&nbsp;&nbsp;Fas&lt;lpr&gt;&nbsp;&nbsp;&nbsp;&nbsp;Pax*&nbsp;&nbsp;&nbsp;&nbsp;axial&nbsp;"skeletal&nbsp;dysplasia"&nbsp;&nbsp;&nbsp;&nbsp;Tg(Igh-6-cre/ESR1)30Afst &nbsp;&nbsp;&nbsp;&nbsp;</div>
+<div id="qsExamples">Examples:&nbsp;&nbsp;embry*&nbsp;develop*&nbsp;&nbsp;&nbsp;&nbsp;NM_013627&nbsp;&nbsp;&nbsp;&nbsp;Fas&lt;lpr&gt;&nbsp;&nbsp;&nbsp;&nbsp;Pax*&nbsp;&nbsp;&nbsp;&nbsp;axial&nbsp;"skeletal&nbsp;dysplasia"&nbsp;&nbsp;&nbsp;&nbsp;Tg(ACTB-cre)2Mrt&nbsp;&nbsp;&nbsp;&nbsp;</div>
 
 <!-- Search Details Link -->
 <%=displayHelper.getSearchDetailOnClick(searchInput)%>

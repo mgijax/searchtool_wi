@@ -492,13 +492,13 @@ public class SearchInput {
                 if (! subCatcher[j].equals("")) {
                     String temp_transformed = removeTrailingPunct(subCatcher[j]);
                     if (temp_transformed != null && ! temp_transformed.equals("")) {
-                        tokens.add(escapeString(temp_transformed, true));
+                        tokens.add(trimWhitespace(escapeString(temp_transformed, true)));
                     }
                 }
             }
         }
         else {
-            tokens.add(escapeString(trimWhitespace(catcher[i]),false));
+            tokens.add(trimWhitespace(escapeString(catcher[i],false)));
         }
     }
 
@@ -613,7 +613,7 @@ public class SearchInput {
             }
         }
         else {
-            queryString += " \"" + escapeString(catcher[i],false) +"\"";
+            queryString += " \"" + trimWhitespace(escapeString(catcher[i],false)) +"\"";
         }
     }
     return trimWhitespace(queryString);

@@ -64,7 +64,7 @@
       <%=displayHelper.superscript(thisMarkerDisplay.getSymbol())%></a>
     </span>
     <br/>
-    <span class="fontBold"><%=thisMarkerDisplay.getName()%></span>
+    <span class="fontBold"><%=displayHelper.superscript(thisMarkerDisplay.getName())%></span>
     <br/>
     <span class="fontBold"><%=thisMarkerDisplay.getMgiId()%></span>
   </td>

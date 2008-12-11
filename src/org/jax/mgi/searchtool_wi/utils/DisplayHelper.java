@@ -387,7 +387,10 @@ public class DisplayHelper
         String messageText = "";
 
         String warningIcon = "<img src=" + stConfig.get("QUICKSEARCH_URL")
-                + "redwarning.gif style='vertical-align: middle'>";
+                + "redwarning.gif style='vertical-align: text-bottom'>";
+
+/*        String warningIcon = "<img src=" + stConfig.get("QUICKSEARCH_URL")
+                + "redwarning.gif>";*/
 
         List<String> zeroHitTokens = si.getZeroHitTokens();
 
@@ -398,7 +401,7 @@ public class DisplayHelper
         if (zeroHitTokens.size() > 0) {
             messageText += "<span>" + warningIcon
                     + "</span><span style='margin-bottom: 100px;'>Could not "
-                    + "find the independant term(s): "
+                    + "find the independent term(s): "
                     + "<span class='redText'>";
 
             // The first word that we print out needs no comma, so set a flag
@@ -524,8 +527,8 @@ public class DisplayHelper
   public String getSearchDetailOnClick(SearchInput si) throws IOException {
 
         String warningIconOverLib = "<img src=" + stConfig.get("QUICKSEARCH_URL")
-                + "redwarning.gif style=\\\'vertical-align: middle\\\'>";
-        String messageText = "<div class='small'>";
+                + "redwarning.gif style=\\\'vertical-align: text-bottom\\\'>";
+        String messageText = "<div class='small grayText'>";
         String text = "";
 
         // Need to know if we have zero hit tokens
@@ -692,7 +695,7 @@ public class DisplayHelper
           + "return overlib('"
           + text
           + "', STICKY, CAPTION, 'Quick Search Details for this search:', HAUTO, BELOW, WIDTH, 375, CLOSECLICK, CLOSETEXT, 'Close X')"
-          + "\">Details</a> for this Search.</div>";
+          + "\">details</a> for this search.</div>";
     }
 
 
@@ -737,7 +740,11 @@ public class DisplayHelper
     String contents = "";
 
     if (nomenMatches != 0) {
-        contents = contents + nomenMatches + " Nomenclature Matches<br/>";
+        contents = contents + nomenMatches + " Nomenclature Match";
+        if (nomenMatches > 1) {
+            contents = contents + "es";
+        }
+        contents = contents + "<br/>";
     }
     if (adMatches != 0) {
         contents = contents + adMatches + " Expression<br/>";

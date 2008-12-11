@@ -42,7 +42,7 @@
 
     // loop variables
     QS_MarkerResult thisMarkerResult; //search result built by model
-    MarkerDisplay thisMarkerDisplay; //pulled from cache for given marker6
+    MarkerDisplay thisMarkerDisplay;  //pulled from cache for given marker
 %>
 
 <!--======================================================== Open the Page -->
@@ -67,9 +67,12 @@
     Genome Features
     <span class='small grayText'>
     Sorted by best match, showing <%=markerStart%> -
-    <%=markerStop%> of <%=markerResultContainer.size()%>
-    <span onmouseover="<%=displayHelper.getHelpPopupMarkerBucket()%>" onmouseout="nd();">
-       <a class="helpCursor" href="#"><img src="<%=stConfig.get("QUICKSEARCH_URL")%>blue_info_icon.gif" border="0"/></a>
+    <%=markerStop%> of
+    <%=displayHelper.commaFormatIntStr(String.valueOf(markerResultContainer.size()))%>
+    <span class="helpCursor"
+      onmouseover="<%=displayHelper.getHelpPopupMarkerBucket()%>"
+      onmouseout="nd();">
+       <img src="<%=stConfig.get("QUICKSEARCH_URL")%>blue_info_icon.gif" border="0"/>
     </span>&nbsp;&nbsp;&nbsp;
     <%=previousLink%> <%=nextLink%>
     </span>
@@ -145,8 +148,9 @@
     <td colspan=4>
       <span class='small grayText'>
       Showing <%=markerStart%> -
-      <%=markerStop%> of <%=markerResultContainer.size()%>&nbsp;&nbsp;&nbsp;
-      <%=previousLink%> <%=nextLink%>
+      <%=markerStop%> of
+      <%=displayHelper.commaFormatIntStr(String.valueOf(markerResultContainer.size()))%>
+      &nbsp;&nbsp;&nbsp;<%=previousLink%> <%=nextLink%>
       </span>
     </td>
     <td colspan=2>

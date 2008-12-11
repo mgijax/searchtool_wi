@@ -54,7 +54,7 @@
   out.print("<td colspan='4' class='qsBucketHeader'>");
   out.print("Vocabulary Terms ");
   out.print("<span class='small grayText'> Sorted by best match, showing " + (vocabStart) + "-" + (vocabStop) + " of "
-    + (vocabResultContainer.size()) + "</span>");
+    + displayHelper.commaFormatIntStr(String.valueOf(vocabResultContainer.size())) + "</span>");
 %>
       <span onmouseover="<%=displayHelper.getHelpPopupVocabBucket()%>" onmouseout="nd();">
            <a class="helpCursor" href="#"><img src="<%=stConfig.get("QUICKSEARCH_URL")%>blue_info_icon.gif" border="0"/></a>
@@ -62,11 +62,14 @@
       &nbsp;&nbsp;&nbsp;&nbsp;
 <%
   if (vocabStart.intValue() > 1) {
-      out.print("<a class='small' href='Search.do?query=" + query + "&page=vocab&vocabStart="
+      out.print("<a class='small' href='Search.do?query=" + displayHelper.getEncodedUrl(queryForward)
+        + "&page=vocab&vocabStart="
         + (vocabStart - vocabRange) +"'>Previous</a> ");
   }
   if (vocabStop.intValue() < vocabResultContainer.size()) {
-      out.print("<a class='small' href='Search.do?query=" + query + "&page=vocab&vocabStart="
+      out.print("<a class='small' href='Search.do?query="
+        + displayHelper.getEncodedUrl(queryForward)
+        + "&page=vocab&vocabStart="
         + (vocabStart + vocabRange) +"'>Next</a>");
   }
 %>
@@ -177,15 +180,21 @@
   <tr style="background-color:#dfefff;">
     <td colspan=4>
 <%
-out.print("<span class='small grayText'> Showing " + (vocabStart) + "-" + (vocabStop) + " of "
-    + (vocabResultContainer.size()) + "</span>&nbsp;&nbsp;&nbsp;&nbsp;");
+out.print("<span class='small grayText'> Showing "
+    + (vocabStart) + "-" + (vocabStop) + " of "
+    + displayHelper.commaFormatIntStr(String.valueOf(vocabResultContainer.size()))
+    + "</span>&nbsp;&nbsp;&nbsp;&nbsp;");
   if (vocabStart.intValue() > 1) {
-      out.print("<a class='small' href='Search.do?query=" + query + "&page=vocab&vocabStart="
-        + (vocabStart - vocabRange) +"'>Previous</a> ");
+    out.print("<a class='small' href='Search.do?query="
+      + displayHelper.getEncodedUrl(queryForward)
+      + "&page=vocab&vocabStart="
+      + (vocabStart - vocabRange) +"'>Previous</a> ");
   }
   if (vocabStop.intValue() < vocabResultContainer.size()) {
-      out.print("<a class='small' href='Search.do?query=" + query + "&page=vocab&vocabStart="
-        + (vocabStart + vocabRange) +"'>Next</a>");
+    out.print("<a class='small' href='Search.do?query="
+      + displayHelper.getEncodedUrl(queryForward)
+      + "&page=vocab&vocabStart="
+      + (vocabStart + vocabRange) +"'>Next</a>");
   }
 %>
     </td>

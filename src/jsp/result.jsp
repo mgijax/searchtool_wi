@@ -80,7 +80,7 @@
 %>
 <!-- Header Row -->
 
-<table class='qsBucket' width='100%' border=0>
+<table class='qsBucket' width='98%' border=0>
 <tr>
   <td colspan='6' class='qsBucketHeader'>Genome Features
 <%
@@ -92,8 +92,8 @@
     out.print("<span class='small grayText'> no results</span>");
   }
 %>
-  <span onmouseover="<%=displayHelper.getHelpPopupMarkerBucket()%>" onmouseout="nd();">
-       <a class="helpCursor" href="#"><img src="<%=stConfig.get("QUICKSEARCH_URL")%>blue_info_icon.gif" border="0"/></a>
+  <span class="helpCursor" onmouseover="<%=displayHelper.getHelpPopupMarkerBucket()%>" onmouseout="nd();">
+       <img src="<%=stConfig.get("QUICKSEARCH_URL")%>blue_info_icon.gif" border="0"/>
   </span>
   </td>
 </tr>
@@ -102,16 +102,16 @@
   if (displayLengthMarker != 0) { %>
 
   <tr align=left valign=top >
-    <th style='padding-right: 5px;padding-left:5px; text-align:right' width='%4'>
+    <th style='padding-right: 5px;padding-left:5px; text-align:right' width='4%'>
       <span onmouseover="<%=displayHelper.getScoreMouseOverMarker()%>" onmouseout="nd();">
        &nbsp;&nbsp;<a class="helpPopUp helpCursor" href="#">Score</a>
       </span>
     </th>
-    <th style='padding-right: 5px;padding-left:5px;'>Type</th>
-    <th style='padding-right: 5px;padding-left:5px;'>Symbol</th>
-    <th style='padding-right: 5px;padding-left:5px;'>Name</th>
-    <th style='padding-right: 5px;padding-left:5px; text-align:right;'>Chr</th>
-    <th style='padding-right: 5px;padding-left:5px;' width='%40' >
+    <th style='padding-right:5px; padding-left:5px;'>Type</th>
+    <th style='padding-right:5px; padding-left:5px;'>Symbol</th>
+    <th style='padding-right:5px; padding-left:5px;'>Name</th>
+    <th style='padding-right:5px; padding-left:5px; text-align:right;'>Chr</th>
+    <th style='padding-right:5px; padding-left:5px;' width='40%' >
       <span onmouseover="<%=displayHelper.getMarkerBestMatchMouseOver()%>" onmouseout="nd();">
        <a class="helpPopUp helpCursor" href="#">Best Match</a>
       </span>
@@ -169,7 +169,8 @@
   <tr style="background-color:#dfefff;">
     <td colspan=3>
     <% if (needMoreMarkerLink) { %>
-      &nbsp;&nbsp;&nbsp;<a href="Search.do?query=<%=displayHelper.getEncodedUrl(queryForward)%>&page=marker">Show
+      &nbsp;&nbsp;&nbsp;
+      <a href="Search.do?query=<%=displayHelper.getEncodedUrl(queryForward)%>&page=marker">Show
       <% if (markerMoreLinkNumber < 100) {
             %>all<%
          }
@@ -188,6 +189,7 @@
       <script>document.getElementById('bqf').style.display = 'block';</script>
     </td>
   </tr>
+
 </table>
 
 
@@ -199,23 +201,21 @@
     bucketRowAlternator.reset();
 
   // table header
-  out.print("<table class='qsBucket' width='100%'><tr>");
+  out.print("<table class='qsBucket' width='98%'><tr>");
   out.print("<td colspan='4' class='qsBucketHeader'>");
   out.print("Vocabulary Terms");
-  if (vocabResultLength != 0)
-  {
+  if (vocabResultLength != 0){
     out.print("<span class='small grayText'> sorted by best match, showing 1-");
     out.print(displayLengthVocab + " of " + vocabResultSizeStr + "</span>");
   }
-  else
-  {
+  else{
     out.print("<span class='small grayText'> no results");
   }
-  %>
+%>
   <span onmouseover="<%=displayHelper.getHelpPopupVocabBucket()%>" onmouseout="nd();">
-       <a class="helpCursor" href="#"><img src="<%=stConfig.get("QUICKSEARCH_URL")%>blue_info_icon.gif" border="0"/></a>
+    <a class="helpCursor" href="#"><img src="<%=stConfig.get("QUICKSEARCH_URL")%>blue_info_icon.gif" border="0"/></a>
   </span>
-  <%
+<%
   out.print("</td></tr>");
 
   // table column headings
@@ -223,14 +223,14 @@
   {
 %>
   <tr align=left valign=top >
-    <th style='padding-right: 5px;padding-left:5px; text-align:right' width='%4'>
+    <th style='padding-right: 5px;padding-left:5px; text-align:right; width:4%' >
       <span onmouseover="<%=displayHelper.getScoreMouseOverVocab()%>" onmouseout="nd();">
        &nbsp;&nbsp;<a class="helpPopUp helpCursor" href="#">Score</a>
       </span>
     </th>
-    <th style='padding-right: 5px;padding-left:5px;'>Term</th>
-    <th style='padding-right: 5px;padding-left:5px;'>Associated Data</th>
-    <th style='padding-right: 5px;padding-left:5px;' width='%40' >
+    <th style='padding-right:5px; padding-left:5px;'>Term</th>
+    <th style='padding-right:5px; padding-left:5px;'>Associated Data</th>
+    <th style='padding-right:5px; padding-left:5px; width:40%;'>
       <span onmouseover="<%=displayHelper.getVocabBestMatchMouseOver()%>"
       onmouseout="nd();">
       <a class="helpPopUp helpCursor" href="#">Best Match</a>
@@ -342,8 +342,8 @@
 <%
   // table header
   out.print("<br/>");
-  out.print("<table class='qsBucket' width='100%'><tr>");
-  out.print("<td colspan='4' class='qsBucketHeader'>");
+  out.print("<table class='qsBucket' width='98%'><tr>");
+  out.print("<td colspan='3' class='qsBucketHeader'>");
   out.print("Other Results By ID");
   if (otherResultContainer.size() != 0) {
     out.print("<span class='small grayText'> sorted by best match, showing 1-");
@@ -488,7 +488,7 @@
 </table>
 <!--======================================================== Search Google -->
 </br></br>
-<table class='qsBucket' width='100%'>
+<table class='qsBucket' width='98%'>
 <tr>
   <td class='qsBucketHeader'>Search MGI with Google
   <span onmouseover="<%=displayHelper.getHelpPopupGoogleBucket()%>" onmouseout="nd();">
