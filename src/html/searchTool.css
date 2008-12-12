@@ -141,8 +141,9 @@
     border-collapse: collapse;
     font-family: Verdana,Arial,Helvetica;
     font-size: 12px;
-    width:%100;
-    min-width:900px;
+    width:%98;
+    min-width:920px;
+    width:expression(document.body.clientWidth < 920? "920px": "auto" );
 }
 .qsBucket th{
     font-size: 12px;

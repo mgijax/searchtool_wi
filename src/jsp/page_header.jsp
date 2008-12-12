@@ -17,18 +17,14 @@
     <h3>Quick Search Results</h3> for:
     <input id="qsTextField" type="text" name="query" size="30" value="<%=query%>"></input>&nbsp;
     <input class="qsButton" type="submit" name="submit" value="Search Again">&nbsp;
-    <!-- A Styled reset form button, which is NOT the same as a clear button
-    <input class="qsButton" type="reset" name="reset" value="Reset">&nbsp; -->
   </form>
   <span class="qsButton" onclick="javascript:clearQuickSearchForm();">
     Reset
   </span>
-  <span class="qsButton" style="margin-left:40px;"
+  <span class="qsButton" style="margin-left:35px;"
     onClick='window.open("<%=mgihome_url%>feedback/feedback_form.cgi?subject=Quick Search")'>
     Your Input Welcome
   </span>
-
-
 </span>
 </td>
 
