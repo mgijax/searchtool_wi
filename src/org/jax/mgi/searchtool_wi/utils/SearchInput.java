@@ -12,6 +12,7 @@ import org.apache.lucene.analysis.StopAnalyzer;
 import org.jax.mgi.shr.searchtool.AnalyzerUtils;
 import org.jax.mgi.shr.searchtool.MGITokenCountAnalyzer;
 import org.jax.mgi.shr.searchtool.StemmedMGITokenCountAnalyzer;
+import org.jax.mgi.shr.searchtool.MGIStopWords;
 
 /**
 * Search Input object, that stores the search string and transforms it in various ways.
@@ -281,7 +282,7 @@ public class SearchInput {
 
                     // Replace all punctuation with whitespace
 
-                    work_string = work_string.replaceAll("\\W", " ");
+                    work_string = work_string.replaceAll("[\\W_]", " ");
 
                     // Remove one trailing whitespace, created by removing the prefix search.
 
@@ -290,9 +291,9 @@ public class SearchInput {
                     String pattern = ".*\\s$";
 
                     /*
-                     * Check to see if the pattern is still terminated by a space.
-                     * If so, trim it off and keep the * off the end, as its no longer
-                     * a valid prefix search.
+                     * Check to see if the pattern is still terminated by a 
+                     * space. If so, trim it off and keep the * off the end, 
+                     * as its no longer a valid prefix search.
                      */
 
                     if (Pattern.matches(pattern, work_string)) {
@@ -313,24 +314,26 @@ public class SearchInput {
                 {
                     if (isID(work_string))
                     {
-                        // Since this IS an ID, replace all its punctation with whitespace, and enclose in
-                        // quotes.
+                        // Since this IS an ID, replace all its punctation with
+                        // whitespace, and enclose in quotes.
 
-                        outString += " \"" + work_string.replaceAll("\\W", " ") + "\"";
+                        outString += " \"" 
+                            + work_string.replaceAll("[\\W_]", " ") + "\"";
                     }
                     else
                     {
-                        // Since its not an ID we replace all its puncutation with whitespace, and add
-                        // it to the stream.
+                        // Since its not an ID we replace all its puncutation 
+                        // with whitespace, and add it to the stream.
 
-                        outString += " " + work_string.replaceAll("\\W", " ");
+                        outString += " " + work_string.replaceAll("[\\W_]", " ");
                     }
                 }
 
             }
         } else {
-            // Since we are in quotes, replace the punctuation with whitespace, and re-enclose in quotes.
-            outString += " \"" + catcher[i].replaceAll("\\W", " ") + "\"";
+            // Since we are in quotes, replace the punctuation with whitespace,
+            // and re-enclose in quotes.
+            outString += " \"" + catcher[i].replaceAll("[\\W_]", " ") + "\"";
         }
     }
 
@@ -364,7 +367,7 @@ public class SearchInput {
                 if (isPrefix(work_string)) {
 
                     // Replace all punctuation with whitespace
-                    work_string = work_string.replaceAll("\\W", " ");
+                    work_string = work_string.replaceAll("[\\W_]", " ");
 
                     // Remove one trailing whitespace, created by removing
                     // the prefix search.
@@ -398,7 +401,8 @@ public class SearchInput {
                         // quotes.
 
                         outString += " \""
-                                + work_string.replaceAll("\\W", " ") + "\"";
+                                + work_string.replaceAll("[\\W_]", " ") + "\"";
+                        
                     } else {
                         // Since its not an ID we replace all its
                         // puncutation with whitespace, and add
@@ -407,20 +411,25 @@ public class SearchInput {
                         // Replace the special characters, and then split on
                         // the resulting whitespace.
 
-                        String[] subTokens = work_string.replaceAll("\\W+",
+                        String[] subTokens = work_string.replaceAll("[\\W_]+",
                                 " ").split(" ");
 
                         for (int k = 0; k < subTokens.length; k++) {
 
                             // If the token length is not 1, add it to the
                             // string for processing in the query
-                            // If it is, that means its a single character
-                            // which can be safely ignored.
+                            // If it is, check to see if it is 2 in length,
+                            // and if so is it two numbers in a row?
+                            
+                            String yield_word_pattern = "at|by|for|in|from|into|of|" +
+                            		"on|to|with|no|not";
+                            
 
                             if (subTokens[k].length() != 1
                                     && !(subTokens[k].length() == 2 && Pattern
                                             .matches("[0-9][0-9]",
-                                                    subTokens[k]))) {
+                                                    subTokens[k])) 
+                                    && ! Pattern.matches(yield_word_pattern, subTokens[k])) {
                                 outString += " " + subTokens[k];
                             }
                         }
@@ -433,7 +442,7 @@ public class SearchInput {
 
             // outString += " \"" +
             // transformID(catcher[i]).replaceAll("\\W", " ") + "\"";
-            outString += " \"" + catcher[i].replaceAll("\\W", " ") + "\"";
+            outString += " \"" + catcher[i].replaceAll("[\\W_]", " ") + "\"";
         }
     }
     return trimWhitespace(outString);
@@ -558,7 +567,7 @@ public class SearchInput {
    */
   public String [] getFilteredSmallTokenList()
   {
-    String temp_string = trimWhitespace(getTransformedLowerCaseStringOr().replaceAll("\\W", " "));
+    String temp_string = trimWhitespace(getTransformedLowerCaseStringOr().replaceAll("[\\W_]", " "));
     return temp_string.split("\\s");
   }
 
@@ -575,7 +584,7 @@ public class SearchInput {
    */
   public String [] getSmallTokenList()
   {
-    String temp_string = trimWhitespace(getTransformedLowerCaseString().replaceAll("\\W", " "));
+    String temp_string = trimWhitespace(getTransformedLowerCaseString().replaceAll("[\\W_]", " "));
     return temp_string.split("\\s");
   }
 
@@ -674,7 +683,7 @@ public class SearchInput {
     // it MAY make more sense to do this only ONCE.  I need to think
     // about this a bit.
 
-    String [] stopList = StopAnalyzer.ENGLISH_STOP_WORDS;
+    String [] stopList = MGIStopWords.MGI_STOP_WORDS;
     String stopPattern =".* (";
 
     for (int i = 0; i < stopList.length; i++) {
@@ -701,6 +710,9 @@ public class SearchInput {
    */
   public Boolean hasExcludedWords()
   {
+      
+    String yield_word_pattern = "at|by|for|in|from|into|of|" 
+        + "on|to|with|no|not";  
     String [] smallTokens = getSmallTokenList();
 
     for (int i = 0; i < smallTokens.length; i++) {
@@ -710,6 +722,10 @@ public class SearchInput {
         if (Pattern.matches("[0-9]{1,2}", smallTokens[i])) {
             return true;
         }
+        if (Pattern.matches(yield_word_pattern, smallTokens[i])) {
+            return true;
+        }
+        
     }
     return false;
   }
@@ -773,6 +789,16 @@ public class SearchInput {
     String mgd_mrk_id_pattern = "mgd-mrk-[0-9]+$";
     String ec_number_id_pattern = "[0-9]+\\.[0-9]+\\.[0-9]+\\.[0-9]+";
 
+    // Pattern to match most acc id's that have an underscore in them.
+    
+    String common_underscore_acc_id_pattern = "[a-z][a-z]_[0-9]+";
+
+    String fhcrc_acc_id_pattern = "fhcrc-gt-[\\w\\-]+";
+
+    String cmhd_acc_id_pattern = "cmhd-gt_[\\w\\.\\-]+";
+    
+    
+
     if (Pattern.matches(common_id_pattern, token)) {
         return true;
     }
@@ -789,6 +815,18 @@ public class SearchInput {
         return true;
     }
 
+    if (Pattern.matches(common_underscore_acc_id_pattern, token)) {
+        return true;
+    }
+    
+    if (Pattern.matches(fhcrc_acc_id_pattern, token)) {
+        return true;
+    }
+
+    if (Pattern.matches(cmhd_acc_id_pattern, token)) {
+        return true;
+    }
+    
     return false;
   }
 
