@@ -42,6 +42,7 @@ public class QuickSearchException extends RuntimeException {
   }
 
   public void setErrorDisplay(String s) {
+      logger.error(s);
       errorDisplay = s;
   }
 

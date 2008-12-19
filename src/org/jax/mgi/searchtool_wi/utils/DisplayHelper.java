@@ -556,13 +556,15 @@ public class DisplayHelper
                 text += warningIconOverLib;
             }
 
-            text += "</span> <br> Searching for matches to <span class=\\\'italic\\\'>";
+            text += "</span> <br> Searching for matches to"
+                    + " <span class=\\\'italic\\\'>";
 
-            for (Iterator<String> iter = tokenizedInputString.iterator(); iter.hasNext();) {
+            for (Iterator<String> iter = tokenizedInputString.iterator(); iter
+                    .hasNext();) {
                 String token = (String) iter.next();
 
-                // Overlib cannot handle quotes in its input, so for ones that we want
-                // to display we need to use the html encoding.
+                // Overlib cannot handle quotes in its input, so for ones that
+                // we want to display we need to use the html encoding.
 
                 text += " " + token.replaceAll("\"", "&quot;");
             }
@@ -602,10 +604,12 @@ public class DisplayHelper
             si.getStemmedTokenizedLittleInputString();
 
         if (stemmedTokenizedInputString.size() > 0 && !si.hasPrefix()) {
-            text += "<div class=\\\'detailRowType\\\'><span class=\\\'detailHeaderType\\\'>" +
-            		"Stemming </span><br> When possible words are &quot;" +
-            		"stemmed&quot; to a root word by removing common suffixes. " +
-            		"Also searching for matches to <span class=\\\'italic\\\'>";
+            text += "<div class=\\\'detailRowType\\\'>"
+                    + "<span class=\\\'detailHeaderType\\\'>"
+                    + "Stemming </span><br> When possible words are &quot;"
+                    + "stemmed&quot; to a root word by removing common suffixes. "
+                    + "Also searching for matches to "
+                    + "<span class=\\\'italic\\\'>";
 
             for (Iterator<String> iter = stemmedTokenizedInputString.iterator(); iter
                     .hasNext();) {
@@ -639,63 +643,92 @@ public class DisplayHelper
 
         // Display the stop words message.
 
+        
+        /*
+         * The search excludes numbers between 0 and 99, single letters,
+         *  and common words like of, to, with and not when they do not
+         *  return relevant results. You can force Quick Search to include
+         *  them by using double quotes.  The search excludes very common
+         *  words like the, and, and or except in current symbols and names
+         *  for mouse genome features.  You cannot force Quick Search to
+         *  consider these words.
+         */
+        
         if (si.hasStopWords() || si.hasExcludedWords()) {
-            text += "<div class=\\\'detailRowType\\\'><span class=\\\'detailHeaderType\\\'>"
-                    + "Excluded Terms</span><br>The search excludes common words like "
-                    + "<span class=\\\'italic\\\'>the</span>, "
-                    + "<span class=\\\'italic\\\'>and</span>, "
-                    + "<span class=\\\'italic\\\'>of</span>, "
-                    + "or <span class=\\\'italic\\\'>with</span> "
-                    + "except in current symbols and names for mouse "
-                    + "genome features, or in phrases using quotation marks.  "
-                    + "The search also excludes numbers between 0 and 99, "
-                    + "and single letters when they do not return relevant "
-                    + "results</div>";
+            text += "<div class=\\\'detailRowType\\\'>"
+                    + "<span class=\\\'detailHeaderType\\\'>"
+                    + "Excluded Terms</span><br>The search excludes"
+                    + " numbers between 0 and 99, single letters,"
+                    + " and common words like"
+                    + " <span class=\\\'italic\\\'>of</span>,"
+                    + " <span class=\\\'italic\\\'>to</span>,"
+                    + " <span class=\\\'italic\\\'>with</span>"
+                    + " and <span class=\\\'italic\\\'>not</span> when they"
+                    + " do not return relevant results. You can force Quick"
+                    + " Search to include them by using double quotes."
+                    + "  The search excludes very common words like"
+                    + " <span class=\\\'italic\\\'>the</span>,"
+                    + " <span class=\\\'italic\\\'>and</span>,"
+                    + " and <span class=\\\'italic\\\'>or</span>"
+                    + " except in current symbols and names for"
+                    + " mouse genome features.  You cannot force Quick Search"
+                    + " to consider these words.</div>";
         }
-
+        
 
         // Display any boolean detected messages if need be.
 
         if (si.hasBoolean()) {
-            text += "<div class=\\\'detailRowType\\\'><span class=\\\'detailHeaderType\\\'>" +
-                "And, Not, and Or</span><br>The search handles " +
-                "<span class=\\\'smallCaps\\\'>And</span>, <span class=\\\'smallCaps\\\'>Not</span>" +
-                ", and <span class=\\\'smallCaps\\\'>Or</span> as " +
-                "Stop Words.  They cannot be used for Boolean logic.</div>";
+            text += "<div class=\\\'detailRowType\\\'>"
+                    + "<span class=\\\'detailHeaderType\\\'>"
+                    + "And, Not, and Or</span><br>The search handles "
+                    + "<span class=\\\'smallCaps\\\'>And</span>,"
+                    + " <span class=\\\'smallCaps\\\'>Not</span>"
+                    + ", and <span class=\\\'smallCaps\\\'>Or</span> as "
+                    + "Stop Words.  "
+                    + "They cannot be used for Boolean logic.</div>";
         }
 
         // Is this a prefix search?
 
         if (si.hasPrefix()) {
-            text += "<div class=\\\'detailRowType\\\'><span class=\\\'detailHeaderType\\\'>" +
-                "Wildcard *</span><br>Your search contains a wildcard.  The search " +
-                "tries to match terms not ending in a wildcard exactly.  Accession " +
-                "IDs may not use a wildcard.</div>";
+            text += "<div class=\\\'detailRowType\\\'>"
+                    + "<span class=\\\'detailHeaderType\\\'>"
+                    + "Wildcard *</span><br>Your search contains a wildcard.  "
+                    + "The search "
+                    + "tries to match terms not ending in a wildcard exactly.  "
+                    + "Accession " + "IDs may not use a wildcard.</div>";
         }
 
         // Are there quotes?
 
         if (si.hasQuotes()) {
-            text += "<div class=\\\'detailRowType\\\'><span class=\\\'detailHeaderType\\\'>" +
-                "Quotes &quot; &quot;</span><br>Your search contains quotation marks." +
-                "  The search handles terms enclosed in quotation marks as a phrase.</div>";
+            text += "<div class=\\\'detailRowType\\\'>"
+                    + "<span class=\\\'detailHeaderType\\\'>"
+                    + "Double Quotes &quot; &quot;</span><br>Your search"
+                    + " contains quotation marks."
+                    + "  The search handles terms enclosed in quotation marks"
+                    + " as a phrase.</div>";
         }
 
         // The Case insensitive statement is always present, add it to the text.
 
-        text += "<div class=\\\'detailRowType\\\'><span class=\\\'detailHeaderType\\\'>" +
-            "Case</span><br>Searches are not case sensitive; searching for embryo," +
-            " Embryo, or eMbRyO will return the same results.</div>";
+        text += "<div class=\\\'detailRowType\\\'>"
+                + "<span class=\\\'detailHeaderType\\\'>"
+                + "Case</span><br>Searches are not case sensitive; "
+                + "searching for embryo,"
+                + " Embryo, or eMbRyO will return the same results.</div>";
 
         text += getUserDocAnchorString();
 
         text += "</div>";
 
         return messageText
-          + "return overlib('"
-          + text
-          + "', STICKY, CAPTION, 'Quick Search Details for this search:', HAUTO, BELOW, WIDTH, 375, CLOSECLICK, CLOSETEXT, 'Close X')"
-          + "\">details</a> for this search.</div>";
+                + "return overlib('"
+                + text
+                + "', STICKY, CAPTION, 'Quick Search Details for this search:', "
+                + "HAUTO, BELOW, WIDTH, 375, CLOSECLICK, CLOSETEXT, 'Close X')"
+                + "\">details</a> for this search.</div>";
     }
 
 

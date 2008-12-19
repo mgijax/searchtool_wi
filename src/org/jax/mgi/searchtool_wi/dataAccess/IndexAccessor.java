@@ -195,7 +195,7 @@ public class IndexAccessor {
         Term t = new Term(IndexConstants.COL_DATA, si
                 .getWholeTermSearchString());
         TermQuery tq = new TermQuery(t);
-
+        
         hits = searcher.search(tq);
 
         return hits;

@@ -365,12 +365,13 @@ public class Search extends HttpServlet {
     HttpServletResponse response, SearchInput searchInput)
     throws IOException, ServletException
   {
-
     QuickSearchException qse = new QuickSearchException();
     String inputString = searchInput.getSearchString();
+    String largeToken;
     int trimmedLength = inputString.trim().length();
     int tokenCount = inputString.split("\\s").length;
     int quoteCount = 0;
+    boolean containsLoneAsterisk = false;
 
     // count quotes; using speed of primatives
     if ( inputString.contains("\"") ) {
@@ -380,6 +381,16 @@ public class Search extends HttpServlet {
             if (buffer[count] == '\"') {
                 quoteCount++;
             }
+        }
+    }
+
+    // check for a lone asterisk
+    for (Iterator iter = searchInput.getLargeTokenList().iterator(); iter.hasNext();)
+    {
+        largeToken = (String) iter.next();
+
+        if ( largeToken.equals("*") ){
+            containsLoneAsterisk = true;
         }
     }
 
@@ -394,6 +405,10 @@ public class Search extends HttpServlet {
     }
     else if ((quoteCount % 2) == 1){
       qse.setErrorDisplay("Your search includes an odd number of quotation marks.  Please edit your search to use quotation marks only in pairs.");
+      sendToError(request, response, qse);
+    }
+    else if (containsLoneAsterisk){
+      qse.setErrorDisplay("Your search contained a lone asterisk (*).  An asterisk must be appended to other characters for use as a wildcard.  Please modify your text and try again.");
       sendToError(request, response, qse);
     }
 

@@ -15,8 +15,10 @@ import org.jax.mgi.shr.searchtool.StemmedMGITokenCountAnalyzer;
 import org.jax.mgi.shr.searchtool.MGIStopWords;
 
 /**
-* Search Input object, that stores the search string and transforms it in various ways.
+* Search Input object, that stores the search string and transforms it 
+* in various ways.
 */
+
 public class SearchInput {
 
   // Set up the logger
@@ -182,7 +184,8 @@ public class SearchInput {
         // We are in items within quotes
         else {
 
-            ArrayList quotesTokens = AnalyzerUtils.getTokenList(tca, catcher[i]);
+            ArrayList quotesTokens =
+                AnalyzerUtils.getTokenList(tca, catcher[i]);
 
             if (quotesTokens.size() > 0) {
                 String quotesToken = "\"";
@@ -205,8 +208,14 @@ public class SearchInput {
   }
 
   /**
-  *
-  */
+   * Produces a list of the tokenized input string, by small tokens.
+   * 
+   * This will also remove any stop words from the list.
+   * 
+   * @return List of Strings containing the little tokens.
+   * @throws IOException
+   */
+  
   public List getTokenizedLittleInputString ()
     throws IOException
   {
@@ -226,7 +235,8 @@ public class SearchInput {
         // We are in items within quotes
         else {
 
-            ArrayList quotesTokens = AnalyzerUtils.getTokenList(tca, catcher[i]);
+            ArrayList quotesTokens =
+                AnalyzerUtils.getTokenList(tca, catcher[i]);
 
             if (quotesTokens.size() > 0) {
                 String quotesToken = "\"";
@@ -249,9 +259,12 @@ public class SearchInput {
     return tokens;
   }
 
-  /**
-  *
-  */
+/**
+ * Produce a transformed search string.  This has had all sorts of special 
+ * handling put into it.  Like forcing phrase queries against accession id's.
+ * 
+ * @return Return a String representation of the search string.  
+ */
   public String getTransformedLowerCaseString() {
 
     // transform everything to lowercase
@@ -276,7 +289,7 @@ public class SearchInput {
 
                 String work_string = removeTrailingPunct(subCatcher[j]);
 
-                if (isPrefix(work_string))
+                if (isPrefix(work_string) && ! isID(work_string))
                 {
                     // Since we've found a prefix string do the following
 
@@ -284,7 +297,8 @@ public class SearchInput {
 
                     work_string = work_string.replaceAll("[\\W_]", " ");
 
-                    // Remove one trailing whitespace, created by removing the prefix search.
+                    // Remove one trailing whitespace, created by removing
+                    // the prefix search.
 
                     work_string = work_string.replaceAll("\\s$", "");
 
@@ -325,7 +339,8 @@ public class SearchInput {
                         // Since its not an ID we replace all its puncutation 
                         // with whitespace, and add it to the stream.
 
-                        outString += " " + work_string.replaceAll("[\\W_]", " ");
+                        outString +=
+                            " " + work_string.replaceAll("[\\W_]", " ");
                     }
                 }
 
@@ -341,9 +356,14 @@ public class SearchInput {
   }
 
   /**
-   *
-   * @return
+   * Produce a transformed search string.  This has had all sorts of special 
+   * handling put into it.  Like forcing phrase queries against accession id's.
+   * In addition this also removes words that are on the yield list from the 
+   * search string as well as any single character, or two character digits.
+   * 
+   * @return Return a String representation of the search string.  
    */
+  
   public String getTransformedLowerCaseStringOr()
   {
     String search_string = this.searchString.toLowerCase();
@@ -364,7 +384,7 @@ public class SearchInput {
 
                 String work_string = removeTrailingPunct(subCatcher[j]);
 
-                if (isPrefix(work_string)) {
+                if (isPrefix(work_string) && ! isID(work_string)) {
 
                     // Replace all punctuation with whitespace
                     work_string = work_string.replaceAll("[\\W_]", " ");
@@ -421,7 +441,8 @@ public class SearchInput {
                             // If it is, check to see if it is 2 in length,
                             // and if so is it two numbers in a row?
                             
-                            String yield_word_pattern = "at|by|for|in|from|into|of|" +
+                            String yield_word_pattern = "at|by|for|in|from|" +
+                            		"into|of|" +
                             		"on|to|with|no|not";
                             
 
@@ -429,7 +450,8 @@ public class SearchInput {
                                     && !(subTokens[k].length() == 2 && Pattern
                                             .matches("[0-9][0-9]",
                                                     subTokens[k])) 
-                                    && ! Pattern.matches(yield_word_pattern, subTokens[k])) {
+                                    && ! Pattern.matches(yield_word_pattern,
+                                            subTokens[k])) {
                                 outString += " " + subTokens[k];
                             }
                         }
@@ -440,8 +462,6 @@ public class SearchInput {
             // Since we are in quotes, replace the punctuation with
             // whitespace, and re-enclose in quotes.
 
-            // outString += " \"" +
-            // transformID(catcher[i]).replaceAll("\\W", " ") + "\"";
             outString += " \"" + catcher[i].replaceAll("[\\W_]", " ") + "\"";
         }
     }
@@ -472,7 +492,8 @@ public class SearchInput {
         for (int i=0; i < temp_tokens.length; i++)
         {
             noPunctToken = removeTrailingPunct(temp_tokens[i]);
-            if (noPunctToken != null && ! noPunctToken.equals("")&& ! noPunctToken.equals(" ") && ! isPrefix(noPunctToken)) {
+            if (noPunctToken != null && ! noPunctToken.equals("")
+                    && ! noPunctToken.equals(" ") && ! isPrefix(noPunctToken)) {
                 tokens.add(noPunctToken);
             }
 
@@ -485,9 +506,12 @@ public class SearchInput {
     return tokens;
   }
 
-  /**
-  * Returns a list of large tokens found in the users String.
-  */
+/**
+ * Returns an escaped list of large tokens.
+ * 
+ * @return A List of Strings
+ */
+  
   public List <String> getEscapedLargeTokenList() {
     String[] catcher = this.searchString.toLowerCase().split("\"");
     String[] subCatcher;
@@ -499,9 +523,12 @@ public class SearchInput {
             subCatcher = catcher[i].split("\\s");
             for (int j = 0; j < subCatcher.length; j++) {
                 if (! subCatcher[j].equals("")) {
-                    String temp_transformed = removeTrailingPunct(subCatcher[j]);
-                    if (temp_transformed != null && ! temp_transformed.equals("")) {
-                        tokens.add(trimWhitespace(escapeString(temp_transformed, true)));
+                    String temp_transformed =
+                        removeTrailingPunct(subCatcher[j]);
+                    if (temp_transformed != null 
+                            && ! temp_transformed.equals("")) {
+                        tokens.add(trimWhitespace(
+                                escapeString(temp_transformed, true)));
                     }
                 }
             }
@@ -531,8 +558,10 @@ public class SearchInput {
             subCatcher = catcher[i].split("\\s");
             for (int j = 0; j < subCatcher.length; j++) {
                 if (! subCatcher[j].equals("")) {
-                    String temp_transformed = removeTrailingPunct(subCatcher[j]);
-                    if (temp_transformed != null && ! temp_transformed.equals("")) {
+                    String temp_transformed =
+                        removeTrailingPunct(subCatcher[j]);
+                    if (temp_transformed != null &&
+                            ! temp_transformed.equals("")) {
                         tokens.add(temp_transformed);
                     }
                 }
@@ -563,11 +592,15 @@ public class SearchInput {
   }
 
   /**
-   *
+   * Return a List of Strings containing the filtered small tokens.
+   * 
+   * @return A List of Strings.
    */
   public String [] getFilteredSmallTokenList()
   {
-    String temp_string = trimWhitespace(getTransformedLowerCaseStringOr().replaceAll("[\\W_]", " "));
+    String temp_string =
+        trimWhitespace(getTransformedLowerCaseStringOr()
+                .replaceAll("[\\W_]", " "));
     return temp_string.split("\\s");
   }
 
@@ -580,26 +613,36 @@ public class SearchInput {
   }
 
   /**
-   *
+   * Returns a list of unfiltered small tokens.
+   * @return A List of Strings.
    */
+  
   public String [] getSmallTokenList()
   {
-    String temp_string = trimWhitespace(getTransformedLowerCaseString().replaceAll("[\\W_]", " "));
+    String temp_string =
+        trimWhitespace(getTransformedLowerCaseString()
+                .replaceAll("[\\W_]", " "));
     return temp_string.split("\\s");
   }
 
 
-  /** Return a transformed search string.
-  * @return String representation of the search string, with all extra spaces
-  *   stripped out, and all letters converted into lowercase.
-  */
+  /** 
+   * Return a transformed search string.
+   * 
+   * @return String representation of the search string, with all extra spaces
+   *   stripped out, and all letters converted into lowercase.
+   */
   public String getWholeTermSearchString(){
-    return trimWhitespace(this.searchString.replaceAll("\"", "").toLowerCase());
+    return trimWhitespace(this.searchString.replaceAll("\"", "")
+            .toLowerCase());
   }
 
   /**
-   *
+   * Return the whole search string, with special characters escaped.
+   * 
+   * @return String representation of the search string. 
    */
+  
   public String getEscapedWholeTermSearchString()
   {
     String[] catcher = this.searchString.toLowerCase().split("\"");
@@ -614,22 +657,27 @@ public class SearchInput {
             subCatcher = catcher[i].split("\\s");
             for (int j = 0; j < subCatcher.length; j++) {
                 if (! subCatcher[j].equals("")) {
-                    String temp_transformed = removeTrailingPunct(subCatcher[j]);
-                    if (temp_transformed != null && ! temp_transformed.equals("")) {
-                        queryString += " " + escapeString(temp_transformed, true);
+                    String temp_transformed =
+                        removeTrailingPunct(subCatcher[j]);
+                    if (temp_transformed != null 
+                            && ! temp_transformed.equals("")) {
+                        queryString +=
+                            " " + escapeString(temp_transformed, true);
                     }
                 }
             }
         }
         else {
-            queryString += " \"" + trimWhitespace(escapeString(catcher[i],false)) +"\"";
+            queryString += " \"" 
+                + trimWhitespace(escapeString(catcher[i],false)) +"\"";
         }
     }
     return trimWhitespace(queryString);
   }
 
   /**
-   *
+   * Does the search string have quotes in it?
+   * @return Boolean
    */
   public Boolean hasQuotes () {
     String pattern = ".*\".*";
@@ -697,8 +745,8 @@ public class SearchInput {
     }
     stopPattern += ") .*";
 
-    // Are there any stop words? Pad the searchstring with a space in order to catch
-    // leading or trailing stopwords.
+    // Are there any stop words? Pad the searchstring with a space in order to
+    // catch leading or trailing stopwords.
     return Pattern.matches(stopPattern, " " +searchString.toLowerCase()+ " ");
   }
 
@@ -736,7 +784,8 @@ public class SearchInput {
    * @return
    */
   private String trimWhitespace(String text) {
-    return text.replaceAll("\\s+", " ").replaceAll("^\\s", "").replaceAll("\\s$", "");
+    return text.replaceAll("\\s+", " ").replaceAll("^\\s", "")
+                .replaceAll("\\s$", "");
   }
 
   /**
@@ -763,7 +812,8 @@ public class SearchInput {
         text = text.replaceAll(regex_patterns[i], replacement_patterns[i]);
     }
 
-    // Make sure prefix searches are intact, if they are intended to be as such.
+    // Make sure prefix searches are intact, if they are intended to be as 
+    // such.
     if (preservePrefix) {
         text = text.replaceAll("\\\\\\*$", "*");
     }
@@ -781,21 +831,21 @@ public class SearchInput {
     // The generic ID pattern, this should catch the bulk of what is in
     // the acc_accession table, add new generic patterns here.
 
-    String common_id_pattern = "(mp|go|mgi|j|ma|mgc|hgnc):[0-9]+$";
+    String common_id_pattern = "(mp|go|mgi|j|ma|mgc|hgnc):[0-9]+\\*?";
 
     // Special cases - Put any new patterns after this comment
 
-    String dots_id_pattern = "dt\\.[0-9]+$";
-    String mgd_mrk_id_pattern = "mgd-mrk-[0-9]+$";
-    String ec_number_id_pattern = "[0-9]+\\.[0-9]+\\.[0-9]+\\.[0-9]+";
+    String dots_id_pattern = "dt\\.[0-9]+\\*?";
+    String mgd_mrk_id_pattern = "mgd-mrk-[0-9]+\\*?";
+    String ec_number_id_pattern = "[0-9]+\\.[0-9]+\\.[0-9]+\\.[0-9]+\\*?";
 
     // Pattern to match most acc id's that have an underscore in them.
     
-    String common_underscore_acc_id_pattern = "[a-z][a-z]_[0-9]+";
+    String common_underscore_acc_id_pattern = "[a-z][a-z]_[0-9]+\\*?";
 
-    String fhcrc_acc_id_pattern = "fhcrc-gt-[\\w\\-]+";
+    String fhcrc_acc_id_pattern = "fhcrc-gt-[\\w\\-]+\\*?";
 
-    String cmhd_acc_id_pattern = "cmhd-gt_[\\w\\.\\-]+";
+    String cmhd_acc_id_pattern = "cmhd-gt_[\\w\\.\\-]+\\*?";
     
     
 

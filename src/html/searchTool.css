@@ -45,7 +45,7 @@
     cursor:pointer;cursor:hand;
 }
 #qsExamples {
-    position:relative;
+    /*position:relative;*/
     text-align:center;
     color: #666666;
     clear: right;
@@ -143,8 +143,11 @@
     font-size: 12px;
     width:%98;
     min-width:920px;
-    width:expression(document.body.clientWidth < 920? "920px": "auto" );
 }
+* html .qsBucket { /* IE workaround to simulate min-width */
+    width:expression(document.body.clientWidth < 920? "920px": "98%" );
+}
+
 .qsBucket th{
     font-size: 12px;
     font-family: Arial,Helvetica;

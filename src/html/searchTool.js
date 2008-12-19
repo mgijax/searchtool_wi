@@ -12,6 +12,8 @@ function validateQsInput(formObj) {
   var queryText = formObj.query.value;
   queryText = queryText.replace(/^\s+|\s+$/g, '') ;
 
+  var hasLoneAsterisk = false;
+  var largeTokens = queryText.split(' ');
   var tokenCount = queryText.split(' ').length;
   var quoteCount = 0;
   
@@ -25,6 +27,12 @@ function validateQsInput(formObj) {
     }
   }
 
+  // check for lone asterisk
+  for (var i=0; i < largeTokens.length; i++)
+  {
+    if (largeTokens[i] == "*"){hasLoneAsterisk = true;}
+  }
+
   // generate popup notifying user
   if (formObj.query.value.length == 0)
     alert("Your search did not contain anything.  Please enter up to 32 words, IDs, or other text items and try again.");
@@ -32,6 +40,8 @@ function validateQsInput(formObj) {
     alert("Quick Search is limited to 32 words, IDs, or other search items.  Please edit your search to contain 32 items or fewer.");
   else if ((quoteCount % 2) == 1)
     alert("Your search includes an odd number of quotation marks.  Please edit your search to use quotation marks only in pairs.");
+  else if ( hasLoneAsterisk )
+    alert("Your search contained a lone asterisk (*).  An asterisk must be appended to other characters for use as a wildcard.  Please modify your text and try again.");
   else return true;
 
   return false;
