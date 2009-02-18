@@ -1,11 +1,6 @@
-TAG: searchtool_wi-4-2-0-x )3 -> 5)
-DATE: 12/4/2008 -> 12/19/2008
-STAFF: mhall
-CHANGES: Tags for beta build.
-
-TAG: searchtool_wi-4-2-0-x )1 -> 3)
-DATE: 12/1/2008
+TAG: searchtool_wi-4-2-0-x )1 -> 5)
+DATE: 12/1/2008 -> 12/19/2008
 STAFF: pf
-CHANGES: Tags for inital testing/release
+CHANGES: Trunk tags for inital testing/release
 
 
