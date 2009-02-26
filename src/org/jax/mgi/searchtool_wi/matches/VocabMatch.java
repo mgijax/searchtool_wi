@@ -24,7 +24,6 @@ public class VocabMatch extends AbstractMatch {
 
   /**
   * Returns vocabulary of this match
-  *
   * @return String - vocabulary
   */
   public String getVocabulary() {
@@ -33,9 +32,7 @@ public class VocabMatch extends AbstractMatch {
 
   /**
   * Set vocabulary of this match
-  *
-  * @param String -
-  *                vocabulary
+  * @param String - vocabulary
   */
   public void setVocabulary(String s) {
     vocabulary = s;

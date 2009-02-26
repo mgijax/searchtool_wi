@@ -23,6 +23,8 @@ public class MarkerVocabMatch extends AbstractMatch {
   private String vocabulary = new String("");
   private String ancestorKey = new String("");
   private boolean isChildMatch = false;
+
+  // reference to Voc Display Cache singleton created at servlet instantiation
   private VocabDisplayCache vocabDisplayCache
     = VocabDisplayCache.getVocabDisplayCache();
 
@@ -81,13 +83,15 @@ public class MarkerVocabMatch extends AbstractMatch {
   //---------//
 
   /**
-  * Get displayable value for this match (overridding abstract
-  *     class implementation)
+  * Get displayable value for this match.  Overridding abstract implementation
+  *  to acomplish display requirements when it's an Accession ID
   * @return String - displayable value
   */
   public String display() {
 
     String returnString = new String();
+
+    // get vocab display cache entries
     VocabDisplay vocabDisplay = vocabDisplayCache.getVocab(this);
     VocabDisplay parentVocabDisplay = vocabDisplayCache.getParentVocab(this);
 

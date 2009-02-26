@@ -16,8 +16,8 @@ public class MarkerMatch extends AbstractMatch {
   // --------//
 
   // Data & Values specific to a Marker Match
-  private String organismKey = new String("");
-  private String isCurrent = new String("");
+  private String organismKey = "";
+  private String isCurrent = "";
 
   // ----------------//
   // Basic Accessors

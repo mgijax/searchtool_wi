@@ -198,7 +198,8 @@
 
 <!--========================================================= Vocab Bucket -->
 <%
-    bucketRowAlternator.reset();
+
+  bucketRowAlternator.reset();
 
   // table header
   out.print("<table class='qsBucket' width='98%'><tr>");

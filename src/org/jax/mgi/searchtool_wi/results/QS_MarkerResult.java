@@ -1,9 +1,15 @@
 package org.jax.mgi.searchtool_wi.results;
 
+// standard java
 import java.util.*;
 
+// lucene
 import org.apache.lucene.search.*;
 
+// MGI homegrown classes
+import org.jax.mgi.shr.config.Configuration;
+
+// searchtool classes
 import org.jax.mgi.searchtool_wi.lookup.MarkerDisplayCache;
 import org.jax.mgi.searchtool_wi.lookup.MarkerVocabSearchCache;
 import org.jax.mgi.searchtool_wi.matches.AbstractMatch;
@@ -12,8 +18,13 @@ import org.jax.mgi.searchtool_wi.matches.MatchSorter;
 import org.jax.mgi.searchtool_wi.matches.MarkerMatch;
 import org.jax.mgi.searchtool_wi.matches.MarkerVocabMatch;
 import org.jax.mgi.searchtool_wi.utils.ScoreConstants;
-import org.jax.mgi.shr.config.Configuration;
 
+/**
+* A MarkerResult represents a marker object resulting from a textual match
+* with the user's input string.
+* See AbstractResult for additional implementation details, and Search Tool
+* wiki documentation for design and usage patterns
+*/
 public class QS_MarkerResult extends AbstractResult {
 
   // -------//
@@ -22,7 +33,6 @@ public class QS_MarkerResult extends AbstractResult {
 
   // number of total matches
   private int matchCount;
-
 
   // list of high-level types of matches
   private List allNomenMatches;
@@ -69,6 +79,10 @@ public class QS_MarkerResult extends AbstractResult {
   // -------------//
   // Constructor //
   // -------------//
+
+  /**
+  * Constructs the MarkerResult, calling the parent class constructor with config
+  */
   public QS_MarkerResult(Configuration c) {
       super(c);
   }
@@ -77,22 +91,35 @@ public class QS_MarkerResult extends AbstractResult {
   // Overriding parent abstracts
   // ----------------------------//
 
-  // primary sort
+  /**
+  * returns the score for the result
+  * @return Float - the score of this result
+  */
   public Float getScore() {
     return derivedScore;
   }
 
-  // secondary sort
+  /**
+  * Returns the string for alpha numeric sorting of results.  This is used
+  * if the scores (from getScore) are the same
+  */
   public String getAlphaSortBy() {
     return markerDisplayCache.getMarker(this).getSymbol().toLowerCase();
   }
 
-  // best match for this result
+  /**
+  * returns the best match for the result
+  * @return AbstractMatch - the best match
+  */
   public AbstractMatch getBestMatch() {
     return bestMatch;
   }
 
-  // finalization tasks
+  /**
+  * Any one-time functionality that needs to happen prior to being sent to
+  * the display layer should be defined here.  The method is called by the
+  * search framework.
+  */
   public void finalizeResult() {
 
     // sort our match arrays
@@ -164,25 +191,15 @@ public class QS_MarkerResult extends AbstractResult {
     }
   }
 
-  // -------------------------//
-  // Best Match Type Boosting
-  // -------------------------//
-
-  public Float getBestMatchTypeBoost()
-  {
-    Float matchTypeBoost = new Float(0.0);
-    String matchType = getBestMatch().getDataType();
-    if (resultBoostMap.containsKey(matchType)) {
-        matchTypeBoost = (Float)resultBoostMap.get(matchType);
-    }
-    return matchTypeBoost;
-  }
-
 
   // ----------------//
   // Marker Matches
   // ----------------//
 
+  /**
+  * Adds a nomen match to this result
+  * @param MarkerMatch
+  */
   public void addNomenMatch(MarkerMatch nm) {
     if (!handledNomenMatches.contains( nm.getUniqueKey() ) ) {
         nomenMatches.add(nm);
@@ -190,10 +207,18 @@ public class QS_MarkerResult extends AbstractResult {
     }
   }
 
+  /**
+  * Returns the nomen matches of this result
+  * @return List of Match Objects
+  */
   public List getNomenMatches() {
     return nomenMatches;
   }
 
+  /**
+  * returns true if this result has nomen matches
+  * @return Boolean
+  */
   public boolean hasMarkerMatches() {
     boolean b = false;
     if (nomenMatches.size() > 0) {
@@ -206,66 +231,137 @@ public class QS_MarkerResult extends AbstractResult {
   // Vocab Matches
   // ---------------//
 
-  // AD
+  /**
+  * Adds a AD match to this result
+  * @param MarkerVocabMatch
+  */
   public void addAdMatch(MarkerVocabMatch vm) {
     adMatches.add(vm);
   }
+  /**
+  * Returns AD Matches
+  * @return List of Match Objects
+  */
   public List getAdMatches() {
     return adMatches;
   }
 
-  // MP
+  /**
+  * Adds a MP match to this result
+  * @param MarkerVocabMatch
+  */
   public void addMpMatch(MarkerVocabMatch vm) {
     mpMatches.add(vm);
   }
+  /**
+  * Returns MP Matches
+  * @return List of Match Objects
+  */
   public List getMpMatches() {
     return mpMatches;
   }
 
-  // GO
+  /**
+  * Adds a GO match to this result
+  * @param MarkerVocabMatch
+  */
   public void addGoMatch(MarkerVocabMatch vm) {
     goMatches.add(vm);
   }
+  /**
+  * Returns GO Matches
+  * @return List of Match Objects
+  */
   public List getGoMatches() {
     return goMatches;
   }
 
-  // OMIM
+  /**
+  * Adds a OMIM match to this result
+  * @param MarkerVocabMatch
+  */
   public void addOmimMatch(MarkerVocabMatch vm) {
     omimMatches.add(vm);
   }
+  /**
+  * Returns OMIMMatches
+  * @return List of Match Objects
+  */
   public List getOmimMatches() {
     return omimMatches;
   }
 
-  // OMIM Ortho
+  /**
+  * Adds a OMIM Ortho match to this result
+  * @param MarkerVocabMatch
+  */
   public void addOmimOrthoMatch(MarkerVocabMatch vm) {
     omimOrthoMatches.add(vm);
   }
+  /**
+  * Returns OMIM Ortho Matches
+  * @return List of Match Objects
+  */
   public List getOmimOrthoMatches() {
     return omimOrthoMatches;
   }
 
-  // PIRSF
+  /**
+  * Adds a PIRSF match to this result
+  * @param MarkerVocabMatch
+  */
   public void addPirsfMatch(MarkerVocabMatch vm) {
     pirsfMatches.add(vm);
   }
+  /**
+  * Returns PIRSF Matches
+  * @return List of Match Objects
+  */
   public List getPirsfMatches() {
     return pirsfMatches;
   }
 
-  // InterProt
+  /**
+  * Adds a InterPro match to this result
+  * @param MarkerVocabMatch
+  */
   public void addIpMatch(MarkerVocabMatch vm) {
     ipMatches.add(vm);
   }
+  /**
+  * Returns InterPro Matches
+  * @return List of Match Objects
+  */
   public List getIpMatches() {
     return ipMatches;
+  }
+
+  // -------------------------//
+  // Best Match Type Boosting
+  // -------------------------//
+
+  /**
+  * Returns the boost for this match; some results need to be boosted
+  * depending on the type of the best match
+  */
+  public Float getBestMatchTypeBoost()
+  {
+    Float matchTypeBoost = new Float(0.0);
+    String matchType = getBestMatch().getDataType();
+    if (resultBoostMap.containsKey(matchType)) {
+        matchTypeBoost = (Float)resultBoostMap.get(matchType);
+    }
+    return matchTypeBoost;
   }
 
   // ---------------------------//
   // Group retrieval of matches
   // ---------------------------//
 
+  /**
+  * Returns all marker vocabulary matches
+  * @return List of Match Objects
+  */
   public List getAllMarkerVocabMatches() {
     if (allVocMatches == null) {
       allVocMatches = new ArrayList();
@@ -281,6 +377,10 @@ public class QS_MarkerResult extends AbstractResult {
     return allVocMatches;
   }
 
+  /**
+  * Returns all marker nomenclature matches
+  * @return List of Match Objects
+  */
   public List getAllMarkerNomenMatches() {
     if (allNomenMatches == null) {
       allNomenMatches = new ArrayList();
@@ -290,6 +390,10 @@ public class QS_MarkerResult extends AbstractResult {
     return allNomenMatches;
   }
 
+  /**
+  * Returns the number of matches in this result object
+  * @return int - match count
+  */
   public int getMatchCount () {
     return matchCount;
   }

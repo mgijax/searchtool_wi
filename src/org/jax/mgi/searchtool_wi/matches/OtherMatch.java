@@ -7,8 +7,7 @@ import java.util.*;
 import org.jax.mgi.shr.searchtool.IndexConstants;
 
 /**
-* An OtherMatch represents an 'other' match, used to fill the catch-all generic
-* 'other' bucket
+* An OtherMatch represents a match to an ID
 */
 public class OtherMatch extends AbstractMatch {
 

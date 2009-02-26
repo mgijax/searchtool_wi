@@ -12,7 +12,8 @@ import org.jax.mgi.searchtool_wi.utils.DisplayHelper;
 * represent the translation of a Lucene textual hit to a local object, and
 * encapsulate the functionality and knowledge to be shared between all
 * concrete matches; whenever possible, code should be written to this
-* general higher-level abstraction. Also see AbstractMatchFactory.java
+* general higher-level abstraction. Also see AbstractMatchFactory.java and
+* searchtool_wi wiki entry for Matches.
 */
 public abstract class AbstractMatch {
 
@@ -20,35 +21,38 @@ public abstract class AbstractMatch {
   // Fields
   //--------//
 
-  // lucene's information regarding the hit
-  private Float searchScore;
-  private int luceneDocID;
-
-  // fields AbstractMatchFactory will attempt to fill; some may be missing,
-  // and their values are initialized with an empty string
-  private String db_key;
-  private String dataType;
+  // data fields all matches have; AbstractMatchFactory will set these
+  private String db_key = "";
+  private String dataType = "";
   private String matchedText = "";
   private String displayableType = "";
   private String provider = "";
 
-  // our secondary scoring layer, set by search layer to weight this match
-  private Float  additiveScore      = new Float(0.0);
-  private Float  luceneWeight       = new Float(1.0);
-
   // unique key provided by the index; used as join-point between indexes
   private String uniqueKey;
 
-  // tiering flags
-  boolean isTier1 = false;
-  boolean isTier2 = false;
-  boolean isTier3 = false;
+  // lucene's information regarding the hit
+  private Float searchScore;
+  private int luceneDocID;
 
-  // derived values
+  // additional scoring layer; set by search layer to weight this match
+  // additiveScore - increases the score of this match by a flat ammount
+  // luceneWeight - increase/decrease the importantance of the lucene score
+  private Float  additiveScore      = new Float(0.0);
+  private Float  luceneWeight       = new Float(1.0);
+
+  // tiering flags; used to indicate which sorting tier this match should
+  // fall within; search layer set these dependant upon which index the match
+  // is being generated from
+  private boolean isTier1 = false;
+  private boolean isTier2 = false;
+  private boolean isTier3 = false;
+
+  // derived score of this match; only derived once, and kept
   Float derivedScore;
 
   //----------------//
-  // Basic Accessors
+  // Field Accessors
   //----------------//
 
   /**
@@ -156,35 +160,53 @@ public abstract class AbstractMatch {
     if (s != null) {uniqueKey = s;}
   }
 
-  // --------//
-  // Tiering
-  // --------//
+  // ------------------//
+  // Tiering & Sorting
+  // ------------------//
 
-  public boolean isTier1() {
-    return isTier1;
-  }
+  /**
+  * Sets this match as belonging in tier 1
+  */
   public void flagAsTier1() {
    isTier1 = true;
   }
-  public boolean isTier2() {
-    return isTier2;
+  /**
+  * Is this tier 1?
+  * @return Boolean
+  */
+  public boolean isTier1() {
+    return isTier1;
   }
+  /**
+  * Sets this match as belonging in tier 2
+  */
   public void flagAsTier2() {
    isTier2 = true;
   }
-  public boolean isTier3() {
-    return isTier3;
+  /**
+  * Is this tier 2?
+  * @return Boolean
+  */
+  public boolean isTier2() {
+    return isTier2;
   }
+  /**
+  * Sets this match as belonging in tier 3
+  */
   public void flagAsTier3() {
    isTier3 = true;
   }
-
-  //---------//
-  // Sorting
-  //---------//
+  /**
+  * Is this tier 3?
+  * @return Boolean
+  */
+  public boolean isTier3() {
+    return isTier3;
+  }
 
   /**
-  * Returns the String by which this match should be alphanumerically sorted
+  * Returns the String by which this match should be alphanumerically sorted;
+  * might be over-ridden in concrete classes
   * @return String - to be sorted by
   */
   public String getAlphaSortBy() {
@@ -196,13 +218,14 @@ public abstract class AbstractMatch {
   //----------------------------------------------------//
 
   /**
-  * Return the derived score of this match (search score + additive score)
+  * Return the derived score of this match -
   * @return Float - the score
   */
   public Float getScore()
   {
     if (derivedScore == null)
     {
+        // add to score depending on the tier
         int tierScore = 0;
         if (isTier1) {
             tierScore = 100000;
@@ -211,14 +234,14 @@ public abstract class AbstractMatch {
         }else if (isTier3) {
             tierScore = 1000;
         }
+
+        // pull all scoring together to get actual score for the match
         derivedScore = (searchScore * luceneWeight) + additiveScore + tierScore;
     }
     return derivedScore;
   }
 
-  //---------------//
-  // Lucene Score
-  //---------------//
+  //----- Search Score -----
 
   /**
   * Return the Lucene score of this match
@@ -242,9 +265,7 @@ public abstract class AbstractMatch {
     setSearchScore(new Float(f));
   }
 
-  //---------------//
-  // Additive Score
-  //---------------//
+  //----- Additive Score -----
 
   /**
   * Return the score to be added to this match by external increase
@@ -253,7 +274,6 @@ public abstract class AbstractMatch {
   public Float getAdditiveScore() {
     return additiveScore;
   }
-
   /**
   * Add to this match's score
   * @param Float - score to add
@@ -283,9 +303,7 @@ public abstract class AbstractMatch {
     addScore(new Float(d));
   }
 
-  //------------------//
-  // Lucene Weighting
-  //------------------//
+  //----- Lucene Weighting -----
 
   /**
   * Return weight to this match's lucene score
@@ -317,12 +335,12 @@ public abstract class AbstractMatch {
       addLuceneWeight(new Float(d));
   }
 
-  //----------------//
-  // Generic Display
-  //----------------//
+  //------//
+  // Misc
+  //------//
 
   /**
-  * Get displayable value for this match
+  * Provide generic display for this match; extending classes may over-ride
   * @return String - displayable value
   */
   public String display() {
@@ -333,13 +351,9 @@ public abstract class AbstractMatch {
       + " " + provider;
   }
 
-  //------//
-  // Misc
-  //------//
-
   /**
   * Determines if this match is to an Accession ID
-  * @return String - displayable value
+  * @return Boolean
   */
   public boolean isAccID() {
 

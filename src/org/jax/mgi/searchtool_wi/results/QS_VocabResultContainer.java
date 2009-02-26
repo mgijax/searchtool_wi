@@ -1,8 +1,7 @@
 package org.jax.mgi.searchtool_wi.results;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
+// standard java
+import java.util.*;
 
 import org.jax.mgi.shr.searchtool.IndexConstants;
 

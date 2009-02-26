@@ -14,13 +14,13 @@ public class ResultContainer {
   // -------------//
   public ResultContainer(List<AbstractResult> l) {
 
-      scoreSortedResults = l;
+    scoreSortedResults = l;
 
-      // fill key->result mapping
-      for (Iterator<AbstractResult> iter = l.iterator(); iter.hasNext();) {
-          AbstractResult current = iter.next();
-          mappedResults.put(current.getDbKey().toString(), current);
-      }
+    // fill key->result mapping
+    for (Iterator<AbstractResult> iter = l.iterator(); iter.hasNext();) {
+        AbstractResult current = iter.next();
+        mappedResults.put(current.getDbKey().toString(), current);
+    }
   }
 
   // ----------------------//
@@ -38,16 +38,16 @@ public class ResultContainer {
   */
   public List getHits(int start, int stop) {
 
-      int startIndex = start;
-      int stopIndex = stop;
+    int startIndex = start;
+    int stopIndex = stop;
 
-      if (startIndex < 1) {startIndex = 1;}
+    if (startIndex < 1) {startIndex = 1;}
 
-      if (stopIndex > scoreSortedResults.size()) {
-          stopIndex = scoreSortedResults.size();
-      }
+    if (stopIndex > scoreSortedResults.size()) {
+        stopIndex = scoreSortedResults.size();
+    }
 
-      return scoreSortedResults.subList((startIndex - 1), stopIndex);
+    return scoreSortedResults.subList((startIndex - 1), stopIndex);
 
   }
 
@@ -59,7 +59,7 @@ public class ResultContainer {
   * @return
   */
   public List getHitsByRange(int start, int range) {
-      return getHits(start, start + range);
+    return getHits(start, start + range);
   }
 
   /**
@@ -69,14 +69,14 @@ public class ResultContainer {
   * @return
   */
   public List getTopHits(int x) {
-      return getHits(1, x);
+    return getHits(1, x);
   }
 
   // ------------------//
   // Mapped Accessors
   // ------------------//
   public int size() {
-      return scoreSortedResults.size();
+    return scoreSortedResults.size();
   }
 
 }

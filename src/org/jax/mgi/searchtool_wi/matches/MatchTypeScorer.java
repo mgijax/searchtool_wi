@@ -11,8 +11,7 @@ import org.apache.log4j.Logger;
 
 /**
 * A MatchTypeScorer will increase or decrease the value of a given match
-* depending on the object type of the match; written to the AbstractMatch match
-* abstraction
+* depending on the object type of the match; written to AbstractMatch
 */
 public class MatchTypeScorer {
 
@@ -25,7 +24,8 @@ public class MatchTypeScorer {
   private Float defaultScore = new Float(0.0);
 
   // logging
-  private static Logger logger = Logger.getLogger(MatchTypeScorer.class.getName());
+  private static Logger logger
+    = Logger.getLogger(MatchTypeScorer.class.getName());
 
   // -------------//
   // Constructor //

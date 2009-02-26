@@ -11,7 +11,11 @@ import org.jax.mgi.searchtool_wi.matches.MatchSorter;
 import org.jax.mgi.shr.config.Configuration;
 
 /**
-* Abstract class in which all concrete results will extend.
+* An AbstractResult is an uninstantiatable parent of concrete Results;
+* Results represent resultant data types (markers, vocab, IDs) to be sent back
+* to the user; it encapsulates the functionality and knowledge to be shared
+* between all concrete results; whenever possible, code should be written to
+* this general higher-level abstraction. Also see searchtool_wi wiki entry.
 */
 public abstract class AbstractResult {
 
@@ -22,10 +26,10 @@ public abstract class AbstractResult {
   // filled at the time the concrete class is instantiated
   protected Configuration config;
 
-  // DB key of the result
+  // DB key of the result; all results have DB keys
   protected String dbKey;
 
-  // best match
+  // best match (highest scoring) for this result
   protected AbstractMatch bestMatch;
 
   // to sort the matches
@@ -43,28 +47,58 @@ public abstract class AbstractResult {
   // Abstract Methods
   // -----------------//
 
+  /**
+  * Derives and returns the score for the result
+  */
   public abstract Float getScore();
 
+  /**
+  * Returns the best match for the result
+  */
   public abstract AbstractMatch getBestMatch();
 
+  /**
+  * Returns the string for alpha numeric sorting of results.  This is used
+  * if the scores (from getScore) are the same
+  */
   public abstract String getAlphaSortBy();
 
+  /**
+  * Any one-time functionality that needs to happen prior to being sent to
+  * the display layer should be defined here.  The method is called by the
+  * search framework.
+  */
   public abstract void finalizeResult();
 
   // ----------------//
   // DB Key Handling
   // ----------------//
 
-  // DB Key accessors
+  /**
+  * Returns the database key of the object hit
+  * @return String - the database key of object hit
+  */
   public String getDbKey() {
     return dbKey;
   }
+  /**
+  * Set database key of the object hit
+  * @param String - the database key of object hit
+  */
   public void setDbKey(String s) {
     dbKey = s;
   }
+  /**
+  * Set database key of the object hit
+  * @param Integer - the database key of object hit
+  */
   public void setDbKey(Integer i) {
     dbKey = i.toString();
   }
+  /**
+  * Set database key of the object hit
+  * @param int - the database key of object hit
+  */
   public void setDbKey(int i) {
     Integer newI = new Integer(i);
     setDbKey(newI);
@@ -75,6 +109,10 @@ public abstract class AbstractResult {
   // Display
   // --------//
 
+  /**
+  * Returns the HTML for rendering "Star" scores for this result
+  * @return String
+  */
   public String getStarScore() {
 
     String star = "<img src='" + config.get("QUICKSEARCH_URL")
@@ -92,6 +130,10 @@ public abstract class AbstractResult {
     return star;
   }
 
+  /**
+  * Returns the HTML for rendering debug values for this result
+  * @return String
+  */
   public String getDebugDisplay() {
 
     String debugMsg = "";
@@ -112,7 +154,5 @@ public abstract class AbstractResult {
     debugMsg += "score->&nbsp;" + this.getScore() + "<br/>";
     return debugMsg;
   }
-
-
 
 }

@@ -28,29 +28,19 @@ public abstract class AbstractSearch {
   // Fields
   //--------//
 
-  /**
-  * Configuration knowledge
-  */
+  // Configuration knowledge
   protected Configuration config;
 
-  /**
-  * Timer for timing information
-  */
+  // Timer for timing information
   protected TimeStamper timer;
 
-  /**
-  * Access layer to the indexes
-  */
+  // Access layer to the indexes
   protected IndexAccessor indexAccessor;
 
-  /**
-  * filled as the search progresses, and will be returned from the search
-  */
+  // filled as the search progresses, and will be returned from the search
   private List resultList;
 
-  /**
-  * logger
-  */
+  // logger
   private static Logger logger = Logger.getLogger(AbstractSearch.class.getName());
 
   //-------------//

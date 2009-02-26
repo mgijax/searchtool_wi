@@ -1,5 +1,6 @@
 package org.jax.mgi.searchtool_wi.results;
 
+// standard java
 import java.util.*;
 
 import org.jax.mgi.searchtool_wi.lookup.MarkerDisplay;
@@ -41,18 +42,18 @@ public class QS_MarkerResultContainer extends ResultContainer {
   // ----------//
 
   public QS_MarkerResult getMarkerByKey(String markerKey) {
-      return (QS_MarkerResult) mappedResults.get(markerKey);
+    return (QS_MarkerResult) mappedResults.get(markerKey);
   }
 
   public String getStringOfSymbols() {
-      return stringOfSymbols;
+    return stringOfSymbols;
   }
 
   // /////////////////
   // Mapped Accessors
   // /////////////////
   public int size() {
-      return scoreSortedResults.size();
+    return scoreSortedResults.size();
   }
 
 }

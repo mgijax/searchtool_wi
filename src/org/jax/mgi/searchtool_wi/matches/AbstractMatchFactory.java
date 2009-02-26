@@ -20,6 +20,7 @@ import org.jax.mgi.shr.timing.TimeStamper;
 * knowledge residing in an AbstractMatch; extending concrete MatchFactory
 * classes are responsible for specific object creation/loading, and need to
 * override the abstract <i>getMatch()</i> method.  Also see AbstractMatch.java
+* and the searchtool_wi wiki entry
 */
 public abstract class AbstractMatchFactory
 {
@@ -38,7 +39,7 @@ public abstract class AbstractMatchFactory
   protected TimeStamper timer;
 
   /**
-  * Hit from which to generate the match
+  * Hit from which to generate a match
   */
   protected Hit hit;
 
@@ -53,8 +54,7 @@ public abstract class AbstractMatchFactory
   private AbstractMatchFactory(){}
 
   /**
-  * Parent constructor to be called by all extending concrete classes. All
-  * class-level objects composing the extending classes will be exposed here
+  * Parent constructor should be called by all extending concrete classes.
   */
   public AbstractMatchFactory(Configuration c)
   {

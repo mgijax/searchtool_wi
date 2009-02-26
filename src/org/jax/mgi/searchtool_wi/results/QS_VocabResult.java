@@ -1,28 +1,35 @@
 package org.jax.mgi.searchtool_wi.results;
 
+// standard java
 import java.util.*;
 
-// logging
-import org.apache.log4j.Logger;
+// lucene
+import org.apache.lucene.search.*;
+
+// MGI homegrown classes
+import org.jax.mgi.shr.config.Configuration;
 
 import org.jax.mgi.searchtool_wi.lookup.MarkerVocabSearchCache;
 import org.jax.mgi.searchtool_wi.lookup.VocabDisplayCache;
 import org.jax.mgi.searchtool_wi.matches.AbstractMatch;
 import org.jax.mgi.searchtool_wi.matches.MatchSorter;
 import org.jax.mgi.searchtool_wi.matches.VocabMatch;
-import org.jax.mgi.shr.config.Configuration;
-import org.apache.lucene.search.Hit;
 import org.jax.mgi.shr.searchtool.IndexConstants;
 
+/**
+* A VocabResult represents a vocabulary term resulting from a textual match
+* with the user's input string.
+* See AbstractResult for additional implementation details, and Search Tool
+* wiki documentation for design and usage patterns
+*/
 public class QS_VocabResult extends AbstractResult {
 
   // --------//
   // Fields
   // --------//
 
-  private static Logger logger = Logger.getLogger(QS_VocabResult.class.getName());
-
-  private static VocabDisplayCache vocabDisplayCache = VocabDisplayCache.getVocabDisplayCache();
+  private static VocabDisplayCache vocabDisplayCache
+    = VocabDisplayCache.getVocabDisplayCache();
 
   // vocabulary from which this term originates
   private String vocabulary;
@@ -46,6 +53,10 @@ public class QS_VocabResult extends AbstractResult {
   // -------------//
   // Constructor //
   // -------------//
+
+  /**
+  * Constructs the MarkerResult, calling the parent class constructor with config
+  */
   public QS_VocabResult(Configuration c) {
       super(c);
   }
@@ -54,51 +65,73 @@ public class QS_VocabResult extends AbstractResult {
   // Overriding parent abstracts
   // ----------------------------//
 
-  // primary sort
+  /**
+  * returns the score for the result
+  * @return Float - the score of this result
+  */
   public Float getScore() {
       return derivedScore;
   }
 
-  // secondary sort
+  /**
+  * Returns the string for alpha numeric sorting of results.  This is used
+  * if the scores (from getScore) are the same
+  */
   public String getAlphaSortBy() {
       return vocabDisplayCache.getVocab(this).getName();
   }
 
-  // best match for this result
+  /**
+  * returns the best match for the result
+  * @return AbstractMatch - the best match
+  */
   public AbstractMatch getBestMatch() {
     return bestMatch;
   }
 
-  // finalization tasks
+  /**
+  * Any one-time functionality that needs to happen prior to being sent to
+  * the display layer should be defined here.  The method is called by the
+  * search framework.
+  */
   public void finalizeResult() {
 
-      // sort our matches arrays, and save off highest score
-      if (exactMatches.size() > 0) {
-          Collections.sort(exactMatches, matchSorter);
-          VocabMatch vem = (VocabMatch) exactMatches.get(0);
-          bestExactMatchScore = vem.getScore();
-          bestMatch = vem;
-      }
-      if (inexactMatches.size() > 0) {
-          Collections.sort(inexactMatches, matchSorter);
-          VocabMatch vm = (VocabMatch) inexactMatches.get(0);
-          bestInexactScoreScore = vm.getScore();
-          if (bestMatch == null) {
-              bestMatch = vm;
-          }
-      }
+    // sort our matches arrays, and save off highest score
+    if (exactMatches.size() > 0) {
+        Collections.sort(exactMatches, matchSorter);
+        VocabMatch vem = (VocabMatch) exactMatches.get(0);
+        bestExactMatchScore = vem.getScore();
+        bestMatch = vem;
+    }
+    if (inexactMatches.size() > 0) {
+        Collections.sort(inexactMatches, matchSorter);
+        VocabMatch vm = (VocabMatch) inexactMatches.get(0);
+        bestInexactScoreScore = vm.getScore();
+        if (bestMatch == null) {
+            bestMatch = vm;
+        }
+    }
 
-      derivedScore = bestExactMatchScore + bestInexactScoreScore;
+    derivedScore = bestExactMatchScore + bestInexactScoreScore;
 
   }
 
   // ------------//
   // Vocabulary
   // ------------//
+
+  /**
+  * returns the vocabulary type
+  * @return String
+  */
   public String getVocabulary() {
-      return vocabulary;
+    return vocabulary;
   }
 
+  /**
+  * Sets the vocabulary for this result
+  * @param String - Vocab
+  */
   public void setVocabulary(String s) {
       vocabulary = s;
   }
@@ -106,28 +139,50 @@ public class QS_VocabResult extends AbstractResult {
   // ----------------//
   // Exact Matches
   // ----------------//
+
+  /**
+  * Adds an Exact Match to this result
+  * @param VocabMatch
+  */
   public void addExactMatch(VocabMatch vem) {
-      has_exact = true;
-      exactMatches.add(vem);
+    has_exact = true;
+    exactMatches.add(vem);
   }
 
+  /**
+  * returns the exact matches
+  * @return List of matches
+  */
   public List getExactMatches() {
-      return exactMatches;
+    return exactMatches;
   }
 
+  /**
+  * returns true if this result has an exact match
+  * @return Boolean
+  */
   public Boolean hasExact() {
-      return has_exact;
+    return has_exact;
   }
 
   // -----------------//
   // Inexact Matches
   // -----------------//
+
+  /**
+  * Adds an Inexact Match to this result
+  * @param VocabMatch
+  */
   public void addInexactMatch(VocabMatch vm) {
-      inexactMatches.add(vm);
+    inexactMatches.add(vm);
   }
 
+  /**
+  * returns the inexact matches
+  * @return List of matches
+  */
   public List getInexactMatches() {
-      return inexactMatches;
+    return inexactMatches;
   }
 
 }
