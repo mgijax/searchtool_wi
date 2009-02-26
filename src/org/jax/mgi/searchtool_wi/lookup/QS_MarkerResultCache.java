@@ -1,7 +1,9 @@
 package org.jax.mgi.searchtool_wi.lookup;
 
+// Standard Java Classes
 import java.util.*;
 
+// Quick Search Classes
 import org.jax.mgi.searchtool_wi.results.QS_MarkerResultContainer;
 
 /**
