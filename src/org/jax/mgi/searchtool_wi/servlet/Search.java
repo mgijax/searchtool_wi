@@ -10,8 +10,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+// Logging
 import org.apache.log4j.Logger;
 
+// Search Tool Classes
 import org.jax.mgi.searchtool_wi.lookup.MarkerDisplayCache;
 import org.jax.mgi.searchtool_wi.lookup.MarkerVocabSearchCache;
 import org.jax.mgi.searchtool_wi.lookup.OtherDisplayLookup;
@@ -28,8 +30,18 @@ import org.jax.mgi.searchtool_wi.searches.QS_VocabSearch;
 import org.jax.mgi.searchtool_wi.exception.QuickSearchException;
 import org.jax.mgi.searchtool_wi.utils.SearchInput;
 import org.jax.mgi.searchtool_wi.utils.WebTemplate;
+
+// MGI Shared Classes
 import org.jax.mgi.shr.config.WebAppCfg;
 
+/**
+* A Search is a servlet who's purpose is to recieve HttpServletRequest
+* objects, determine which page is being requested, retreive the data
+* for the requested page, and forward to the view layer.
+*
+* Please see sw:Searchtool_wi software documentation in the MGI wiki for
+* more information
+*/
 public class Search extends HttpServlet {
 
   // objects filled at instantiation; init()
@@ -51,9 +63,10 @@ public class Search extends HttpServlet {
   // public methods
   //---------------//
 
-  /** This is a "hook" in parent class, called <i>once</i> at initialization,
+  /**
+  * This is a "hook" in parent class, called <i>once</i> at initialization,
   * after JBoss instantiates the servlet.  This is used to setup our
-  * in-memory caches, configuration, logger etc...
+  * in-memory caches, template, configuration, logger etc...
   */
   public void init () {
 
@@ -64,6 +77,7 @@ public class Search extends HttpServlet {
     String glocalConfigLoc = servletContext.getInitParameter("globalConfig");
     try {
       stConfig = (WebAppCfg)WebAppCfg.load(glocalConfigLoc, false);
+
       // move some web.xml parameters to our native mgi config object
       stConfig.set("INDEX_DIR", servletContext.getInitParameter("indexDir"));
     }
@@ -92,7 +106,8 @@ public class Search extends HttpServlet {
   }
 
 
-  /** handle a submission which came via the GET method over HTTP.
+  /**
+  * handle a submission which came via the GET method over HTTP.
   * @param req information about the request (parameters, client info, etc.)
   * @param res information for the response (the writer to be used to reach
   *    the user's browser, etc.)
@@ -132,7 +147,7 @@ public class Search extends HttpServlet {
         searchInput.setSearchString(request.getParameter("query"));
         logger.info("*User's Input String ->" + request.getParameter("query"));
 
-        // pass the input string downhill
+        // pass the input string downhill in the request object
         request.setAttribute("query", request.getParameter("query"));
 
         // add references to in-memory objects the display layer may need
@@ -146,7 +161,7 @@ public class Search extends HttpServlet {
         // search for tokens that won't match anything, to later notify the user
         parseSearchString(searchInput);
 
-        // Validate the input string; if invalid, will forard to error page
+        // validate the input string; if invalid, will forward to error page
         validateUserInput(request, response, searchInput);
 
         // Determine which page to display.  Private 'sendTo' methods handle
@@ -173,7 +188,7 @@ public class Search extends HttpServlet {
             QuickSearchException qse = new QuickSearchException("Requested Error Page");
             sendToError(request, response, qse);
         }
-        else { // present summary as default page
+        else { // if page wasn't NULL, but had an unrecognized value
             sendToSummary(request, response, searchInput);
         }
     }
@@ -189,6 +204,9 @@ public class Search extends HttpServlet {
   // Page Generation
   //-----------------//
 
+  /**
+  * MAIN SUMMARY - Gather the data, and forward to the view layer
+  */
   private void sendToSummary(HttpServletRequest request,
     HttpServletResponse response, SearchInput searchInput)
     throws Exception
@@ -212,6 +230,9 @@ public class Search extends HttpServlet {
     view.forward(request, response);
   }
 
+  /**
+  * MARKER SUMMARY - Gather the data, and forward to the view layer
+  */
   private void sendToMarker(HttpServletRequest request,
     HttpServletResponse response, SearchInput searchInput)
     throws Exception
@@ -226,6 +247,9 @@ public class Search extends HttpServlet {
     view.forward(request, response);
   }
 
+  /**
+  * MARKER DETAIL - Gather the data, and forward to the view layer
+  */
   private void sendToMarkerDetails(HttpServletRequest request,
     HttpServletResponse response, SearchInput searchInput)
     throws Exception
@@ -240,6 +264,9 @@ public class Search extends HttpServlet {
     view.forward(request, response);
   }
 
+  /**
+  * VOCAB SUMMARY - Gather the data, and forward to the view layer
+  */
   private void sendToVocab(HttpServletRequest request,
     HttpServletResponse response, SearchInput searchInput)
     throws Exception
@@ -254,6 +281,9 @@ public class Search extends HttpServlet {
     view.forward(request, response);
   }
 
+  /**
+  * VOCAB DETAILS - Gather the data, and forward to the view layer
+  */
   private void sendToVocabDetails(HttpServletRequest request,
     HttpServletResponse response, SearchInput searchInput)
     throws Exception
@@ -268,6 +298,9 @@ public class Search extends HttpServlet {
     view.forward(request, response);
   }
 
+  /**
+  * ERROR PAGE
+  */
   private void sendToError(HttpServletRequest request,
     HttpServletResponse response, QuickSearchException qse)
   {
@@ -287,7 +320,12 @@ public class Search extends HttpServlet {
   //------------------//
 
   /**
-  * encapsulation of marker result container retrieval
+  * encapsulation of marker result container retrieval - if the result
+  * container is cached, retrieve it; otherwise generate a new set of
+  * results, and cache it.
+  *
+  * The caller of this method doesn't need to know whether the result set
+  * was pulled from cache, or dynamically generated
   */
   private QS_MarkerResultContainer getMarkerResults(SearchInput searchInput)
     throws Exception
@@ -317,7 +355,12 @@ public class Search extends HttpServlet {
 
 
   /**
-  * encapsulation of vocab result container retrieval
+  * encapsulation of vocab result container retrieval - if the result
+  * container is cached, retrieve it; otherwise generate a new set of
+  * results, and cache it.
+  *
+  * The caller of this method doesn't need to know whether the result set
+  * was pulled from cache, or dynamically generated
   */
   private QS_VocabResultContainer getVocabResults(SearchInput searchInput)
     throws Exception
@@ -339,6 +382,9 @@ public class Search extends HttpServlet {
   // Token Existance
   //-----------------//
 
+  /**
+  * Check each token to see if we'll not get a hit for it
+  */
   private void parseSearchString(SearchInput searchInput)
     throws Exception
   {
@@ -361,6 +407,9 @@ public class Search extends HttpServlet {
   // User Input Validation
   //-----------------------//
 
+  /**
+  * Validation of user's input
+  */
   private void validateUserInput(HttpServletRequest request,
     HttpServletResponse response, SearchInput searchInput)
     throws IOException, ServletException

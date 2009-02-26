@@ -6,6 +6,7 @@ import java.util.*;
 // Logging
 import org.apache.log4j.Logger;
 
+// Search Tool Classes
 import org.jax.mgi.searchtool_wi.dataAccess.IndexAccessor;
 import org.jax.mgi.searchtool_wi.results.AbstractResult;
 import org.jax.mgi.searchtool_wi.results.ResultSorter;
