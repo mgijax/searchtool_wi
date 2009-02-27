@@ -15,19 +15,20 @@ import org.jax.mgi.shr.searchtool.StemmedMGITokenCountAnalyzer;
 import org.jax.mgi.shr.searchtool.MGIStopWords;
 
 /**
-* Search Input object, that stores the search string and transforms it 
+* Search Input object, that stores the search string and transforms it
 * in various ways.
 */
-
 public class SearchInput {
 
   // Set up the logger
   private static Logger log = Logger.getLogger(SearchInput.class.getName());
 
+  // form parameters
   private String searchString = new String("");
+  private HashMap formParameters = new HashMap();
+
   private String cacheString = new String("");
   private List<String> zeroHitTokens   = new ArrayList<String>();
-  private HashMap formParameters = new HashMap();
 
   //-------------//
   // Constructors
@@ -209,13 +210,13 @@ public class SearchInput {
 
   /**
    * Produces a list of the tokenized input string, by small tokens.
-   * 
+   *
    * This will also remove any stop words from the list.
-   * 
+   *
    * @return List of Strings containing the little tokens.
    * @throws IOException
    */
-  
+
   public List getTokenizedLittleInputString ()
     throws IOException
   {
@@ -260,10 +261,10 @@ public class SearchInput {
   }
 
 /**
- * Produce a transformed search string.  This has had all sorts of special 
+ * Produce a transformed search string.  This has had all sorts of special
  * handling put into it.  Like forcing phrase queries against accession id's.
- * 
- * @return Return a String representation of the search string.  
+ *
+ * @return Return a String representation of the search string.
  */
   public String getTransformedLowerCaseString() {
 
@@ -305,8 +306,8 @@ public class SearchInput {
                     String pattern = ".*\\s$";
 
                     /*
-                     * Check to see if the pattern is still terminated by a 
-                     * space. If so, trim it off and keep the * off the end, 
+                     * Check to see if the pattern is still terminated by a
+                     * space. If so, trim it off and keep the * off the end,
                      * as its no longer a valid prefix search.
                      */
 
@@ -331,12 +332,12 @@ public class SearchInput {
                         // Since this IS an ID, replace all its punctation with
                         // whitespace, and enclose in quotes.
 
-                        outString += " \"" 
+                        outString += " \""
                             + work_string.replaceAll("[\\W_]", " ") + "\"";
                     }
                     else
                     {
-                        // Since its not an ID we replace all its puncutation 
+                        // Since its not an ID we replace all its puncutation
                         // with whitespace, and add it to the stream.
 
                         outString +=
@@ -356,14 +357,14 @@ public class SearchInput {
   }
 
   /**
-   * Produce a transformed search string.  This has had all sorts of special 
+   * Produce a transformed search string.  This has had all sorts of special
    * handling put into it.  Like forcing phrase queries against accession id's.
-   * In addition this also removes words that are on the yield list from the 
+   * In addition this also removes words that are on the yield list from the
    * search string as well as any single character, or two character digits.
-   * 
-   * @return Return a String representation of the search string.  
+   *
+   * @return Return a String representation of the search string.
    */
-  
+
   public String getTransformedLowerCaseStringOr()
   {
     String search_string = this.searchString.toLowerCase();
@@ -422,7 +423,7 @@ public class SearchInput {
 
                         outString += " \""
                                 + work_string.replaceAll("[\\W_]", " ") + "\"";
-                        
+
                     } else {
                         // Since its not an ID we replace all its
                         // puncutation with whitespace, and add
@@ -440,16 +441,16 @@ public class SearchInput {
                             // string for processing in the query
                             // If it is, check to see if it is 2 in length,
                             // and if so is it two numbers in a row?
-                            
+
                             String yield_word_pattern = "at|by|for|in|from|" +
                             		"into|of|" +
                             		"on|to|with|no|not";
-                            
+
 
                             if (subTokens[k].length() != 1
                                     && !(subTokens[k].length() == 2 && Pattern
                                             .matches("[0-9][0-9]",
-                                                    subTokens[k])) 
+                                                    subTokens[k]))
                                     && ! Pattern.matches(yield_word_pattern,
                                             subTokens[k])) {
                                 outString += " " + subTokens[k];
@@ -508,10 +509,10 @@ public class SearchInput {
 
 /**
  * Returns an escaped list of large tokens.
- * 
+ *
  * @return A List of Strings
  */
-  
+
   public List <String> getEscapedLargeTokenList() {
     String[] catcher = this.searchString.toLowerCase().split("\"");
     String[] subCatcher;
@@ -525,7 +526,7 @@ public class SearchInput {
                 if (! subCatcher[j].equals("")) {
                     String temp_transformed =
                         removeTrailingPunct(subCatcher[j]);
-                    if (temp_transformed != null 
+                    if (temp_transformed != null
                             && ! temp_transformed.equals("")) {
                         tokens.add(trimWhitespace(
                                 escapeString(temp_transformed, true)));
@@ -593,7 +594,7 @@ public class SearchInput {
 
   /**
    * Return a List of Strings containing the filtered small tokens.
-   * 
+   *
    * @return A List of Strings.
    */
   public String [] getFilteredSmallTokenList()
@@ -616,7 +617,7 @@ public class SearchInput {
    * Returns a list of unfiltered small tokens.
    * @return A List of Strings.
    */
-  
+
   public String [] getSmallTokenList()
   {
     String temp_string =
@@ -626,9 +627,9 @@ public class SearchInput {
   }
 
 
-  /** 
+  /**
    * Return a transformed search string.
-   * 
+   *
    * @return String representation of the search string, with all extra spaces
    *   stripped out, and all letters converted into lowercase.
    */
@@ -639,10 +640,10 @@ public class SearchInput {
 
   /**
    * Return the whole search string, with special characters escaped.
-   * 
-   * @return String representation of the search string. 
+   *
+   * @return String representation of the search string.
    */
-  
+
   public String getEscapedWholeTermSearchString()
   {
     String[] catcher = this.searchString.toLowerCase().split("\"");
@@ -659,7 +660,7 @@ public class SearchInput {
                 if (! subCatcher[j].equals("")) {
                     String temp_transformed =
                         removeTrailingPunct(subCatcher[j]);
-                    if (temp_transformed != null 
+                    if (temp_transformed != null
                             && ! temp_transformed.equals("")) {
                         queryString +=
                             " " + escapeString(temp_transformed, true);
@@ -668,7 +669,7 @@ public class SearchInput {
             }
         }
         else {
-            queryString += " \"" 
+            queryString += " \""
                 + trimWhitespace(escapeString(catcher[i],false)) +"\"";
         }
     }
@@ -758,9 +759,9 @@ public class SearchInput {
    */
   public Boolean hasExcludedWords()
   {
-      
-    String yield_word_pattern = "at|by|for|in|from|into|of|" 
-        + "on|to|with|no|not";  
+
+    String yield_word_pattern = "at|by|for|in|from|into|of|"
+        + "on|to|with|no|not";
     String [] smallTokens = getSmallTokenList();
 
     for (int i = 0; i < smallTokens.length; i++) {
@@ -773,7 +774,7 @@ public class SearchInput {
         if (Pattern.matches(yield_word_pattern, smallTokens[i])) {
             return true;
         }
-        
+
     }
     return false;
   }
@@ -812,7 +813,7 @@ public class SearchInput {
         text = text.replaceAll(regex_patterns[i], replacement_patterns[i]);
     }
 
-    // Make sure prefix searches are intact, if they are intended to be as 
+    // Make sure prefix searches are intact, if they are intended to be as
     // such.
     if (preservePrefix) {
         text = text.replaceAll("\\\\\\*$", "*");
@@ -840,14 +841,14 @@ public class SearchInput {
     String ec_number_id_pattern = "[0-9]+\\.[0-9]+\\.[0-9]+\\.[0-9]+\\*?";
 
     // Pattern to match most acc id's that have an underscore in them.
-    
+
     String common_underscore_acc_id_pattern = "[a-z][a-z]_[0-9]+\\*?";
 
     String fhcrc_acc_id_pattern = "fhcrc-gt-[\\w\\-]+\\*?";
 
     String cmhd_acc_id_pattern = "cmhd-gt_[\\w\\.\\-]+\\*?";
-    
-    
+
+
 
     if (Pattern.matches(common_id_pattern, token)) {
         return true;
@@ -868,7 +869,7 @@ public class SearchInput {
     if (Pattern.matches(common_underscore_acc_id_pattern, token)) {
         return true;
     }
-    
+
     if (Pattern.matches(fhcrc_acc_id_pattern, token)) {
         return true;
     }
@@ -876,7 +877,7 @@ public class SearchInput {
     if (Pattern.matches(cmhd_acc_id_pattern, token)) {
         return true;
     }
-    
+
     return false;
   }
 

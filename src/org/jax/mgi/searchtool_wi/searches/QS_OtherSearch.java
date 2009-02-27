@@ -31,10 +31,12 @@ public class QS_OtherSearch extends AbstractSearch {
   //--------//
 
   // Set up the logger
-  private static Logger log = Logger.getLogger(QS_OtherSearch.class.getName());
+  private static Logger log
+    = Logger.getLogger(QS_OtherSearch.class.getName());
 
   // results to be returned
-  private HashMap <String, QS_OtherResult> searchResults = new HashMap <String, QS_OtherResult>();
+  private HashMap <String, QS_OtherResult> searchResults
+    = new HashMap <String, QS_OtherResult>();
 
   // Match factories we'll need generate the matches
   OtherMatchFactory otherMatchFactory
