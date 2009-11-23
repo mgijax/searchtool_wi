@@ -139,6 +139,8 @@ public class MarkerDisplayCache
             thisMarkerDisplay.setMarkerType(doc.get(IndexConstants.COL_MARKER_TYPE));
             thisMarkerDisplay.setChromosome(doc.get(IndexConstants.COL_CHROMOSOME));
             thisMarkerDisplay.setMgiId(doc.get(IndexConstants.COL_MGI_ID));
+            thisMarkerDisplay.setStrand(doc.get(IndexConstants.COL_STRAND));
+            thisMarkerDisplay.setLocDisplay(doc.get(IndexConstants.COL_LOC_DISPLAY));
 
             newMarkerCache.put(thisMarkerDisplay.getDbKey(), thisMarkerDisplay);
 
