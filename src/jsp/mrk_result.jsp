@@ -63,7 +63,7 @@
 <!-- Header Row -->
 <table class='qsBucket' width='100%' border=0>
   <tr>
-  <td colspan='6' class='qsBucketHeader'>
+  <td colspan='8' class='qsBucketHeader'>
     Genome Features
     <span class='small grayText'>
     Sorted by best match, showing <%=markerStart%> -
@@ -89,6 +89,8 @@
     <th style='padding-right:5px;padding-left:5px;'>Symbol</th>
     <th style='padding-right:5px;padding-left:5px;'>Name</th>
     <th style='text-align:right;padding-right:5px;padding-left:5px;'>Chr</th>
+    <th style='padding-right:5px; padding-left:5px;'>Location</th>
+    <th style='padding-right:5px; padding-left:5px;'>Str</th>
     <th style='padding-right:5px;padding-left:5px;' width='%40' >
       <span onmouseover="<%=displayHelper.getMarkerBestMatchMouseOver()%>" onmouseout="nd();">
        <a class="helpPopUp helpCursor" href="#">Best Match</a>
@@ -127,6 +129,12 @@
       <%=thisMarkerDisplay.getChromosome()%>
     </td>
     <td class='small'>
+      <%=thisMarkerDisplay.getLocDisplay()%>
+    </td>
+    <td class='small'>
+      <%=thisMarkerDisplay.getStrand()%>
+    </td>
+    <td class='small'>
       <%=thisMarkerResult.getBestMatch().display()%>
 
       <a class="qsWhyMatchLink"
@@ -145,7 +153,7 @@
 <% } /* for each result */ %>
 
   <tr style="background-color:#dfefff;">
-    <td colspan=4>
+    <td colspan=5>
       <span class='small grayText'>
       Showing <%=markerStart%> -
       <%=markerStop%> of
@@ -153,7 +161,7 @@
       &nbsp;&nbsp;&nbsp;<%=previousLink%> <%=nextLink%>
       </span>
     </td>
-    <td colspan=2>
+    <td colspan=3>
       <div style='float:right; display:none;' id='bqf'>
                <%@include file="batchQueryForwarding.jsp"%>
       </div>

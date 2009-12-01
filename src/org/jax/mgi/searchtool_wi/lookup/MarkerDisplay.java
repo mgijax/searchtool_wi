@@ -10,6 +10,8 @@ public class MarkerDisplay {
     private String markerType;
     private String chromosome;
     private String mgiID;
+    private String strand = "";
+    private String locDisplay = "";
 
 
     // Key
@@ -77,4 +79,30 @@ public class MarkerDisplay {
     public void setMgiId(String s) {
         this.mgiID = s;
     }
+
+
+    // Strand
+    public String getStrand() {
+        return strand;
+    }
+
+    public void setStrand(String strand) {
+        if (strand != null) {
+            this.strand = strand;
+        }
+    }
+
+    // location display
+    public String getLocDisplay() {
+        return locDisplay;
+    }
+
+    public void setLocDisplay(String s) {
+        if (s != null) {
+            this.locDisplay = s;
+        }
+    }
+
+
+
 }

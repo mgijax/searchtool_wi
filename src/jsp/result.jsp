@@ -82,7 +82,7 @@
 
 <table class='qsBucket' width='98%' border=0>
 <tr>
-  <td colspan='6' class='qsBucketHeader'>Genome Features
+  <td colspan='8' class='qsBucketHeader'>Genome Features
 <%
   if (displayLengthMarker != 0) {
     out.print("<span class='small grayText'> sorted by best match, showing 1-");
@@ -111,6 +111,10 @@
     <th style='padding-right:5px; padding-left:5px;'>Symbol</th>
     <th style='padding-right:5px; padding-left:5px;'>Name</th>
     <th style='padding-right:5px; padding-left:5px; text-align:right;'>Chr</th>
+
+    <th style='padding-right:5px; padding-left:5px;'>Location</th>
+    <th style='padding-right:5px; padding-left:5px;'>Str</th>
+
     <th style='padding-right:5px; padding-left:5px;' width='40%' >
       <span onmouseover="<%=displayHelper.getMarkerBestMatchMouseOver()%>" onmouseout="nd();">
        <a class="helpPopUp helpCursor" href="#">Best Match</a>
@@ -147,6 +151,13 @@
       <%=thisMarkerDisplay.getChromosome()%>
     </td>
     <td class='small'>
+      <%=thisMarkerDisplay.getLocDisplay()%>
+    </td>
+    <td class='small'>
+      <%=thisMarkerDisplay.getStrand()%>
+    </td>
+
+    <td class='small'>
       <%=thisMarkerResult.getBestMatch().display()%>
 
       <a class="qsWhyMatchLink"
@@ -167,7 +178,7 @@
 <% } /* if we have marker results */ %>
 
   <tr style="background-color:#dfefff;">
-    <td colspan=3>
+    <td colspan=5>
     <% if (needMoreMarkerLink) { %>
       &nbsp;&nbsp;&nbsp;
       <a href="Search.do?query=<%=displayHelper.getEncodedUrl(queryForward)%>&page=marker">Show
