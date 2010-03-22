@@ -832,7 +832,7 @@ public class SearchInput {
     // The generic ID pattern, this should catch the bulk of what is in
     // the acc_accession table, add new generic patterns here.
 
-    String common_id_pattern = "(mp|go|mgi|j|ma|mgc|hgnc):[0-9]+\\*?";
+    String common_id_pattern = "(mp|go|mgi|j|ma|mgc|hgnc|pro):[0-9]+\\*?";
 
     // Special cases - Put any new patterns after this comment
 
