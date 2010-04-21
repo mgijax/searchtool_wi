@@ -12,7 +12,7 @@ import org.jax.mgi.searchtool_wi.dataAccess.IndexReaderContainer;
 import org.jax.mgi.shr.config.Configuration;
 import org.jax.mgi.shr.searchtool.IndexConstants;
 
-/**  
+/**
 * The MarkerVocabSearchCache object provides a persistent, in-memory
 * container for search tool related display data.
 *
@@ -46,40 +46,27 @@ public class MarkerVocabSearchCache
     private static boolean loadNeeded = true;
 
     // vocabID -> child ID list
-    private static HashMap mpChildIds                   = new HashMap();
-    private static HashMap goChildIds                   = new HashMap();
-    private static HashMap adChildIds                   = new HashMap();
-    private static HashMap omimChildIds                 = new HashMap();
-    private static HashMap omimOrthoChildIds            = new HashMap();
-    private static HashMap psChildIds                   = new HashMap();
-    private static HashMap ipChildIds                   = new HashMap();
+    private static HashMap mpChildIds             = new HashMap();
+    private static HashMap goChildIds             = new HashMap();
+    private static HashMap adChildIds             = new HashMap();
+    private static HashMap omimChildIds           = new HashMap();
+    private static HashMap omimOrthoChildIds      = new HashMap();
+    private static HashMap psChildIds             = new HashMap();
+    private static HashMap ipChildIds             = new HashMap();
 
     // vocabID -> annotated genes list
-    private static HashMap mpAnnotMarkers               = new HashMap();
-    private static HashMap goAnnotMarkers               = new HashMap();
-    private static HashMap adAnnotMarkers               = new HashMap();
-    private static HashMap omimAnnotMarkers             = new HashMap();
-    private static HashMap omimOrthoAnnotMarkers        = new HashMap();
-    private static HashMap psAnnotMarkers               = new HashMap();
-    private static HashMap ipAnnotMarkers               = new HashMap();
+    private static HashMap mpAnnotMarkers         = new HashMap();
+    private static HashMap goAnnotMarkers         = new HashMap();
+    private static HashMap adAnnotMarkers         = new HashMap();
+    private static HashMap omimAnnotMarkers       = new HashMap();
+    private static HashMap omimOrthoAnnotMarkers  = new HashMap();
+    private static HashMap psAnnotMarkers         = new HashMap();
+    private static HashMap ipAnnotMarkers         = new HashMap();
 
-    // vocabID -> raw_data (display data)
-    private static HashMap mpAnnotDisplayData           = new HashMap();
-    private static HashMap goAnnotDisplayData           = new HashMap();
-    private static HashMap adAnnotDisplayData           = new HashMap();
-    private static HashMap omimAnnotDisplayData         = new HashMap();
-    private static HashMap omimOrthoAnnotDisplayData    = new HashMap();
-    private static HashMap psAnnotDisplayData           = new HashMap();
-    private static HashMap ipAnnotDisplayData           = new HashMap();
+    // vocabID -> annotated alleles list
+    private static HashMap mpAnnotAlleles         = new HashMap();
+    private static HashMap omimAnnotAlleles       = new HashMap();
 
-    // vocabID -> type display (Displayprefix)
-    private static HashMap mpAnnotTypeDisplay           = new HashMap();
-    private static HashMap goAnnotTypeDisplay           = new HashMap();
-    private static HashMap adAnnotTypeDisplay           = new HashMap();
-    private static HashMap omimAnnotTypeDisplay         = new HashMap();
-    private static HashMap omimOrthoAnnotTypeDisplay    = new HashMap();
-    private static HashMap psAnnotTypeDisplay           = new HashMap();
-    private static HashMap ipAnnotTypeDisplay           = new HashMap();
 
     // IndexReaderContainer
     private static IndexReaderContainer irc;
@@ -103,83 +90,6 @@ public class MarkerVocabSearchCache
         return _theInstance;
     }
 
-    //------------------------------------//
-    // Annotated Marker Retrieval Methods //
-    //------------------------------------//
-
-    public List getMpAnnotMarkers(String termKey){
-        return (List)mpAnnotMarkers.get(termKey);
-    }
-    public List getGoAnnotMarkers(String termKey){
-        return (List)goAnnotMarkers.get(termKey);
-    }
-    public List getAdAnnotMarkers(String termKey){
-        return (List)adAnnotMarkers.get(termKey);
-    }
-    public List getOmimAnnotMarkers(String termKey){
-        return (List)omimAnnotMarkers.get(termKey);
-    }
-    public List getOmimOrthoAnnotMarkers(String termKey){
-        return (List)omimOrthoAnnotMarkers.get(termKey);
-    }
-    public List getPsAnnotMarkers(String termKey){
-        return (List)psAnnotMarkers.get(termKey);
-    }
-    public List getIpAnnotMarkers(String termKey){
-        return (List)ipAnnotMarkers.get(termKey);
-    }
-
-    //------------------------------------//
-    // Display Data Retrieval Methods //
-    //------------------------------------//
-
-    public List getMpAnnotDisplayData(String termKey){
-        return (List)mpAnnotDisplayData.get(termKey);
-    }
-    public List getGoAnnotDisplayData(String termKey){
-        return (List)goAnnotDisplayData.get(termKey);
-    }
-    public List getAdAnnotDisplayData(String termKey){
-        return (List)adAnnotDisplayData.get(termKey);
-    }
-    public List getOmimAnnotDisplayData(String termKey){
-        return (List)omimAnnotDisplayData.get(termKey);
-    }
-    public List getOmimOrthoAnnotDisplayData(String termKey){
-        return (List)omimOrthoAnnotDisplayData.get(termKey);
-    }
-    public List getPsAnnotDisplayData(String termKey){
-        return (List)psAnnotDisplayData.get(termKey);
-    }
-    public List getIpAnnotDisplayData(String termKey){
-        return (List)ipAnnotDisplayData.get(termKey);
-    }
-
-    //------------------------------------//
-    // Data Type Retrieval Methods //
-    //------------------------------------//
-
-    public List getMpAnnotTypeDisplay(String termKey){
-        return (List)mpAnnotTypeDisplay.get(termKey);
-    }
-    public List getGoAnnotTypeDisplay(String termKey){
-        return (List)goAnnotTypeDisplay.get(termKey);
-    }
-    public List getAdAnnotTypeDisplay(String termKey){
-        return (List)adAnnotTypeDisplay.get(termKey);
-    }
-    public List getOmimAnnotTypeDisplay(String termKey){
-        return (List)omimAnnotTypeDisplay.get(termKey);
-    }
-    public List getOmimOrthoAnnotTypeDisplay(String termKey){
-        return (List)omimOrthoAnnotTypeDisplay.get(termKey);
-    }
-    public List getPsAnnotTypeDisplay(String termKey){
-        return (List)psAnnotTypeDisplay.get(termKey);
-    }
-    public List getIpAnnotTypeDisplay(String termKey){
-        return (List)ipAnnotTypeDisplay.get(termKey);
-    }
 
     //------------------------------//
     // Child Term Retrieval Methods //
@@ -208,13 +118,51 @@ public class MarkerVocabSearchCache
     }
 
 
+    //------------------------------------//
+    // Annotated Marker Retrieval Methods //
+    //------------------------------------//
+
+    public List getMpAnnotMarkers(String termKey){
+        return (List)mpAnnotMarkers.get(termKey);
+    }
+    public List getGoAnnotMarkers(String termKey){
+        return (List)goAnnotMarkers.get(termKey);
+    }
+    public List getAdAnnotMarkers(String termKey){
+        return (List)adAnnotMarkers.get(termKey);
+    }
+    public List getOmimAnnotMarkers(String termKey){
+        return (List)omimAnnotMarkers.get(termKey);
+    }
+    public List getOmimOrthoAnnotMarkers(String termKey){
+        return (List)omimOrthoAnnotMarkers.get(termKey);
+    }
+    public List getPsAnnotMarkers(String termKey){
+        return (List)psAnnotMarkers.get(termKey);
+    }
+    public List getIpAnnotMarkers(String termKey){
+        return (List)ipAnnotMarkers.get(termKey);
+    }
+
+
+    //------------------------------------//
+    // Annotated Allele Retrieval Methods //
+    //------------------------------------//
+
+    public List getMpAnnotAlleles(String termKey){
+        return (List)mpAnnotAlleles.get(termKey);
+    }
+    public List getOmimAnnotAlleles(String termKey){
+        return (List)omimAnnotAlleles.get(termKey);
+    }
+
+
     /////////////////
     //private methods
     /////////////////
 
     private static void load(Configuration stConfig)
     {
-
         Document doc;
 
         log.info("MarkerVocabSearchCache loading...");
@@ -256,12 +204,13 @@ public class MarkerVocabSearchCache
                   psChildIds.put(doc.get(IndexConstants.COL_DB_KEY), markerKeys);
                 }
             }
-
             // gather the markers annotated to this vocab term
-            if(!doc.get(IndexConstants.COL_GENE_IDS).equals("")) {
+            if( !doc.get(IndexConstants.COL_FEATURE_IDS).equals("")
+              && doc.get(IndexConstants.COL_OBJ_TYPE).equals("MARKER"))
 
+            {
                 ArrayList markerKeys =
-                    new ArrayList( Arrays.asList(doc.get("gene_ids").split(",")) );
+                    new ArrayList( Arrays.asList(doc.get("feature_ids").split(",")) );
 
                 // put the data in the proper mapping
                 if (doc.get(IndexConstants.COL_VOCABULARY).equals(IndexConstants.AD_TYPE_NAME)) {
@@ -287,63 +236,29 @@ public class MarkerVocabSearchCache
                 }
             }
 
-            // gather the display data to this vocab term
-            if(!doc.get(IndexConstants.COL_RAW_DATA).equals("")) {
+            // gather the alleles annotated to this vocab term
+            if( !doc.get(IndexConstants.COL_FEATURE_IDS).equals("")
+              && doc.get(IndexConstants.COL_OBJ_TYPE).equals("ALLELE"))
 
-                String displayData = doc.get(IndexConstants.COL_RAW_DATA);
+            {
 
-                // put the data in the proper mapping
-                if (doc.get(IndexConstants.COL_VOCABULARY).equals(IndexConstants.AD_TYPE_NAME)) {
-                  adAnnotDisplayData.put(doc.get(IndexConstants.COL_DB_KEY), displayData);
-                }
-                else if (doc.get(IndexConstants.COL_VOCABULARY).equals(IndexConstants.MP_TYPE_NAME)){
-                  mpAnnotDisplayData.put(doc.get(IndexConstants.COL_DB_KEY), displayData);
-                }
-                else if (doc.get(IndexConstants.COL_VOCABULARY).equals(IndexConstants.GO_TYPE_NAME)){
-                  goAnnotDisplayData.put(doc.get(IndexConstants.COL_DB_KEY), displayData);
-                }
-                else if (doc.get(IndexConstants.COL_VOCABULARY).equals(IndexConstants.OMIM_TYPE_NAME)){
-                  omimAnnotDisplayData.put(doc.get(IndexConstants.COL_DB_KEY), displayData);
-                }
-                else if (doc.get(IndexConstants.COL_VOCABULARY).equals(IndexConstants.OMIM_ORTH_TYPE_NAME)){
-                  omimOrthoAnnotDisplayData.put(doc.get(IndexConstants.COL_DB_KEY), displayData);
-                }
-                else if (doc.get(IndexConstants.COL_VOCABULARY).equals(IndexConstants.INTERPRO_TYPE_NAME)){
-                  ipAnnotDisplayData.put(doc.get(IndexConstants.COL_DB_KEY), displayData);
-                }
-                else if (doc.get(IndexConstants.COL_VOCABULARY).equals(IndexConstants.PIRSF_TYPE_NAME)){
-                  psAnnotDisplayData.put(doc.get(IndexConstants.COL_DB_KEY), displayData);
-                }
-            }
-
-            // gather the type display data to this vocab term
-            if(!doc.get(IndexConstants.COL_TYPE_DISPLAY).equals("")) {
-
-                String displayData = doc.get(IndexConstants.COL_RAW_DATA);
+                ArrayList alleleKeys =
+                    new ArrayList( Arrays.asList(doc.get("feature_ids").split(",")) );
 
                 // put the data in the proper mapping
-                if (doc.get(IndexConstants.COL_VOCABULARY).equals(IndexConstants.AD_TYPE_NAME)) {
-                  adAnnotTypeDisplay.put(doc.get(IndexConstants.COL_DB_KEY), displayData);
-                }
-                else if (doc.get(IndexConstants.COL_VOCABULARY).equals(IndexConstants.MP_TYPE_NAME)){
-                  mpAnnotTypeDisplay.put(doc.get(IndexConstants.COL_DB_KEY), displayData);
-                }
-                else if (doc.get(IndexConstants.COL_VOCABULARY).equals(IndexConstants.GO_TYPE_NAME)){
-                  goAnnotTypeDisplay.put(doc.get(IndexConstants.COL_DB_KEY), displayData);
+                if (doc.get(IndexConstants.COL_VOCABULARY).equals(IndexConstants.MP_TYPE_NAME)){
+                  mpAnnotAlleles.put(doc.get(IndexConstants.COL_DB_KEY), alleleKeys);
                 }
                 else if (doc.get(IndexConstants.COL_VOCABULARY).equals(IndexConstants.OMIM_TYPE_NAME)){
-                  omimAnnotTypeDisplay.put(doc.get(IndexConstants.COL_DB_KEY), displayData);
+                  omimAnnotAlleles.put(doc.get(IndexConstants.COL_DB_KEY), alleleKeys);
                 }
-                else if (doc.get(IndexConstants.COL_VOCABULARY).equals(IndexConstants.OMIM_ORTH_TYPE_NAME)){
-                  omimOrthoAnnotTypeDisplay.put(doc.get(IndexConstants.COL_DB_KEY), displayData);
-                }
-                else if (doc.get(IndexConstants.COL_VOCABULARY).equals(IndexConstants.INTERPRO_TYPE_NAME)){
-                  ipAnnotTypeDisplay.put(doc.get(IndexConstants.COL_DB_KEY), displayData);
-                }
-                else if (doc.get(IndexConstants.COL_VOCABULARY).equals(IndexConstants.PIRSF_TYPE_NAME)){
-                  psAnnotTypeDisplay.put(doc.get(IndexConstants.COL_DB_KEY), displayData);
-                }
+                else {
+					System.out.println("-------?-----" + doc.get(IndexConstants.COL_VOCABULARY));
+				}
+
+
             }
+
           }
         }
         catch (Exception e) {
@@ -351,7 +266,7 @@ public class MarkerVocabSearchCache
         }
 
         loadNeeded = false;
-        log.info("MarkerVocabSearchCache finished loading...");
+        log.info("GenomeFeature VocabSearchCache finished loading...");
         return;
     }
 

@@ -11,7 +11,7 @@ import org.apache.lucene.index.IndexReader;
 import org.jax.mgi.searchtool_wi.dataAccess.IndexReaderContainer;
 import org.jax.mgi.searchtool_wi.matches.MarkerVocabMatch;
 import org.jax.mgi.searchtool_wi.matches.VocabMatch;
-import org.jax.mgi.searchtool_wi.results.QS_VocabResult;
+import org.jax.mgi.searchtool_wi.results.VocabResult;
 import org.jax.mgi.shr.config.Configuration;
 import org.jax.mgi.shr.searchtool.IndexConstants;
 
@@ -79,7 +79,7 @@ public class VocabDisplayCache
     // Data Retrieval Methods
     /////////////////////////
 
-     public VocabDisplay getVocab(QS_VocabResult s)
+     public VocabDisplay getVocab(VocabResult s)
     {
 
         if (s.getVocabulary().equals(IndexConstants.AD_TYPE_NAME)) {

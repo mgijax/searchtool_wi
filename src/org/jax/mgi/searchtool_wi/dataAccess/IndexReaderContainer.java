@@ -5,14 +5,14 @@ import org.apache.lucene.index.IndexReader;
 import org.jax.mgi.shr.config.Configuration;
 
 /**
- * 
+ *
  * @author mhall
- * 
+ *
  * @is A singleton container, which supplies an IndexReaders to objects
  * requesting them.
- * 
+ *
  * @has Various IndexReaders
- * 
+ *
  * @does Upon initialization creates the only copies of the various index
  * readers, and passees them out upon request.
  */
@@ -28,16 +28,16 @@ public class IndexReaderContainer {
     private IndexReader markerVocabDagReader = null;
     private IndexReader nonIDTokenReader = null;
 
-    private static Logger log = 
+    private static Logger log =
         Logger.getLogger(IndexReaderContainer.class.getName());
 
     private static String baseDir = null;
 
     /**
-     * Private default constructor, this object is a singleton, so you never 
+     * Private default constructor, this object is a singleton, so you never
      * construct it!
      */
-    
+
     private IndexReaderContainer() {
     }
 
@@ -46,20 +46,20 @@ public class IndexReaderContainer {
      * @param stConfig
      * @return The one and only instance of the IRC.
      */
-    
+
     public static IndexReaderContainer getIndexReaderContainer(
             Configuration stConfig) {
-        
+
         baseDir = stConfig.get("INDEX_DIR");
 
         // If the Marker Exact Reader is null, we are uninitialized.  So
         // go ahead and initialize all of the readers.
-        
+
         if (instance.markerExactReader == null) {
-            instance.setMarkerExactReader(baseDir + "markerExact/index");
-            instance.setMarkerInexactReader(baseDir + "markerInexact/index");
-            instance.setMarkerDisplayReader(baseDir + "markerDisplay/index");
-            instance.setMarkerVocabDagReader(baseDir + "markerVocabDag/index");
+            instance.setMarkerExactReader(baseDir + "genomeFeatureExact/index");
+            instance.setMarkerInexactReader(baseDir + "genomeFeatureInexact/index");
+            instance.setMarkerDisplayReader(baseDir + "genomeFeatureDisplay/index");
+            instance.setMarkerVocabDagReader(baseDir + "genomeFeatureVocabDag/index");
             instance.setVocabExactReader(baseDir + "vocabExact/index");
             instance.setVocabDisplayReader(baseDir + "vocabDisplay/index");
             instance.setNonIDTokenReader(baseDir + "nonIDToken/index");
@@ -72,7 +72,7 @@ public class IndexReaderContainer {
      * Get the Marker Exact IndexReader
      * @return An IndexReader
      */
-    
+
     public IndexReader getMarkerExactReader() {
         return markerExactReader;
     }
@@ -81,7 +81,7 @@ public class IndexReaderContainer {
      * Set the Marker Exact IndexReader
      * @param path - The path to the index.
      */
-    
+
     private void setMarkerExactReader(String path) {
         markerExactReader = setReader(path);
     }
@@ -90,7 +90,7 @@ public class IndexReaderContainer {
      * Get the Marker Inexact IndexReader
      * @return An IndexReader
      */
-    
+
     public IndexReader getMarkerInexactReader() {
         return markerInexactReader;
     }
@@ -99,7 +99,7 @@ public class IndexReaderContainer {
      * Set the Marker Inexact IndexReader
      * @param path - The path to the index.
      */
-    
+
     private void setMarkerInexactReader(String path) {
         markerInexactReader = setReader(path);
     }
@@ -108,7 +108,7 @@ public class IndexReaderContainer {
      * Get the Vocab Exact IndexReader
      * @return An IndexReader
      */
-    
+
     public IndexReader getVocabExactReader() {
         return vocabExactReader;
     }
@@ -117,7 +117,7 @@ public class IndexReaderContainer {
      * Set the Vocab Exact IndexReader
      * @param path - The path to the index.
      */
-    
+
     private void setVocabExactReader(String path) {
         vocabExactReader = setReader(path);
     }
@@ -126,7 +126,7 @@ public class IndexReaderContainer {
      * Get the Vocab Dag IndexReader
      * @return An IndexReader
      */
-    
+
     public IndexReader getVocabDisplayReader() {
         return vocabDisplayReader;
     }
@@ -135,7 +135,7 @@ public class IndexReaderContainer {
      * Set the Vocab Display IndexReader
      * @param path - The path to the index.
      */
-    
+
     private void setVocabDisplayReader(String path) {
         vocabDisplayReader = setReader(path);
     }
@@ -144,7 +144,7 @@ public class IndexReaderContainer {
      * Get the Marker Display IndexReader
      * @return An IndexReader
      */
-    
+
     public IndexReader getMarkerDisplayReader() {
         return markerDisplayReader;
     }
@@ -153,7 +153,7 @@ public class IndexReaderContainer {
      * Set the Marker Display IndexReader
      * @param path - The path to the index.
      */
-    
+
     private void setMarkerDisplayReader(String path) {
         markerDisplayReader = setReader(path);
     }
@@ -162,7 +162,7 @@ public class IndexReaderContainer {
      * Get the Marker Vocab Dag IndexReader
      * @return An IndexReader
      */
-    
+
     public IndexReader getMarkerVocabDagReader() {
         return markerVocabDagReader;
     }
@@ -171,7 +171,7 @@ public class IndexReaderContainer {
      * Set the Marker Vocab Dag IndexReader
      * @param path - The path to the index.
      */
-    
+
     private void setMarkerVocabDagReader(String path) {
         markerVocabDagReader = setReader(path);
     }
@@ -180,7 +180,7 @@ public class IndexReaderContainer {
      * Get the Non ID Token IndexReader
      * @return An IndexReader
      */
-    
+
     public IndexReader getNonIDTokenReader() {
         return nonIDTokenReader;
     }
@@ -189,7 +189,7 @@ public class IndexReaderContainer {
      * Set the Non ID Token IndexReader
      * @param path - The path to the index.
      */
-    
+
     private void setNonIDTokenReader(String path) {
         nonIDTokenReader = setReader(path);
     }
@@ -198,7 +198,7 @@ public class IndexReaderContainer {
      * Generic setReader that all the more specific set methods use.
      * @return An IndexReader
      */
-    
+
     private IndexReader setReader(String path) {
         IndexReader ir = null;
         try {

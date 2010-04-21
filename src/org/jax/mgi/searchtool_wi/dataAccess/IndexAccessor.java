@@ -26,38 +26,38 @@ import org.jax.mgi.shr.searchtool.MGIAnalyzer;
 import org.jax.mgi.shr.searchtool.StemmedMGIAnalyzer;
 
 /**
- * This class provides the API between the indexes and the search tool. By 
- * using this API the searchtool needn't concern itself as to how its indexes 
- * are named, nor does it need any knowledge about how to perform searches 
+ * This class provides the API between the indexes and the search tool. By
+ * using this API the searchtool needn't concern itself as to how its indexes
+ * are named, nor does it need any knowledge about how to perform searches
  * against them.
  *
  * @author mhall
  *
  * @has Various Analyzers, an IndexSearcherContainer, and Queries.
- * 
- * These are used in the various searches to complete the task of searching 
+ *
+ * These are used in the various searches to complete the task of searching
  * a given data source.
  *
- * @does This object encapsulates all the various searches into a single 
- * interface.  The interface consistently takes a SearchInput object, with 
- * the exception of some very special cases. 
+ * @does This object encapsulates all the various searches into a single
+ * interface.  The interface consistently takes a SearchInput object, with
+ * the exception of some very special cases.
  */
 
 public class IndexAccessor {
 
     private IndexSearcherContainer isc;
     private Logger log = Logger.getLogger(IndexAccessor.class.getName());
-    
+
     // Set up the various analyzers that we use as class variables.
-    
+
     private Analyzer standard_analyzer = new StandardAnalyzer();
     private Analyzer mgi_analyzer = new MGIAnalyzer();
     private Analyzer stemmed_mgi_analyzer = new StemmedMGIAnalyzer();
-    private PerFieldAnalyzerWrapper perField_analyzer = 
+    private PerFieldAnalyzerWrapper perField_analyzer =
         new PerFieldAnalyzerWrapper(standard_analyzer);
 
     // Set up the various query parsers as class variables.
-    
+
     private QueryParser qp_pre;
     private QueryParser qp_snow;
     private QueryParser qp_large_token;
@@ -81,7 +81,7 @@ public class IndexAccessor {
         config = stConfig;
 
         // Set up the various query parsers.  They are each used to generate
-        // specific queries based upon a search string that has been passed to 
+        // specific queries based upon a search string that has been passed to
         // them.
 
         qp_snow = new QueryParser(IndexConstants.COL_SDATA,
@@ -145,7 +145,6 @@ public class IndexAccessor {
         Term t = new Term(IndexConstants.COL_DATA, si
                 .getWholeTermSearchString());
         TermQuery tq = new TermQuery(t);
-
         hits = searcher.search(tq);
 
         return hits;
@@ -195,7 +194,7 @@ public class IndexAccessor {
         Term t = new Term(IndexConstants.COL_DATA, si
                 .getWholeTermSearchString());
         TermQuery tq = new TermQuery(t);
-        
+
         hits = searcher.search(tq);
 
         return hits;
@@ -204,10 +203,10 @@ public class IndexAccessor {
     /**
      * Search Marker Symbols By the Large Tokens contained in the search
      * string.
-     * 
-     * Unlike other "Exact" searches, this one allows prefix searching to 
+     *
+     * Unlike other "Exact" searches, this one allows prefix searching to
      * process.
-     * 
+     *
      * @param si
      * @return A List of Hits
      * @throws Exception
@@ -242,7 +241,7 @@ public class IndexAccessor {
     /**
      * Search marker symbols by whole term.  This also allows the use of prefix
      * searches.
-     * 
+     *
      * @param si
      * @return
      * @throws Exception
@@ -261,9 +260,9 @@ public class IndexAccessor {
     }
 
     /**
-     * Search marker non symbol nomenclature via large tokens contained in 
+     * Search marker non symbol nomenclature via large tokens contained in
      * the search string.
-     * 
+     *
      * @param si
      * @return
      * @throws Exception
@@ -367,9 +366,9 @@ public class IndexAccessor {
 
     /**
      * Search for Other Objects by Whole term.
-     * 
+     *
      * This is primarily used in the token existence cache.
-     * 
+     *
      * @param si
      * @return
      * @throws Exception
@@ -463,7 +462,7 @@ public class IndexAccessor {
     }
 
     /**
-     * Search the vocabulary items via small tokens, and as an 
+     * Search the vocabulary items via small tokens, and as an
      * And search.
      * @param si SearchInput
      * @return
@@ -479,7 +478,7 @@ public class IndexAccessor {
     }
 
     /**
-     * Search the vocabulary items, via small tokens, and as an 
+     * Search the vocabulary items, via small tokens, and as an
      * Or search.
      * @param si SearchInput
      * @return
@@ -562,7 +561,7 @@ public class IndexAccessor {
     /**
      * Search vocabulary accession id's by large tokens contained in the search
      * string.
-     * 
+     *
      * @param si The searchinput object.
      * @return A List of Hit objects
      * @throws Exception

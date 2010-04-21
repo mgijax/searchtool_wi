@@ -8,21 +8,21 @@ import org.jax.mgi.shr.searchtool.MGISimilarity;
 
 /**
  * @author mhall
- * 
+ *
  * @is A Singleton container object, that handles supplying the various
  * IndexSearchers to objects requesting them.
- * 
+ *
  * @has References to several Lucene IndexSearchers
- * 
+ *
  * @does Returns references to various IndexSearchers. Initializing them all
  * upon first invocation.
  */
 
 public class IndexSearcherContainer {
 
-    private static Logger log = 
+    private static Logger log =
         Logger.getLogger(IndexSearcherContainer.class.getName());
-    private static IndexSearcherContainer instance = 
+    private static IndexSearcherContainer instance =
         new IndexSearcherContainer();
     private IndexSearcher otherExactIndex = null;
     private IndexSearcher otherDisplayIndex = null;
@@ -39,45 +39,45 @@ public class IndexSearcherContainer {
     private static MGISimilarity mgis = new MGISimilarity();
 
     /**
-     * Private no argument constructor, this object is a singleton and 
+     * Private no argument constructor, this object is a singleton and
      * should never be directly constructed.
      */
-    
+
     private IndexSearcherContainer() {
     }
 
     /**
-     * The singleton get method.  This returns the single instance of this 
+     * The singleton get method.  This returns the single instance of this
      * class.  It will also serve to initialize the class if this is its first
      * invocation.
-     * 
+     *
      * @param stConfig
      * @return The one and only instance of this class.
      */
-    
+
     public static IndexSearcherContainer getIndexSearcherContainer(
             Configuration stConfig) {
 
         baseDir = stConfig.get("INDEX_DIR");
-        
+
         // If the marker exact index searcher is currently null, that means
-        // that we are in an uninitialized state.  So we will therefore 
+        // that we are in an uninitialized state.  So we will therefore
         // initialize the object now.
-        
+
         if (instance.getMarkerExactIndex() == null) {
             instance.setOtherExactIndex(baseDir + "otherExact/index");
             instance.setOtherDisplayIndex(baseDir + "otherDisplay/index");
             instance.setVocabInexact(baseDir + "vocabInexact/index");
             instance.setVocabExactIndex(baseDir + "vocabExact/index");
             instance.setVocabAccIDIndex(baseDir + "vocabAccID/index");
-            instance.setMarkerExactIndex(baseDir + "markerExact/index");
-            instance.setMarkerAccIDIndex(baseDir + "markerAccID/index");
-            instance.setMarkerSymbolIndex(baseDir + "markerSymbol/index");
-            instance.setMarkerInexactIndex(baseDir + "markerInexact/index");
+            instance.setMarkerExactIndex(baseDir + "genomeFeatureExact/index");
+            instance.setMarkerAccIDIndex(baseDir + "genomeFeatureAccID/index");
+            instance.setMarkerSymbolIndex(baseDir + "genomeFeatureSymbol/index");
+            instance.setMarkerInexactIndex(baseDir + "genomeFeatureInexact/index");
             instance.setMarkerVocabAccIDIndex(baseDir
-                    + "markerVocabAccID/index");
+                    + "genomeFeatureVocabAccID/index");
             instance.setMarkerVocabExactIndex(baseDir
-                    + "markerVocabExact/index");
+                    + "genomeFeatureVocabExact/index");
         }
         return instance;
     }
@@ -87,7 +87,7 @@ public class IndexSearcherContainer {
      * @param index
      * @return
      */
-    
+
     private IndexSearcher setIndex(String index) {
         IndexSearcher is = null;
         try {
@@ -103,7 +103,7 @@ public class IndexSearcherContainer {
      * Get the Other Exact Index Searcher.
      * @return An Index Searcher
      */
-    
+
     public IndexSearcher getOtherExactIndex() {
         return otherExactIndex;
     }
@@ -112,7 +112,7 @@ public class IndexSearcherContainer {
      * Set the Other Exact Index
      * @param Index The path to the index
      */
-    
+
     private void setOtherExactIndex(String Index) {
         this.otherExactIndex = setIndex(Index);
     }
@@ -121,7 +121,7 @@ public class IndexSearcherContainer {
      * Get the Other Display Index Searcher.
      * @return An Index Searcher
      */
-    
+
     public IndexSearcher getOtherDisplayIndex() {
         return otherDisplayIndex;
     }
@@ -130,7 +130,7 @@ public class IndexSearcherContainer {
      * Set the Other Display Index
      * @param Index The path to the index
      */
-    
+
     private void setOtherDisplayIndex(String Index) {
         this.otherDisplayIndex = setIndex(Index);
     }
@@ -139,7 +139,7 @@ public class IndexSearcherContainer {
      * Get the Marker Inexact Index Searcher.
      * @return An Index Searcher
      */
-    
+
     public IndexSearcher getMarkerInexactIndex() {
         return markerInexactIndex;
     }
@@ -148,7 +148,7 @@ public class IndexSearcherContainer {
      * Set the Marker Inexact Index
      * @param Index The path to the index
      */
-    
+
     private void setMarkerInexactIndex(String Index) {
         this.markerInexactIndex = setIndex(Index);
     }
@@ -157,7 +157,7 @@ public class IndexSearcherContainer {
      * Get the Marker Exact Index Searcher.
      * @return An Index Searcher
      */
-    
+
     public IndexSearcher getMarkerExactIndex() {
         return markerExactIndex;
     }
@@ -166,7 +166,7 @@ public class IndexSearcherContainer {
      * Set the Marker Exact Index
      * @param Index The path to the index
      */
-    
+
     private void setMarkerExactIndex(String Index) {
         this.markerExactIndex = setIndex(Index);
     }
@@ -175,7 +175,7 @@ public class IndexSearcherContainer {
      * Get the Marker Acc ID Index Searcher.
      * @return An Index Searcher
      */
-    
+
     public IndexSearcher getMarkerAccIDIndex() {
         return markerAccIDIndex;
     }
@@ -184,7 +184,7 @@ public class IndexSearcherContainer {
      * Set the Marker Acc ID Index
      * @param Index The path to the index
      */
-    
+
     private void setMarkerAccIDIndex(String Index) {
         this.markerAccIDIndex = setIndex(Index);
     }
@@ -193,7 +193,7 @@ public class IndexSearcherContainer {
      * Get the Marker Symbol Index Searcher.
      * @return An Index Searcher
      */
-    
+
     public IndexSearcher getMarkerSymbolIndex() {
         return markerSymbolIndex;
     }
@@ -202,7 +202,7 @@ public class IndexSearcherContainer {
      * Set the Marker Symbol Index
      * @param Index The path to the index
      */
-    
+
     private void setMarkerSymbolIndex(String Index) {
         this.markerSymbolIndex = setIndex(Index);
     }
@@ -211,7 +211,7 @@ public class IndexSearcherContainer {
      * Get the Vocab Inexact Index Searcher.
      * @return An Index Searcher
      */
-    
+
     public IndexSearcher getVocabInexact() {
         return vocabInexactIndex;
     }
@@ -229,7 +229,7 @@ public class IndexSearcherContainer {
      * Get the Vocab Exact Index Searcher.
      * @return An Index Searcher
      */
-    
+
     public IndexSearcher getVocabExactIndex() {
         return vocabExact;
     }
@@ -238,7 +238,7 @@ public class IndexSearcherContainer {
      * Set the Vocab Exact Index
      * @param Index The path to the index
      */
-    
+
     private void setVocabExactIndex(String vocabIndex) {
         this.vocabExact = setIndex(vocabIndex);
     }
@@ -247,7 +247,7 @@ public class IndexSearcherContainer {
      * Get the Vocab Acc ID Index Searcher.
      * @return An Index Searcher
      */
-    
+
     public IndexSearcher getVocabAccIDIndex() {
         return vocabAccID;
     }
@@ -256,7 +256,7 @@ public class IndexSearcherContainer {
      * Set the Vocab Acc ID Index
      * @param Index The path to the index
      */
-    
+
     private void setVocabAccIDIndex(String vocabIndex) {
         this.vocabAccID = setIndex(vocabIndex);
     }
@@ -265,7 +265,7 @@ public class IndexSearcherContainer {
      * Get the Marker Vocab Acc ID Index Searcher.
      * @return An Index Searcher
      */
-    
+
     public IndexSearcher getMarkerVocabAccIDIndex() {
         return markerVocabAccIDIndex;
     }
@@ -274,7 +274,7 @@ public class IndexSearcherContainer {
      * Set the Marker Vocab Acc ID Index
      * @param Index The path to the index
      */
-    
+
     private void setMarkerVocabAccIDIndex(String vocabIndex) {
         this.markerVocabAccIDIndex = setIndex(vocabIndex);
     }
@@ -283,7 +283,7 @@ public class IndexSearcherContainer {
      * Get the Marker Vocab Exact Index Searcher.
      * @return An Index Searcher
      */
-    
+
     public IndexSearcher getMarkerVocabExactIndex() {
         return markerVocabExactIndex;
     }
@@ -292,7 +292,7 @@ public class IndexSearcherContainer {
      * Set the Marker Vocab Exact Index
      * @param Index The path to the index
      */
-    
+
     private void setMarkerVocabExactIndex(String vocabIndex) {
         this.markerVocabExactIndex = setIndex(vocabIndex);
     }

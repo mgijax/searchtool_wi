@@ -5,11 +5,13 @@ import java.util.*;
 public class MarkerDisplay {
 
     private String db_key;
+    private String objectType;
     private String symbol;
     private String name;
     private String markerType;
     private String chromosome;
     private String mgiID;
+    private String cacheKey;
     private String strand = "";
     private String locDisplay = "";
 
@@ -25,7 +27,18 @@ public class MarkerDisplay {
         db_key = s;
     }
 
-    // Type
+    // Object type - marker/allele/etc...
+    public String getObjectType() {
+        if (this.objectType == null) {
+            return "";
+        }
+        return objectType;
+    }
+    public void setObjectType(String s) {
+        objectType = s;
+    }
+
+    //
     public String getMarkerType() {
         if (this.markerType == null) {
             return "";
@@ -104,5 +117,13 @@ public class MarkerDisplay {
     }
 
 
+
+    // Cache Key
+    public String getCacheKey() {
+        if (this.cacheKey == null) {
+            cacheKey = objectType + "_" + db_key;
+        }
+        return cacheKey;
+    }
 
 }
