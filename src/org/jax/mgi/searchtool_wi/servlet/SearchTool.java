@@ -14,19 +14,19 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
 
 // Search Tool Classes
-import org.jax.mgi.searchtool_wi.lookup.MarkerDisplayCache;
+import org.jax.mgi.searchtool_wi.lookup.GenomeFeatureDisplayCache;
 import org.jax.mgi.searchtool_wi.lookup.MarkerVocabSearchCache;
 import org.jax.mgi.searchtool_wi.lookup.OtherDisplayLookup;
-import org.jax.mgi.searchtool_wi.lookup.QS_MarkerResultCache;
-import org.jax.mgi.searchtool_wi.lookup.QS_VocabResultCache;
+import org.jax.mgi.searchtool_wi.lookup.GenomeFeatureResultCache;
+import org.jax.mgi.searchtool_wi.lookup.VocabResultCache;
 import org.jax.mgi.searchtool_wi.lookup.TokenExistanceCache;
 import org.jax.mgi.searchtool_wi.lookup.VocabDisplayCache;
-import org.jax.mgi.searchtool_wi.results.QS_MarkerResultContainer;
-import org.jax.mgi.searchtool_wi.results.QS_OtherResultContainer;
-import org.jax.mgi.searchtool_wi.results.QS_VocabResultContainer;
-import org.jax.mgi.searchtool_wi.searches.QS_MarkerSearch;
-import org.jax.mgi.searchtool_wi.searches.QS_OtherSearch;
-import org.jax.mgi.searchtool_wi.searches.QS_VocabSearch;
+import org.jax.mgi.searchtool_wi.results.GenomeFeatureResultContainer;
+import org.jax.mgi.searchtool_wi.results.OtherResultContainer;
+import org.jax.mgi.searchtool_wi.results.VocabResultContainer;
+import org.jax.mgi.searchtool_wi.searches.GenomeFeatureSearch;
+import org.jax.mgi.searchtool_wi.searches.OtherSearch;
+import org.jax.mgi.searchtool_wi.searches.VocabSearch;
 import org.jax.mgi.searchtool_wi.exception.QuickSearchException;
 import org.jax.mgi.searchtool_wi.utils.SearchInput;
 import org.jax.mgi.searchtool_wi.utils.WebTemplate;
@@ -47,15 +47,15 @@ public class SearchTool extends HttpServlet {
   // objects filled at instantiation; init()
   private static WebAppCfg stConfig;
   private static WebTemplate webTemplate;
-  private static MarkerDisplayCache markerDisplayCache;
+  private static GenomeFeatureDisplayCache gfDisplayCache;
   private static VocabDisplayCache vocabDisplayCache;
   private static OtherDisplayLookup otherDisplayLookup;
   private static MarkerVocabSearchCache markerVocabSearchCache;
   private static Logger logger;
   private static ServletContext servletContext;
 
-  private static QS_MarkerResultCache markerResultCache;
-  private static QS_VocabResultCache vocabResultCache;
+  private static GenomeFeatureResultCache genomeFeatureResultCache;
+  private static VocabResultCache vocabResultCache;
   private static TokenExistanceCache tokenExistanceCache;
 
 
@@ -84,10 +84,10 @@ public class SearchTool extends HttpServlet {
     catch (Exception e) { e.printStackTrace(); }
 
     // log4j logging
-    logger = Logger.getLogger(Search.class.getName());
+    logger = Logger.getLogger(SearchTool.class.getName());
 
     // Setup display caches and web template for the JSPs to use
-    markerDisplayCache = MarkerDisplayCache.getMarkerDisplayCache(stConfig);
+    gfDisplayCache = GenomeFeatureDisplayCache.getGenomeFeatureDisplayCache(stConfig);
     vocabDisplayCache = VocabDisplayCache.getVocabDisplayCache(stConfig);
     otherDisplayLookup = OtherDisplayLookup.getOtherDisplayLookup(stConfig);
     webTemplate = new WebTemplate(getServletContext().getInitParameter("templateLoc"));
@@ -99,10 +99,10 @@ public class SearchTool extends HttpServlet {
     tokenExistanceCache = TokenExistanceCache.getTokenExistanceCache(stConfig);
 
     // Caching of result sets returned from Search execution
-    markerResultCache
-      = new QS_MarkerResultCache(servletContext.getInitParameter("resultCacheSize"));
+    genomeFeatureResultCache
+      = new GenomeFeatureResultCache(servletContext.getInitParameter("resultCacheSize"));
     vocabResultCache
-      = new QS_VocabResultCache(servletContext.getInitParameter("resultCacheSize"));
+      = new VocabResultCache(servletContext.getInitParameter("resultCacheSize"));
   }
 
 
@@ -151,7 +151,7 @@ public class SearchTool extends HttpServlet {
         request.setAttribute("query", request.getParameter("query"));
 
         // add references to in-memory objects the display layer may need
-        request.setAttribute("MarkerDisplayCache", markerDisplayCache);
+        request.setAttribute("GenomeFeatureDisplayCache", gfDisplayCache);
         request.setAttribute("VocabDisplayCache", vocabDisplayCache);
         request.setAttribute("OtherDisplayLookup", otherDisplayLookup);
         request.setAttribute("WebTemplate", webTemplate);
@@ -212,16 +212,16 @@ public class SearchTool extends HttpServlet {
     throws Exception
   {
     // Search for markers results
-    QS_MarkerResultContainer markerResultContainer = getMarkerResults(searchInput);
+    GenomeFeatureResultContainer markerResultContainer = getMarkerResults(searchInput);
     request.setAttribute("MarkerResultContainer", markerResultContainer);
 
     // Search for vocab results
-    QS_VocabResultContainer vocabResultContainer = getVocabResults(searchInput);
+    VocabResultContainer vocabResultContainer = getVocabResults(searchInput);
     request.setAttribute("VocabResultContainer", vocabResultContainer);
 
     // Search for 'other' results
-    QS_OtherSearch otherSearch = new QS_OtherSearch(stConfig);
-    QS_OtherResultContainer otherResultContainer = new QS_OtherResultContainer(otherSearch.search(searchInput));
+    OtherSearch otherSearch = new OtherSearch(stConfig);
+    OtherResultContainer otherResultContainer = new OtherResultContainer(otherSearch.search(searchInput));
     request.setAttribute("OtherResultContainer", otherResultContainer);
 
     // prep request and forward to display
@@ -238,7 +238,7 @@ public class SearchTool extends HttpServlet {
     throws Exception
   {
     // Search markers
-    QS_MarkerResultContainer markerResultContainer = getMarkerResults(searchInput);
+    GenomeFeatureResultContainer markerResultContainer = getMarkerResults(searchInput);
     request.setAttribute("MarkerResultContainer", markerResultContainer);
 
     // prep request and forward to display
@@ -255,7 +255,7 @@ public class SearchTool extends HttpServlet {
     throws Exception
   {
     // Search markers
-    QS_MarkerResultContainer markerResultContainer = getMarkerResults(searchInput);
+    GenomeFeatureResultContainer markerResultContainer = getMarkerResults(searchInput);
     request.setAttribute("MarkerResultContainer", markerResultContainer);
 
     // prep request and forward to display
@@ -272,7 +272,7 @@ public class SearchTool extends HttpServlet {
     throws Exception
   {
     // Search vocab
-    QS_VocabResultContainer vocabResultContainer = getVocabResults(searchInput);
+    VocabResultContainer vocabResultContainer = getVocabResults(searchInput);
     request.setAttribute("VocabResultContainer", vocabResultContainer);
 
     // prep request and forward to display
@@ -289,7 +289,7 @@ public class SearchTool extends HttpServlet {
     throws Exception
   {
     // Search vocab
-    QS_VocabResultContainer vocabResultContainer = getVocabResults(searchInput);
+    VocabResultContainer vocabResultContainer = getVocabResults(searchInput);
     request.setAttribute("VocabResultContainer", vocabResultContainer);
 
     // prep request and forward to display
@@ -327,12 +327,12 @@ public class SearchTool extends HttpServlet {
   * The caller of this method doesn't need to know whether the result set
   * was pulled from cache, or dynamically generated
   */
-  private QS_MarkerResultContainer getMarkerResults(SearchInput searchInput)
+  private GenomeFeatureResultContainer getMarkerResults(SearchInput searchInput)
     throws Exception
   {
     // first, try to retrieve this result set from cache
-    QS_MarkerResultContainer markerResultContainer
-      = markerResultCache.getMarkerContainer( searchInput.getCacheString() );
+    GenomeFeatureResultContainer markerResultContainer
+      = genomeFeatureResultCache.getMarkerContainer( searchInput.getCacheString() );
 
     // if a filter has been submitted, bypass cache
     if (searchInput.hasFilter()) {
@@ -341,13 +341,13 @@ public class SearchTool extends HttpServlet {
 
     // if not found in cache (or we cleared it), generarate the result set
     if (markerResultContainer == null) {
-        QS_MarkerSearch markerSearch = new QS_MarkerSearch(stConfig);
-        markerResultContainer = new QS_MarkerResultContainer(markerSearch.search(searchInput));
+        GenomeFeatureSearch markerSearch = new GenomeFeatureSearch(stConfig);
+        markerResultContainer = new GenomeFeatureResultContainer(markerSearch.search(searchInput));
     }
 
     // and add to servlet-level cache if a filter was not submitted
     if (!searchInput.hasFilter()) {
-        markerResultCache.addMarkerContainer(searchInput.getCacheString(), markerResultContainer);
+        genomeFeatureResultCache.addMarkerContainer(searchInput.getCacheString(), markerResultContainer);
     }
 
     return markerResultContainer;
@@ -362,17 +362,17 @@ public class SearchTool extends HttpServlet {
   * The caller of this method doesn't need to know whether the result set
   * was pulled from cache, or dynamically generated
   */
-  private QS_VocabResultContainer getVocabResults(SearchInput searchInput)
+  private VocabResultContainer getVocabResults(SearchInput searchInput)
     throws Exception
   {
     // first, try to retrieve this result set from cache
-    QS_VocabResultContainer vocabResultContainer
+    VocabResultContainer vocabResultContainer
       = vocabResultCache.getVocabContainer( searchInput.getCacheString() );
 
     // if not found in cache, generarate the result set and add to cache
     if (vocabResultContainer == null) {
-        QS_VocabSearch vocabSearch = new QS_VocabSearch(stConfig);
-        vocabResultContainer = new QS_VocabResultContainer(vocabSearch.search(searchInput));
+        VocabSearch vocabSearch = new VocabSearch(stConfig);
+        vocabResultContainer = new VocabResultContainer(vocabSearch.search(searchInput));
         vocabResultCache.addVocabContainer(searchInput.getCacheString(), vocabResultContainer);
     }
     return vocabResultContainer;

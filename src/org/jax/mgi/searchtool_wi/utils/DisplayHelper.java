@@ -15,12 +15,12 @@ import org.apache.lucene.analysis.snowball.SnowballAnalyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.jax.mgi.searchtool_wi.dataAccess.IndexReaderContainer;
 import org.jax.mgi.searchtool_wi.lookup.MarkerDisplay;
-import org.jax.mgi.searchtool_wi.lookup.MarkerDisplayCache;
+import org.jax.mgi.searchtool_wi.lookup.GenomeFeatureDisplayCache;
 import org.jax.mgi.searchtool_wi.lookup.VocabDisplay;
 import org.jax.mgi.searchtool_wi.lookup.VocabDisplayCache;
 import org.jax.mgi.searchtool_wi.matches.AbstractMatch;
-import org.jax.mgi.searchtool_wi.results.QS_MarkerResult;
-import org.jax.mgi.searchtool_wi.results.QS_VocabResult;
+import org.jax.mgi.searchtool_wi.results.GenomeFeatureResult;
+import org.jax.mgi.searchtool_wi.results.VocabResult;
 import org.jax.mgi.shr.config.Configuration;
 import org.jax.mgi.shr.searchtool.IndexConstants;
 import org.jax.mgi.shr.searchtool.MGIAnalyzer;
@@ -41,7 +41,7 @@ public class DisplayHelper
     = Logger.getLogger(DisplayHelper.class.getName());
 
   private Configuration stConfig;
-  private static MarkerDisplayCache markerDisplayCache;
+  private static GenomeFeatureDisplayCache gfDisplayCache;
   private static VocabDisplayCache vocabDisplayCache;
   private static IndexReaderContainer irc;
 
@@ -63,14 +63,14 @@ public class DisplayHelper
   */
   private DisplayHelper(){}
   public DisplayHelper(Configuration c ,
-                       MarkerDisplayCache mdc,
+                       GenomeFeatureDisplayCache mdc,
                        VocabDisplayCache vdc)
   {
     stConfig = c;
     irc = IndexReaderContainer.getIndexReaderContainer(stConfig);
 
     // Setup display caches
-    markerDisplayCache = mdc;
+    gfDisplayCache = mdc;
     vocabDisplayCache = vdc;
   }
 
@@ -643,7 +643,7 @@ public class DisplayHelper
 
         // Display the stop words message.
 
-        
+
         /*
          * The search excludes numbers between 0 and 99, single letters,
          *  and common words like of, to, with and not when they do not
@@ -653,7 +653,7 @@ public class DisplayHelper
          *  for mouse genome features.  You cannot force Quick Search to
          *  consider these words.
          */
-        
+
         if (si.hasStopWords() || si.hasExcludedWords()) {
             text += "<div class=\\\'detailRowType\\\'>"
                     + "<span class=\\\'detailHeaderType\\\'>"
@@ -674,7 +674,7 @@ public class DisplayHelper
                     + " mouse genome features.  You cannot force Quick Search"
                     + " to consider these words.</div>";
         }
-        
+
 
         // Display any boolean detected messages if need be.
 
@@ -734,17 +734,17 @@ public class DisplayHelper
 
   //------------------------------------------------------- Marker "Why Match"
 
-  public String getMrkWhyMatchURL (QS_MarkerResult mResult, String query)
+  public String getMrkWhyMatchURL (GenomeFeatureResult mResult, String query)
   {
     return "'Search.do?query="
       + getEncodedUrl(query) + "&page=markerDetails&markerKey="
       + mResult.getDbKey() + "'";
   }
 
-  public String getMrkWhyMatchText (QS_MarkerResult markerResult)
+  public String getMrkWhyMatchText (GenomeFeatureResult genomeFeatureResult)
   {
-    if ( markerResult.getMatchCount() > 1 ) {
-        return "&nbsp;&nbsp;and " + (markerResult.getMatchCount() -1 ) + " more...";
+    if ( genomeFeatureResult.getMatchCount() > 1 ) {
+        return "&nbsp;&nbsp;and " + (genomeFeatureResult.getMatchCount() -1 ) + " more...";
     }else {
         return "&nbsp;&nbsp;and more detail...";
     }
@@ -752,21 +752,21 @@ public class DisplayHelper
 
   /**
   * Helper method that creates a tooltip for the markerbucket.
-  * @param markerResult The markerResult we want to create the tooltip for.
+  * @param genomeFeatureResult The genomeFeatureResult we want to create the tooltip for.
   * @return A An anchor tag, containing the overlib javascript to create the tooltip.
   */
-  public static String getMarkerScoreMouseOver (QS_MarkerResult markerResult)
+  public static String getMarkerScoreMouseOver (GenomeFeatureResult genomeFeatureResult)
   {
-    MarkerDisplay markerDisplay = markerDisplayCache.getMarker(markerResult);
+    MarkerDisplay markerDisplay = gfDisplayCache.getGenomeFeature(genomeFeatureResult);
 
-    int nomenMatches     = markerResult.getAllMarkerNomenMatches().size();
-    int adMatches        = markerResult.getAdMatches().size();
-    int mpMatches        = markerResult.getMpMatches().size();
-    int goMatches        = markerResult.getGoMatches().size();
-    int omimMatches      = markerResult.getOmimMatches().size();
-    int omimOrthoMatches = markerResult.getOmimOrthoMatches().size();
-    int pirsfMatches     = markerResult.getPirsfMatches().size();
-    int ipMatches        = markerResult.getIpMatches().size();
+    int nomenMatches     = genomeFeatureResult.getAllMarkerNomenMatches().size();
+    int adMatches        = genomeFeatureResult.getAdMatches().size();
+    int mpMatches        = genomeFeatureResult.getMpMatches().size();
+    int goMatches        = genomeFeatureResult.getGoMatches().size();
+    int omimMatches      = genomeFeatureResult.getOmimMatches().size();
+    int omimOrthoMatches = genomeFeatureResult.getOmimOrthoMatches().size();
+    int pirsfMatches     = genomeFeatureResult.getPirsfMatches().size();
+    int ipMatches        = genomeFeatureResult.getIpMatches().size();
 
     String caption = "see matches for "
         + DisplayHelper.superscript(markerDisplay.getSymbol());
@@ -822,7 +822,7 @@ public class DisplayHelper
   *
   */
 
-  public String vocabAnnotation (QS_VocabResult vocabResult)
+  public String vocabAnnotation (VocabResult vocabResult)
   {
     String vocab = vocabResult.getVocabulary();
     VocabDisplay vocabDisplay = vocabDisplayCache.getVocab(vocabResult);
