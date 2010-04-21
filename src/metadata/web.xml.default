@@ -4,13 +4,13 @@
  version="2.4">
 
 <servlet>
-  <servlet-name>Search</servlet-name>
-  <servlet-class>org.jax.mgi.searchtool_wi.servlet.Search</servlet-class>
+  <servlet-name>SearchTool</servlet-name>
+  <servlet-class>org.jax.mgi.searchtool_wi.servlet.SearchTool</servlet-class>
   <load-on-startup/>
 </servlet>
 
 <servlet-mapping>
-  <servlet-name>Search</servlet-name>
+  <servlet-name>SearchTool</servlet-name>
   <url-pattern>/Search.do</url-pattern>
 </servlet-mapping>
 
