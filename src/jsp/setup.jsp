@@ -11,8 +11,8 @@
 // Pull the objects we'll need from the request.  These have been attached
 // to the request'upstream', either by the servlet or the container
 SearchInput searchInput = (SearchInput)request.getAttribute("SearchInput");
-MarkerDisplayCache markerDisplayCache =
-    (MarkerDisplayCache)request.getAttribute("MarkerDisplayCache");
+GenomeFeatureDisplayCache gfDisplayCache =
+    (GenomeFeatureDisplayCache)request.getAttribute("GenomeFeatureDisplayCache");
 VocabDisplayCache vocabDisplayCache =
     (VocabDisplayCache)request.getAttribute("VocabDisplayCache");
 OtherDisplayLookup otherDisplayLookup =
@@ -30,7 +30,7 @@ if ( searchInput.hasFormParameter("debug")
 
 // derive needed data from passed request arrributes
 DisplayHelper displayHelper
-    = new DisplayHelper(stConfig, markerDisplayCache, vocabDisplayCache);
+    = new DisplayHelper(stConfig, gfDisplayCache, vocabDisplayCache);
 
 // query strings; queryForward to be used in URL generation and forwarding
 String query = searchInput.getSearchString().replaceAll("\"", "&quot;");

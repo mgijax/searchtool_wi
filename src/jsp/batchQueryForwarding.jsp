@@ -1,5 +1,5 @@
 <script>
-var symbolArray = new Array(<%=markerResultContainer.getStringOfSymbols()%>);
+var symbolArray = new Array(<%=genomeFeatureResultContainer.getStringOfSymbols()%>);
 function updateBatchWebForwardForm()
 {
     var batchForwardSize = document.getElementById ("batchForwardSize").value;
@@ -16,11 +16,11 @@ function updateBatchTabForwardForm()
 
 <%  // Determine the max number to forward
   int numToForward;
-  if (markerResultContainer.size() > 100) {
+  if (genomeFeatureResultContainer.size() > 100) {
     numToForward = 100;
   }
   else {
-    numToForward = markerResultContainer.size();
+    numToForward = genomeFeatureResultContainer.size();
   }
 %>
 

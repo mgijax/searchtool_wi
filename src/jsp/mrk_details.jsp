@@ -5,19 +5,19 @@
 <!--============================================ Setup Scriptlet Variables -->
 <%
     // get results for this request
-    QS_MarkerResultContainer markerResultContainer
-      = (QS_MarkerResultContainer)request.getAttribute("MarkerResultContainer");
+    GenomeFeatureResultContainer genomeFeatureResultContainer
+      = (GenomeFeatureResultContainer)request.getAttribute("MarkerResultContainer");
 
     // derive needed data from passed request arrributes
     String markerKey = searchInput.getParameter("markerKey");
-    QS_MarkerResult thisMarkerResult
-      = markerResultContainer.getMarkerByKey(markerKey);
+    GenomeFeatureResult thisGenomeFeatureResult
+      = genomeFeatureResultContainer.getMarkerByKey(markerKey);
     MarkerDisplay thisMarkerDisplay
-      = markerDisplayCache.getMarker(thisMarkerResult);
+      = markerDisplayCache.getMarker(thisGenomeFeatureResult);
 
     // matches for this marker result
-    List nomenMatches = thisMarkerResult.getAllMarkerNomenMatches();
-    List vocabMatches = thisMarkerResult.getAllMarkerVocabMatches();
+    List nomenMatches = thisGenomeFeatureResult.getAllMarkerNomenMatches();
+    List vocabMatches = thisGenomeFeatureResult.getAllMarkerVocabMatches();
 
     // colors and color iteration
     String rowClass = "";

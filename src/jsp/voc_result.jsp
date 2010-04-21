@@ -2,8 +2,8 @@
 
 <%
 
-    QS_VocabResultContainer vocabResultContainer =
-        (QS_VocabResultContainer)request.getAttribute("VocabResultContainer");
+    VocabResultContainer vocabResultContainer =
+        (VocabResultContainer)request.getAttribute("VocabResultContainer");
 
     // derive needed data from passed request attributes
     Integer vocabStart = new Integer(1);   //default
@@ -42,7 +42,7 @@
   // Vocab Bucket
   //--------------//
 
-  QS_VocabResult thisVocabResult; //search result built by model
+  VocabResult thisVocabResult; //search result built by model
   VocabDisplay thisVocabDisplay; //pulled from cache for given marker
 
   String rowClass;
@@ -103,7 +103,7 @@
     // derive CSS classes and IDs for this row
     rowClass = bucketRowAlternator.getString();
 
-    thisVocabResult = (QS_VocabResult)iter.next();
+    thisVocabResult = (VocabResult)iter.next();
     thisVocabDisplay = vocabDisplayCache.getVocab(thisVocabResult);
 
     out.print("<tr class='" + rowClass +"'>");

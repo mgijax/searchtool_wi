@@ -1,8 +1,8 @@
 <%@include file="setup.jsp"%>
 
 <%
-    QS_MarkerResultContainer markerResultContainer =
-        (QS_MarkerResultContainer)request.getAttribute("MarkerResultContainer");
+    GenomeFeatureResultContainer genomeFeatureResultContainer =
+        (GenomeFeatureResultContainer)request.getAttribute("MarkerResultContainer");
 
     // derive needed data from passed request attributes
     Integer markerStart = new Integer(1);   //default
@@ -15,8 +15,8 @@
     }
 
     Integer markerStop = markerStart + markerRange -1;
-    if (markerStop > markerResultContainer.size() ) {
-        markerStop = markerResultContainer.size();
+    if (markerStop > genomeFeatureResultContainer.size() ) {
+        markerStop = genomeFeatureResultContainer.size();
     }
 
     // colors and color iteration
@@ -33,7 +33,7 @@
           + "&page=marker&markerStart=" + (markerStart - markerRange);
         previousLink = "<a class='small' href='" + forwardUrl + "'>Previous</a>";
     }
-    if (markerStop.intValue() < markerResultContainer.size()) {
+    if (markerStop.intValue() < genomeFeatureResultContainer.size()) {
         String forwardUrl = stConfig.get("QUICKSEARCH_URL") + "Search.do?query="
           + displayHelper.getEncodedUrl(queryForward)
           + "&page=marker&markerStart=" + (markerStart + markerRange);
@@ -41,8 +41,9 @@
     }
 
     // loop variables
-    QS_MarkerResult thisMarkerResult; //search result built by model
-    MarkerDisplay thisMarkerDisplay;  //pulled from cache for given marker
+    GenomeFeatureResult  thisGenomeFeatureResult; //search result 
+    MarkerDisplay thisMarkerDisplay; //pulled from cache 
+
 %>
 
 <!--======================================================== Open the Page -->
@@ -68,7 +69,7 @@
     <span class='small grayText'>
     Sorted by best match, showing <%=markerStart%> -
     <%=markerStop%> of
-    <%=displayHelper.commaFormatIntStr(String.valueOf(markerResultContainer.size()))%>
+    <%=displayHelper.commaFormatIntStr(String.valueOf(genomeFeatureResultContainer.size()))%>
     <span class="helpCursor"
       onmouseover="<%=displayHelper.getHelpPopupMarkerBucket()%>"
       onmouseout="nd();">
@@ -100,19 +101,20 @@
 
 <!-- Iterate through data rows -->
 <%
+
   for (Iterator iter
-    = markerResultContainer.getHits(markerStart,markerStop).iterator();
+    = genomeFeatureResultContainer.getHits(markerStart,markerStop).iterator();
     iter.hasNext();)
 
   {
-    thisMarkerResult    = (QS_MarkerResult)iter.next();
-    thisMarkerDisplay   = markerDisplayCache.getMarker(thisMarkerResult);
+    thisGenomeFeatureResult    = (GenomeFeatureResult)iter.next();
+    thisMarkerDisplay   = gfDisplayCache.getGenomeFeature(thisGenomeFeatureResult);
     rowClass = bucketRowAlternator.getString();
 %>
   <tr class='<%=rowClass%>'>
     <td style='text-align:right;'>
-        <%=thisMarkerResult.getStarScore()%>
-        <% if(debug){out.print(thisMarkerResult.getDebugDisplay());} %>
+        <%=thisGenomeFeatureResult.getStarScore()%>
+        <% if(debug){out.print(thisGenomeFeatureResult.getDebugDisplay());} %>
     </td>
     <td class='small' >
         <%=thisMarkerDisplay.getMarkerType()%>
@@ -135,17 +137,17 @@
       <%=thisMarkerDisplay.getStrand()%>
     </td>
     <td class='small'>
-      <%=thisMarkerResult.getBestMatch().display()%>
+      <%=thisGenomeFeatureResult.getBestMatch().display()%>
 
       <a class="qsWhyMatchLink"
-        <%=displayHelper.getMarkerScoreMouseOver(thisMarkerResult)%>
-        href=<%=displayHelper.getMrkWhyMatchURL(thisMarkerResult, queryForward)%> >
-        <%=displayHelper.getMrkWhyMatchText(thisMarkerResult)%>
+        <%=displayHelper.getMarkerScoreMouseOver(thisGenomeFeatureResult)%>
+        href=<%=displayHelper.getMrkWhyMatchURL(thisGenomeFeatureResult, queryForward)%> >
+        <%=displayHelper.getMrkWhyMatchText(thisGenomeFeatureResult)%>
       </a>
 
       <% if (debug) { %>
-        <br/>result db key -> <%=thisMarkerResult.getDbKey()%>
-        <br/>match db key -> <%=thisMarkerResult.getBestMatch().getDbKey()%>
+        <br/>result db key -> <%=thisGenomeFeatureResult.getDbKey()%>
+        <br/>match db key -> <%=thisGenomeFeatureResult.getBestMatch().getDbKey()%>
       <% } %>
 
     </td>
@@ -157,7 +159,7 @@
       <span class='small grayText'>
       Showing <%=markerStart%> -
       <%=markerStop%> of
-      <%=displayHelper.commaFormatIntStr(String.valueOf(markerResultContainer.size()))%>
+      <%=displayHelper.commaFormatIntStr(String.valueOf(genomeFeatureResultContainer.size()))%>
       &nbsp;&nbsp;&nbsp;<%=previousLink%> <%=nextLink%>
       </span>
     </td>

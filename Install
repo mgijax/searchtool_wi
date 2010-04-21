@@ -14,5 +14,7 @@ export JAVA_HOME
 echo $JAVA_HOME
 echo $PATH
 
+rm -R ./build/*
+
 ant
 

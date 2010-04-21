@@ -4,17 +4,17 @@
 <!--============================================ Setup Scriptlet Variables -->
 <%
   // pull in the result containers from the request object
-  QS_MarkerResultContainer markerResultContainer =
-    (QS_MarkerResultContainer)request.getAttribute("MarkerResultContainer");
-  QS_VocabResultContainer vocabResultContainer =
-    (QS_VocabResultContainer)request.getAttribute("VocabResultContainer");
-  QS_OtherResultContainer otherResultContainer =
-    (QS_OtherResultContainer)request.getAttribute("OtherResultContainer");
+  GenomeFeatureResultContainer genomeFeatureResultContainer =
+    (GenomeFeatureResultContainer)request.getAttribute("MarkerResultContainer");
+  VocabResultContainer vocabResultContainer =
+    (VocabResultContainer)request.getAttribute("VocabResultContainer");
+  OtherResultContainer otherResultContainer =
+    (OtherResultContainer)request.getAttribute("OtherResultContainer");
 
-  // display lenghts and display lengths
+  // display lenghts
   int displayLengthMarker = 10;
   int displayLengthVocab = 10;
-  int markerResultLength = markerResultContainer.size();
+  int markerResultLength = genomeFeatureResultContainer.size();
   int vocabResultLength = vocabResultContainer.size();
   String markerResultSizeStr
     = displayHelper.commaFormatIntStr(String.valueOf( markerResultLength ));
@@ -34,18 +34,15 @@
   }
 
   // Get the number to display in the more link for markers
-
   int markerMoreLinkNumber;
-
-  if (markerResultContainer.size() > 100) {
+  if (genomeFeatureResultContainer.size() > 100) {
     markerMoreLinkNumber = 100;
   }
   else {
-    markerMoreLinkNumber = markerResultContainer.size();
+    markerMoreLinkNumber = genomeFeatureResultContainer.size();
   }
 
   // Get the number to display in the more link for vocab
-
   int vocabMoreLinkNumber;
   if (vocabResultContainer.size() > 100) {
     vocabMoreLinkNumber = 100;
@@ -58,6 +55,9 @@
   StringAlternator bucketRowAlternator
     = new StringAlternator( "qsBucketRow1", "qsBucketRow2" );
   String rowClass;
+
+  // URLS
+  String detailPageUrl = "";
 %>
 
 <!--======================================================== Open the Page -->
@@ -74,8 +74,8 @@
 
 <!--======================================================== Marker Bucket -->
 <%
-  QS_MarkerResult thisMarkerResult; //search result built by model
-  MarkerDisplay thisMarkerDisplay; //pulled from cache for given marker6
+  GenomeFeatureResult thisGenomeFeatureResult; //search result built by model
+  MarkerDisplay thisGenomeFeatureDisplay; //pulled from cache for given marker6
 
 %>
 <!-- Header Row -->
@@ -124,52 +124,60 @@
 
 <% // iterate through the marker results
     for (Iterator iter
-      = markerResultContainer.getTopHits(displayLengthMarker).iterator();
+      = genomeFeatureResultContainer.getTopHits(displayLengthMarker).iterator();
       iter.hasNext();)
   {
-    thisMarkerResult    = (QS_MarkerResult)iter.next();
-    thisMarkerDisplay   = markerDisplayCache.getMarker(thisMarkerResult);
+    thisGenomeFeatureResult    = (GenomeFeatureResult)iter.next();
+    thisGenomeFeatureDisplay   = gfDisplayCache.getGenomeFeature(thisGenomeFeatureResult);
     rowClass = bucketRowAlternator.getString();
+
+    if ( thisGenomeFeatureResult.isMarker() ) {
+      detailPageUrl = javawi_url + "WIFetch?page=markerDetail&key=" + thisGenomeFeatureResult.getDbKey();
+    }
+    else if ( thisGenomeFeatureResult.isAllele() ) {
+      detailPageUrl = javawi_url + "WIFetch?page=alleleDetail&key=" + thisGenomeFeatureResult.getDbKey();
+    }
+
 %>
   <tr class='<%=rowClass%>'>
     <td style='text-align:right;'>
-        <%=thisMarkerResult.getStarScore()%>
-        <% if(debug){out.print(thisMarkerResult.getDebugDisplay());} %>
+        <%=thisGenomeFeatureResult.getStarScore()%>
+        <% if(debug){out.print(thisGenomeFeatureResult.getDebugDisplay());} %>
     </td>
     <td class='small' >
-        <%=thisMarkerDisplay.getMarkerType()%>
+        <%=thisGenomeFeatureDisplay.getMarkerType()%>
     </td>
     <td>
-      <a href='<%=javawi_url%>WIFetch?page=markerDetail&key=<%=thisMarkerDisplay.getDbKey()%>'>
-        <%=DisplayHelper.superscript(thisMarkerDisplay.getSymbol())%>
+      <a href='<%=detailPageUrl%>'>
+        <%=DisplayHelper.superscript(thisGenomeFeatureDisplay.getSymbol())%>
       </a>
     </td>
     <td>
-      <%=DisplayHelper.superscript(thisMarkerDisplay.getName())%>
+      <%=DisplayHelper.superscript(thisGenomeFeatureDisplay.getName())%>
     </td>
     <td class='small' style='text-align:right'>
-      <%=thisMarkerDisplay.getChromosome()%>
+      <%=thisGenomeFeatureDisplay.getChromosome()%>
     </td>
     <td class='small'>
-      <%=thisMarkerDisplay.getLocDisplay()%>
+      <%=thisGenomeFeatureDisplay.getLocDisplay()%>
     </td>
     <td class='small'>
-      <%=thisMarkerDisplay.getStrand()%>
+      <%=thisGenomeFeatureDisplay.getStrand()%>
     </td>
 
     <td class='small'>
-      <%=thisMarkerResult.getBestMatch().display()%>
+      <%=thisGenomeFeatureResult.getBestMatch().display()%>
 
       <a class="qsWhyMatchLink"
-        <%=displayHelper.getMarkerScoreMouseOver(thisMarkerResult)%>
-        href=<%=displayHelper.getMrkWhyMatchURL(thisMarkerResult, queryForward)%> >
-        <%=displayHelper.getMrkWhyMatchText(thisMarkerResult)%>
+        <%=displayHelper.getMarkerScoreMouseOver(thisGenomeFeatureResult)%>
+        href=<%=displayHelper.getMrkWhyMatchURL(thisGenomeFeatureResult, queryForward)%> >
+        <%=displayHelper.getMrkWhyMatchText(thisGenomeFeatureResult)%>
       </a>
 
       <% if (debug) { %>
-        <br/>match type -> <%=thisMarkerResult.getBestMatch().getDataType()%>
-        <br/>match db key -> <%=thisMarkerResult.getBestMatch().getDbKey()%>
-        <br/>score -> <%=thisMarkerResult.getBestMatch().getScore()%>
+        <br/>match type -> <%=thisGenomeFeatureResult.getBestMatch().getDataType()%>
+        <br/>match db key -> <%=thisGenomeFeatureResult.getBestMatch().getDbKey()%>
+        <br/>score -> <%=thisGenomeFeatureResult.getBestMatch().getScore()%>
       <% } %>
     </td>
   </tr>
@@ -255,7 +263,7 @@
         // derive CSS classes and IDs for this row
         rowClass = bucketRowAlternator.getString();
 
-        QS_VocabResult thisVocabResult = (QS_VocabResult)iter.next();
+        VocabResult thisVocabResult = (VocabResult)iter.next();
         VocabDisplay thisVocabDisplay = vocabDisplayCache.getVocab(thisVocabResult);
 
         out.print("<tr class='" + rowClass +"'>");
@@ -386,7 +394,7 @@
         // derive CSS classes and IDs for this row
         rowClass = bucketRowAlternator.getString();
 
-        QS_OtherResult thisOtherResult = (QS_OtherResult)iter.next();
+        OtherResult thisOtherResult = (OtherResult)iter.next();
         OtherDisplay thisOtherDisplay = otherDisplayLookup.getOther(thisOtherResult);
 
         out.print("<tr class='" + rowClass +"'>");
