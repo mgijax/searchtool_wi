@@ -44,6 +44,9 @@
     GenomeFeatureResult  thisGenomeFeatureResult; //search result 
     MarkerDisplay thisMarkerDisplay; //pulled from cache 
 
+    // URLS
+    String detailPageUrl = "";
+
 %>
 
 <!--======================================================== Open the Page -->
@@ -110,6 +113,14 @@
     thisGenomeFeatureResult    = (GenomeFeatureResult)iter.next();
     thisMarkerDisplay   = gfDisplayCache.getGenomeFeature(thisGenomeFeatureResult);
     rowClass = bucketRowAlternator.getString();
+
+    if ( thisGenomeFeatureResult.isMarker() ) {
+      detailPageUrl = javawi_url + "WIFetch?page=markerDetail&key=" + thisGenomeFeatureResult.getDbKey();
+    }
+    else if ( thisGenomeFeatureResult.isAllele() ) {
+      detailPageUrl = javawi_url + "WIFetch?page=alleleDetail&key=" + thisGenomeFeatureResult.getDbKey();
+    }
+
 %>
   <tr class='<%=rowClass%>'>
     <td style='text-align:right;'>
@@ -120,7 +131,7 @@
         <%=thisMarkerDisplay.getMarkerType()%>
     </td>
     <td>
-      <a href='<%=javawi_url%>WIFetch?page=markerDetail&key=<%=thisMarkerDisplay.getDbKey()%>'>
+      <a href='<%=detailPageUrl%>'>
         <%=DisplayHelper.superscript(thisMarkerDisplay.getSymbol())%>
       </a>
     </td>
