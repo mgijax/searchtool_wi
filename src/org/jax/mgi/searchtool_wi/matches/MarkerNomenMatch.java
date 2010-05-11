@@ -11,6 +11,7 @@ import org.jax.mgi.shr.searchtool.IndexConstants;
 */
 public class MarkerNomenMatch extends AbstractMatch {
 
+
   // --------//
   // Fields
   // --------//
@@ -18,6 +19,7 @@ public class MarkerNomenMatch extends AbstractMatch {
   // Data & Values specific to a Marker Match
   private String organismKey = "";
   private String isCurrent = "";
+
 
   // ----------------//
   // Basic Accessors

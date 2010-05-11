@@ -168,7 +168,7 @@ public class MarkerVocabSearchCache
         log.info("MarkerVocabSearchCache loading...");
         try {
 
-          IndexReader ir = irc.getMarkerVocabDagReader();
+          IndexReader ir = irc.getGenomeFeatureVocabReader();
 
           // for each index entry, map the term to it's annotated markers
           for (int count=0; count<ir.maxDoc(); count++ ) {

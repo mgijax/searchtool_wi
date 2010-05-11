@@ -51,11 +51,9 @@ public class GenomeFeatureDisplayCache
         getGenomeFeatureDisplayCache(Configuration config)
     {
 
-        if (irc == null)
-        {
-        irc = IndexReaderContainer.getIndexReaderContainer(config);
+        if (irc == null) {
+          irc = IndexReaderContainer.getIndexReaderContainer(config);
         }
-
         load(config);
 
         return _theInstance;
@@ -119,7 +117,7 @@ public class GenomeFeatureDisplayCache
         log.info("GenomeFeatureDisplayCache loading...");
         try {
 
-          IndexReader ir = irc.getMarkerDisplayReader();
+          IndexReader ir = irc.getGenomeFeatureDisplayReader();
 
           for (int count=0; count<ir.maxDoc(); count++ ) {
 
