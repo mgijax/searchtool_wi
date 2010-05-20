@@ -42,7 +42,7 @@
 
     // loop variables
     GenomeFeatureResult  thisGenomeFeatureResult; //search result 
-    MarkerDisplay thisMarkerDisplay; //pulled from cache 
+    GenomeFeatureDisplay thisGenomeFeatureDisplay; //pulled from cache 
 
     // URLS
     String detailPageUrl = "";
@@ -111,7 +111,7 @@
 
   {
     thisGenomeFeatureResult    = (GenomeFeatureResult)iter.next();
-    thisMarkerDisplay   = gfDisplayCache.getGenomeFeature(thisGenomeFeatureResult);
+    thisGenomeFeatureDisplay   = gfDisplayCache.getGenomeFeature(thisGenomeFeatureResult);
     rowClass = bucketRowAlternator.getString();
 
     if ( thisGenomeFeatureResult.isMarker() ) {
@@ -128,24 +128,24 @@
         <% if(debug){out.print(thisGenomeFeatureResult.getDebugDisplay());} %>
     </td>
     <td class='small' >
-        <%=thisMarkerDisplay.getMarkerType()%>
+        <%=thisGenomeFeatureDisplay.getMarkerType()%>
     </td>
     <td>
       <a href='<%=detailPageUrl%>'>
-        <%=DisplayHelper.superscript(thisMarkerDisplay.getSymbol())%>
+        <%=DisplayHelper.superscript(thisGenomeFeatureDisplay.getSymbol())%>
       </a>
     </td>
     <td>
-      <%=DisplayHelper.superscript(thisMarkerDisplay.getName())%>
+      <%=DisplayHelper.superscript(thisGenomeFeatureDisplay.getName())%>
     </td>
     <td class='small' style='text-align:right'>
-      <%=thisMarkerDisplay.getChromosome()%>
+      <%=thisGenomeFeatureDisplay.getChromosome()%>
     </td>
     <td class='small'>
-      <%=thisMarkerDisplay.getLocDisplay()%>
+      <%=thisGenomeFeatureDisplay.getLocDisplay()%>
     </td>
     <td class='small'>
-      <%=thisMarkerDisplay.getStrand()%>
+      <%=thisGenomeFeatureDisplay.getStrand()%>
     </td>
     <td class='small'>
       <%=thisGenomeFeatureResult.getBestMatch().display()%>

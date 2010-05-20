@@ -9,11 +9,11 @@
       = (GenomeFeatureResultContainer)request.getAttribute("MarkerResultContainer");
 
     // derive needed data from passed request arrributes
-    String markerKey = searchInput.getParameter("markerKey");
+    String resultKey = searchInput.getParameter("resultKey");
     GenomeFeatureResult thisGenomeFeatureResult
-      = genomeFeatureResultContainer.getMarkerByKey(markerKey);
-    MarkerDisplay thisMarkerDisplay
-      = markerDisplayCache.getMarker(thisGenomeFeatureResult);
+      = genomeFeatureResultContainer.getResultByKey(resultKey);
+    GenomeFeatureDisplay thisGenomeFeatureDisplay
+      = gfDisplayCache.getGenomeFeature(thisGenomeFeatureResult);
 
     // matches for this marker result
     List nomenMatches = thisGenomeFeatureResult.getAllMarkerNomenMatches();
@@ -22,7 +22,7 @@
     // colors and color iteration
     String rowClass = "";
     StringAlternator bucketRowAlternator
-        = new StringAlternator( "qsBucketRow1", "qsBucketRow2" );
+        = new StringAlternator( "qsBucketRow1", "qsBucketRow2" ); 
 
     // misc values used in scriptlets below
     String matchScore = "";
@@ -43,7 +43,7 @@
 <!--========================================================== Page Header -->
 <div id="detailTitleBarWrapper">
   <span class="fontSize22 fontBold">
-    All Matches for <%=displayHelper.superscript(thisMarkerDisplay.getSymbol())%>
+    All Matches for <%=displayHelper.superscript(thisGenomeFeatureDisplay.getSymbol())%>
   </span>
 </div>
 
@@ -60,13 +60,13 @@
   </td>
   <td class="whyMatchData" bgcolor="#ffffff">
     <span class="fontSize18 fontBold">
-      <a href="<%=javawi_url%>WIFetch?page=markerDetail&amp;key=<%=thisMarkerDisplay.getDbKey()%>">
-      <%=displayHelper.superscript(thisMarkerDisplay.getSymbol())%></a>
+      <a href="<%=javawi_url%>WIFetch?page=markerDetail&amp;key=<%=thisGenomeFeatureDisplay.getDbKey()%>">
+      <%=displayHelper.superscript(thisGenomeFeatureDisplay.getSymbol())%></a>
     </span>
     <br/>
-    <span class="fontBold"><%=displayHelper.superscript(thisMarkerDisplay.getName())%></span>
+    <span class="fontBold"><%=displayHelper.superscript(thisGenomeFeatureDisplay.getName())%></span>
     <br/>
-    <span class="fontBold"><%=thisMarkerDisplay.getMgiId()%></span>
+    <span class="fontBold"><%=thisGenomeFeatureDisplay.getMgiId()%></span>
   </td>
 </tr>
 </table>
@@ -100,7 +100,7 @@
 
 <% // generate a row for each nomen match
 for (Iterator iter = nomenMatches.iterator(); iter.hasNext();) {
-  MarkerMatch thisMatch = (MarkerMatch)iter.next();
+  AbstractMatch thisMatch = (AbstractMatch)iter.next();
   rowClass = bucketRowAlternator.getString();
   if (debug) {matchScore="(" + thisMatch.getScore().toString() + ")";}
 %>

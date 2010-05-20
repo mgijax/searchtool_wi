@@ -72,10 +72,10 @@
 
 <%@include file="page_header.jsp"%>
 
-<!--======================================================== Marker Bucket -->
+<!--================================================ Genome Feature Bucket -->
 <%
-  GenomeFeatureResult thisGenomeFeatureResult; //search result built by model
-  MarkerDisplay thisGenomeFeatureDisplay; //pulled from cache for given marker6
+  GenomeFeatureResult thisGenomeFeatureResult;   //search result 
+  GenomeFeatureDisplay thisGenomeFeatureDisplay; //pulled from cache 
 
 %>
 <!-- Header Row -->
