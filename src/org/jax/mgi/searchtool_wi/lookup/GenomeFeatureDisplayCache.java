@@ -35,7 +35,7 @@ public class GenomeFeatureDisplayCache
     // class variables
     /////////////////////
 
-    // markerKey -> MarkerDisplay object
+    // markerKey -> GenomeFeatureDisplay object
     private static HashMap genomeFeatureCacheMap;
 
     private static Boolean loadNeeded = true;
@@ -75,31 +75,31 @@ public class GenomeFeatureDisplayCache
     // Data Retrieval Methods
     /////////////////////////
 
-    public MarkerDisplay getGenomeFeature(GenomeFeatureResult gfResult)
+    public GenomeFeatureDisplay getGenomeFeature(GenomeFeatureResult gfResult)
     {
 
-        MarkerDisplay thisMarkerDisplay
-            = (MarkerDisplay)genomeFeatureCacheMap.get(gfResult.getCacheKey());
+        GenomeFeatureDisplay thisGenomeFeatureDisplay
+            = (GenomeFeatureDisplay)genomeFeatureCacheMap.get(gfResult.getCacheKey());
 
         //if we don't have the requested object, returning an empty
-        if (thisMarkerDisplay==null) {
-            thisMarkerDisplay = new MarkerDisplay();
+        if (thisGenomeFeatureDisplay==null) {
+            thisGenomeFeatureDisplay = new GenomeFeatureDisplay();
         }
 
-        return thisMarkerDisplay;
+        return thisGenomeFeatureDisplay;
     }
 
-    public MarkerDisplay getMarker(String dbKey)
+    public GenomeFeatureDisplay getMarker(String dbKey)
     {
-        MarkerDisplay thisMarkerDisplay
-            = (MarkerDisplay)genomeFeatureCacheMap.get(dbKey);
+        GenomeFeatureDisplay thisGenomeFeatureDisplay
+            = (GenomeFeatureDisplay)genomeFeatureCacheMap.get(dbKey);
 
         //if we don't have the requested object, returning an empty
-        if (thisMarkerDisplay==null) {
-            thisMarkerDisplay = new MarkerDisplay();
+        if (thisGenomeFeatureDisplay==null) {
+            thisGenomeFeatureDisplay = new GenomeFeatureDisplay();
         }
 
-        return thisMarkerDisplay;
+        return thisGenomeFeatureDisplay;
     }
 
 
@@ -121,7 +121,7 @@ public class GenomeFeatureDisplayCache
 
           for (int count=0; count<ir.maxDoc(); count++ ) {
 
-            MarkerDisplay thisMarkerDisplay = new MarkerDisplay();
+            GenomeFeatureDisplay thisGenomeFeatureDisplay = new GenomeFeatureDisplay();
 
             // flesh out the display cache object
             doc = ir.document(count);
@@ -129,17 +129,18 @@ public class GenomeFeatureDisplayCache
 			cacheKey = doc.get(IndexConstants.COL_OBJECT_TYPE)
 			  + "_" + doc.get(IndexConstants.COL_DB_KEY);
 
-            thisMarkerDisplay.setDbKey(doc.get(IndexConstants.COL_DB_KEY));
-            thisMarkerDisplay.setObjectType(doc.get(IndexConstants.COL_OBJECT_TYPE));
-            thisMarkerDisplay.setSymbol(doc.get(IndexConstants.COL_MARKER_SYMBOL));
-            thisMarkerDisplay.setName(doc.get(IndexConstants.COL_MARKER_NAME));
-            thisMarkerDisplay.setMarkerType(doc.get(IndexConstants.COL_MARKER_TYPE));
-            thisMarkerDisplay.setChromosome(doc.get(IndexConstants.COL_CHROMOSOME));
-            thisMarkerDisplay.setMgiId(doc.get(IndexConstants.COL_MGI_ID));
-            thisMarkerDisplay.setStrand(doc.get(IndexConstants.COL_STRAND));
-            thisMarkerDisplay.setLocDisplay(doc.get(IndexConstants.COL_LOC_DISPLAY));
+            thisGenomeFeatureDisplay.setDbKey(doc.get(IndexConstants.COL_DB_KEY));
+            thisGenomeFeatureDisplay.setObjectType(doc.get(IndexConstants.COL_OBJECT_TYPE));
+            thisGenomeFeatureDisplay.setSymbol(doc.get(IndexConstants.COL_MARKER_SYMBOL));
+            thisGenomeFeatureDisplay.setName(doc.get(IndexConstants.COL_MARKER_NAME));
+            thisGenomeFeatureDisplay.setMarkerType(doc.get(IndexConstants.COL_MARKER_TYPE));
+            thisGenomeFeatureDisplay.setChromosome(doc.get(IndexConstants.COL_CHROMOSOME));
+            thisGenomeFeatureDisplay.setMgiId(doc.get(IndexConstants.COL_MGI_ID));
+            thisGenomeFeatureDisplay.setStrand(doc.get(IndexConstants.COL_STRAND));
+            thisGenomeFeatureDisplay.setLocDisplay(doc.get(IndexConstants.COL_LOC_DISPLAY));
+            thisGenomeFeatureDisplay.setBatchForwardValue(doc.get(IndexConstants.COL_BATCH_FORWARD_VALUE));
 
-            newMarkerCache.put(thisMarkerDisplay.getCacheKey(), thisMarkerDisplay);
+            newMarkerCache.put(thisGenomeFeatureDisplay.getCacheKey(), thisGenomeFeatureDisplay);
 
           }
 

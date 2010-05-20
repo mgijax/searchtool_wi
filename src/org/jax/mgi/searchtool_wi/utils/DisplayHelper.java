@@ -14,7 +14,7 @@ import org.apache.lucene.analysis.KeywordAnalyzer;
 import org.apache.lucene.analysis.snowball.SnowballAnalyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.jax.mgi.searchtool_wi.dataAccess.IndexReaderContainer;
-import org.jax.mgi.searchtool_wi.lookup.MarkerDisplay;
+import org.jax.mgi.searchtool_wi.lookup.GenomeFeatureDisplay;
 import org.jax.mgi.searchtool_wi.lookup.GenomeFeatureDisplayCache;
 import org.jax.mgi.searchtool_wi.lookup.VocabDisplay;
 import org.jax.mgi.searchtool_wi.lookup.VocabDisplayCache;
@@ -734,11 +734,11 @@ public class DisplayHelper
 
   //------------------------------------------------------- Marker "Why Match"
 
-  public String getMrkWhyMatchURL (GenomeFeatureResult mResult, String query)
+  public String getMrkWhyMatchURL (GenomeFeatureResult gfResult, String query)
   {
     return "'Search.do?query="
-      + getEncodedUrl(query) + "&page=markerDetails&markerKey="
-      + mResult.getDbKey() + "'";
+      + getEncodedUrl(query) + "&page=markerDetails&resultKey="
+      + gfResult.getCacheKey() + "'";
   }
 
   public String getMrkWhyMatchText (GenomeFeatureResult genomeFeatureResult)
@@ -757,7 +757,7 @@ public class DisplayHelper
   */
   public static String getMarkerScoreMouseOver (GenomeFeatureResult genomeFeatureResult)
   {
-    MarkerDisplay markerDisplay = gfDisplayCache.getGenomeFeature(genomeFeatureResult);
+    GenomeFeatureDisplay markerDisplay = gfDisplayCache.getGenomeFeature(genomeFeatureResult);
 
     int nomenMatches     = genomeFeatureResult.getAllMarkerNomenMatches().size();
     int adMatches        = genomeFeatureResult.getAdMatches().size();

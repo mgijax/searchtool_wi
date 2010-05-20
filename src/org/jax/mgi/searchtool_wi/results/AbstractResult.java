@@ -104,6 +104,14 @@ public abstract class AbstractResult {
     setDbKey(newI);
   }
 
+  /**
+  * Returns the result key of the object hit; normally, this is the DB key
+  *    This may be overridden
+  * @return String - the result key of object hit
+  */
+  public String getResultKey() {
+    return dbKey;
+  }
 
   // --------//
   // Display

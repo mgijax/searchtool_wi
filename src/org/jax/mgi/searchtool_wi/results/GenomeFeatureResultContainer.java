@@ -3,7 +3,7 @@ package org.jax.mgi.searchtool_wi.results;
 // standard java
 import java.util.*;
 
-import org.jax.mgi.searchtool_wi.lookup.MarkerDisplay;
+import org.jax.mgi.searchtool_wi.lookup.GenomeFeatureDisplay;
 import org.jax.mgi.searchtool_wi.lookup.GenomeFeatureDisplayCache;
 
 public class GenomeFeatureResultContainer extends ResultContainer {
@@ -24,11 +24,12 @@ public class GenomeFeatureResultContainer extends ResultContainer {
     // pre-make symbol list for this result set
     StringBuilder sb = new StringBuilder();
     GenomeFeatureResult thisMarkerResult; // search result built by model
-    MarkerDisplay thisMarkerDisplay; // pulled from cache for given marker
+    GenomeFeatureDisplay thisGenomeFeatureDisplay; // pulled from cache for given marker
     for (Iterator iter = scoreSortedResults.iterator(); iter.hasNext();) {
         thisMarkerResult = (GenomeFeatureResult) iter.next();
-        thisMarkerDisplay = gfDisplayCache.getGenomeFeature(thisMarkerResult);
-        sb = sb.append("\"" + thisMarkerDisplay.getSymbol() + "\",");
+        thisGenomeFeatureDisplay = gfDisplayCache.getGenomeFeature(thisMarkerResult);
+
+        sb = sb.append("\"" + thisGenomeFeatureDisplay.getBatchForwardValue() + "\",");
     }
 
     stringOfSymbols = sb.toString();
@@ -41,8 +42,8 @@ public class GenomeFeatureResultContainer extends ResultContainer {
   // Accessors
   // ----------//
 
-  public GenomeFeatureResult getMarkerByKey(String markerKey) {
-    return (GenomeFeatureResult) mappedResults.get(markerKey);
+  public GenomeFeatureResult getResultByKey(String resultKey) {
+    return (GenomeFeatureResult) mappedResults.get(resultKey);
   }
 
   public String getStringOfSymbols() {

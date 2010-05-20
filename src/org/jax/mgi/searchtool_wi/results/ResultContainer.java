@@ -19,7 +19,7 @@ public class ResultContainer {
     // fill key->result mapping
     for (Iterator<AbstractResult> iter = l.iterator(); iter.hasNext();) {
         AbstractResult current = iter.next();
-        mappedResults.put(current.getDbKey().toString(), current);
+        mappedResults.put(current.getResultKey(), current);
     }
   }
 

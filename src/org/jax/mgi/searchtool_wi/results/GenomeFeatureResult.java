@@ -234,6 +234,14 @@ public class GenomeFeatureResult extends AbstractResult {
     return genomeFeatureType + "_" + dbKey;
   }
 
+  /**
+  * Returns the result key of the object hit; overridding method in Abstract
+  * @return String - the result key of object hit
+  */
+  public String getResultKey() {
+    return getCacheKey();
+  }
+
   // ----------------//
   // Nomen Matches
   // ----------------//
