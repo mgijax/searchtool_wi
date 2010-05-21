@@ -30,13 +30,13 @@
     if (markerStart.intValue() > 1) {
         String forwardUrl = stConfig.get("QUICKSEARCH_URL") + "Search.do?query="
           + displayHelper.getEncodedUrl(queryForward)
-          + "&page=marker&markerStart=" + (markerStart - markerRange);
+          + "&page=featureList&markerStart=" + (markerStart - markerRange);
         previousLink = "<a class='small' href='" + forwardUrl + "'>Previous</a>";
     }
     if (markerStop.intValue() < genomeFeatureResultContainer.size()) {
         String forwardUrl = stConfig.get("QUICKSEARCH_URL") + "Search.do?query="
           + displayHelper.getEncodedUrl(queryForward)
-          + "&page=marker&markerStart=" + (markerStart + markerRange);
+          + "&page=featureList&markerStart=" + (markerStart + markerRange);
         nextLink = "<a class='small' href='" + forwardUrl + "'>Next</a>";
     }
 

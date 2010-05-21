@@ -189,7 +189,7 @@
     <td colspan=5>
     <% if (needMoreMarkerLink) { %>
       &nbsp;&nbsp;&nbsp;
-      <a href="Search.do?query=<%=displayHelper.getEncodedUrl(queryForward)%>&page=marker">Show
+      <a href="Search.do?query=<%=displayHelper.getEncodedUrl(queryForward)%>&page=featureList">Show
       <% if (markerMoreLinkNumber < 100) {
             %>all<%
          }
