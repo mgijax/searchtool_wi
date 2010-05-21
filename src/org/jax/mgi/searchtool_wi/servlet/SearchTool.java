@@ -172,10 +172,10 @@ public class SearchTool extends HttpServlet {
         else if ( request.getParameter("page").equals("summary") ) {
             sendToSummary(request, response, searchInput);
         }
-        else if ( request.getParameter("page").equals("marker") ) {
+        else if ( request.getParameter("page").equals("featureList") ) {
             sendToMarker(request, response, searchInput);
         }
-        else if ( request.getParameter("page").equals("markerDetails") ) {
+        else if ( request.getParameter("page").equals("featureDetails") ) {
             sendToMarkerDetails(request, response, searchInput);
         }
         else if ( request.getParameter("page").equals("vocab") ) {
@@ -243,7 +243,7 @@ public class SearchTool extends HttpServlet {
 
     // prep request and forward to display
     response.setContentType("text/html");
-    RequestDispatcher view = request.getRequestDispatcher("mrk_result.jsp");
+    RequestDispatcher view = request.getRequestDispatcher("gf_result.jsp");
     view.forward(request, response);
   }
 
@@ -260,7 +260,7 @@ public class SearchTool extends HttpServlet {
 
     // prep request and forward to display
     response.setContentType("text/html");
-    RequestDispatcher view = request.getRequestDispatcher("mrk_details.jsp");
+    RequestDispatcher view = request.getRequestDispatcher("gf_details.jsp");
     view.forward(request, response);
   }
 
