@@ -737,7 +737,7 @@ public class DisplayHelper
   public String getMrkWhyMatchURL (GenomeFeatureResult gfResult, String query)
   {
     return "'Search.do?query="
-      + getEncodedUrl(query) + "&page=markerDetails&resultKey="
+      + getEncodedUrl(query) + "&page=featureDetails&resultKey="
       + gfResult.getCacheKey() + "'";
   }
 
