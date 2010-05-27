@@ -252,9 +252,6 @@ public class MarkerVocabSearchCache
                 else if (doc.get(IndexConstants.COL_VOCABULARY).equals(IndexConstants.OMIM_TYPE_NAME)){
                   omimAnnotAlleles.put(doc.get(IndexConstants.COL_DB_KEY), alleleKeys);
                 }
-                else {
-					System.out.println("-------?-----" + doc.get(IndexConstants.COL_VOCABULARY));
-				}
 
 
             }
