@@ -42,5 +42,12 @@
   </param-value>
 </context-param>
 
+<context-param>
+  <param-name>maxMatchCount</param-name>
+  <param-value>
+    10000
+  </param-value>
+</context-param>
+
 </web-app>
 
