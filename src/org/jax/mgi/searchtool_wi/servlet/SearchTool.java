@@ -80,6 +80,7 @@ public class SearchTool extends HttpServlet {
 
       // move some web.xml parameters to our native mgi config object
       stConfig.set("INDEX_DIR", servletContext.getInitParameter("indexDir"));
+      stConfig.set("MAX_MATCHES", servletContext.getInitParameter("maxMatchCount"));
     }
     catch (Exception e) { e.printStackTrace(); }
 

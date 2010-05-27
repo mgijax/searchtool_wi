@@ -99,6 +99,9 @@ public class GenomeFeatureSearch extends AbstractSearch
   MatchTypeScorer gfOrWeightTypeScorer =
     new MatchTypeScorer( ScoreConstants.getMrkOrWeightMap() );
 
+  // threshold
+  private int matchCounter = 0;
+  private int maxMatches;
 
   //-------------//
   // Constructor //
@@ -108,6 +111,8 @@ public class GenomeFeatureSearch extends AbstractSearch
     super(c);
     markerVocabSearchCache =
       MarkerVocabSearchCache.getMarkerVocabSearchCache();
+
+    maxMatches = new Integer(config.get("MAX_MATCHES")).intValue();
   }
 
   //----------------------------------------//
@@ -180,7 +185,7 @@ public class GenomeFeatureSearch extends AbstractSearch
 
     // search for ID matches of entire user input string
     hits =  indexAccessor.searchMarkerAccIDByWholeTerm(searchInput);
-    logger.debug("MarkerSearch.searchMarkerAccIDByWholeTerm number of hits ->"
+    logger.debug("GenomeFeatureSearch.searchMarkerAccIDByWholeTerm number of hits ->"
         + hits.length());
     for (Iterator hitIter = hits.iterator(); hitIter.hasNext();)
     {
@@ -191,7 +196,7 @@ public class GenomeFeatureSearch extends AbstractSearch
 
     // search for symbol matches of entire user input string
     hits =  indexAccessor.searchMarkerSymbolExactByWholeTerm(searchInput);
-    logger.debug("MarkerSearch.searchMarkerSymbolExactByWholeTerm number of hits ->"
+    logger.debug("GenomeFeatureSearch.searchMarkerSymbolExactByWholeTerm number of hits ->"
         + hits.length());
     for (Iterator hitIter = hits.iterator(); hitIter.hasNext();)
     {
@@ -202,7 +207,7 @@ public class GenomeFeatureSearch extends AbstractSearch
 
     // search for name/synonym matches of entire user input string
     hits =  indexAccessor.searchMarkerExactByWholeTerm(searchInput);
-    logger.debug("MarkerSearch.searchMarkerExactByWholeTerm number of hits ->"
+    logger.debug("GenomeFeatureSearch.searchMarkerExactByWholeTerm number of hits ->"
         + hits.length());
     for (Iterator hitIter = hits.iterator(); hitIter.hasNext();)
     {
@@ -253,7 +258,7 @@ public class GenomeFeatureSearch extends AbstractSearch
     String vocabID;
 
     hits =  indexAccessor.searchMarkerVocabExactByWholeTerm(searchInput);
-    logger.debug("MarkerSearch.searchMarkerVocabExactByWholeTerm ->" + hits.length());
+    logger.debug("GenomeFeatureSearch.searchMarkerVocabExactByWholeTerm ->" + hits.length());
     for (Iterator iter = hits.iterator(); iter.hasNext();)
     {
         hit = (Hit) iter.next();
@@ -261,7 +266,7 @@ public class GenomeFeatureSearch extends AbstractSearch
     }
 
     hits =  indexAccessor.searchMarkerVocabAccIDByWholeTerm(searchInput);
-    logger.debug("MarkerSearch.searchMarkerVocabAccIDByWholeTerm ->" + hits.length());
+    logger.debug("GenomeFeatureSearch.searchMarkerVocabAccIDByWholeTerm ->" + hits.length());
     for (Iterator iter = hits.iterator(); iter.hasNext();)
     {
         hit = (Hit) iter.next();
@@ -438,7 +443,7 @@ public class GenomeFeatureSearch extends AbstractSearch
     }
 
     else { // shouldn't be hitting this part of the code, so log value
-      logger.error("***Bad Object Type in Exact Vocab MarkerSearch ->"
+      logger.error("***Bad Object Type in Exact Vocab GenomeFeatureSearch ->"
         + hit.get(IndexConstants.COL_VOCABULARY) );
     }
   }
@@ -462,10 +467,16 @@ public class GenomeFeatureSearch extends AbstractSearch
 
     // execute the search, and handle each textual match
     Hits hits =  indexAccessor.searchMarkerAnd(searchInput);
-    logger.debug("MarkerSearch.searchGenomeFeature_AllTokens number of hits ->" + hits.length());
+    logger.debug("GenomeFeatureSearch.searchGenomeFeature_AllTokens number of hits ->" + hits.length());
 
     // examine each hit
     for (Iterator iter = hits.iterator(); iter.hasNext();) {
+
+	  // ensure we're not over the max allowable number of and/or matches
+	  if (matchCounter > maxMatches) {
+		break;
+	  }
+	  matchCounter++;
 
       hit = (Hit) iter.next();
 
@@ -662,7 +673,7 @@ public class GenomeFeatureSearch extends AbstractSearch
 
     // search each token against IDs
     List idHits =  indexAccessor.searchMarkerAccIDByLargeToken(searchInput);
-    logger.debug("MarkerSearch.searchMarkerAccID ->"
+    logger.debug("GenomeFeatureSearch.searchMarkerAccID ->"
         + idHits.size());
     for (Iterator hitIter = idHits.iterator(); hitIter.hasNext();)
     {
@@ -673,7 +684,7 @@ public class GenomeFeatureSearch extends AbstractSearch
 
     // search each token against symbols
     List symbolHits =  indexAccessor.searchMarkerSymbolExactByLargeToken(searchInput);
-    logger.debug("MarkerSearch.searchMarkerSymbolExact ->"
+    logger.debug("GenomeFeatureSearch.searchMarkerSymbolExact ->"
         + symbolHits.size());
     for (Iterator hitIter = symbolHits.iterator(); hitIter.hasNext();)
     {
@@ -684,7 +695,7 @@ public class GenomeFeatureSearch extends AbstractSearch
 
     // search each token against marker names/synonyms
     List nameSynonymHits =  indexAccessor.searchMarkerExactByLargeToken(searchInput);
-    logger.debug("MarkerSearch.searchMarkerExactByBigToken ->"
+    logger.debug("GenomeFeatureSearch.searchMarkerExactByBigToken ->"
         + nameSynonymHits.size());
     for (Iterator hitIter = nameSynonymHits.iterator(); hitIter.hasNext();)
     {
@@ -729,7 +740,7 @@ public class GenomeFeatureSearch extends AbstractSearch
 
     // search each token against vocab IDs
     hits =  indexAccessor.searchMarkerVocabAccIDByLargeToken(searchInput);
-    logger.debug("MarkerSearch.searchMarkerVocabAccIDByLargeToken ->"
+    logger.debug("GenomeFeatureSearch.searchMarkerVocabAccIDByLargeToken ->"
         + hits.size());
     for (Iterator hitIter = hits.iterator(); hitIter.hasNext();)
     {
@@ -905,7 +916,7 @@ public class GenomeFeatureSearch extends AbstractSearch
     }
 
     else { // shouldn't be hitting this part of the code, so log value
-      logger.error("***Bad Object Type in Large Token Vocab MarkerSearch ->"
+      logger.error("***Bad Object Type in Large Token Vocab GenomeFeatureSearch ->"
         + hit.get(IndexConstants.COL_VOCABULARY) );
     }
   }
@@ -927,8 +938,14 @@ public class GenomeFeatureSearch extends AbstractSearch
 
     // execute the search, and handle each textual match
     Hits hits =  indexAccessor.searchMarkerOr(searchInput);
-    logger.debug("MarkerSearch.searchOrMatches number of hits ->" + hits.length());
+    logger.debug("GenomeFeatureSearch.searchOrMatches number of hits ->" + hits.length());
     for (Iterator iter = hits.iterator(); iter.hasNext();) {
+
+	  // ensure we're not over the max allowable number of and/or matches
+	  if (matchCounter > maxMatches) {
+		break;
+	  }
+	  matchCounter++;
 
       hit = (Hit) iter.next();
 
@@ -1090,7 +1107,7 @@ public class GenomeFeatureSearch extends AbstractSearch
           }
 
           else { // shouldn't be hitting this part of the code, so log value
-            logger.error("***Bad Object Type in 'OR' MarkerSearch ->"
+            logger.error("***Bad Object Type in 'OR' GenomeFeatureSearch ->"
               + hit.get(IndexConstants.COL_OBJ_TYPE) );
           }
       }
