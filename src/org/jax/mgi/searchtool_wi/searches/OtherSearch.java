@@ -16,7 +16,7 @@ import org.apache.lucene.search.*;
 // Quick Search Specific
 import org.jax.mgi.searchtool_wi.matches.OtherMatch;
 import org.jax.mgi.searchtool_wi.matches.OtherMatchFactory;
-import org.jax.mgi.searchtool_wi.results.QS_OtherResult;
+import org.jax.mgi.searchtool_wi.results.OtherResult;
 import org.jax.mgi.searchtool_wi.utils.SearchInput;
 import org.jax.mgi.shr.searchtool.IndexConstants;
 
@@ -24,7 +24,7 @@ import org.jax.mgi.shr.searchtool.IndexConstants;
 * This concrete search is responsible for gathering all data required for
 * the Quick Search to display the "Other Bucket"
 */
-public class QS_OtherSearch extends AbstractSearch {
+public class OtherSearch extends AbstractSearch {
 
   //--------//
   // Fields
@@ -32,11 +32,11 @@ public class QS_OtherSearch extends AbstractSearch {
 
   // Set up the logger
   private static Logger log
-    = Logger.getLogger(QS_OtherSearch.class.getName());
+    = Logger.getLogger(OtherSearch.class.getName());
 
   // results to be returned
-  private HashMap <String, QS_OtherResult> searchResults
-    = new HashMap <String, QS_OtherResult>();
+  private HashMap <String, OtherResult> searchResults
+    = new HashMap <String, OtherResult>();
 
   // Match factories we'll need generate the matches
   OtherMatchFactory otherMatchFactory
@@ -45,7 +45,7 @@ public class QS_OtherSearch extends AbstractSearch {
   //--------------//
   // Constructors
   //--------------//
-  public QS_OtherSearch(Configuration c)
+  public OtherSearch(Configuration c)
   {
     super(c);
   }
@@ -96,7 +96,7 @@ public class QS_OtherSearch extends AbstractSearch {
   private void handleOtherExactHit (Hit hit)
     throws Exception
   {
-    QS_OtherResult otherResult;
+    OtherResult otherResult;
     OtherMatch otherMatch;
 
     // info about the result
@@ -117,13 +117,13 @@ public class QS_OtherSearch extends AbstractSearch {
   * already been created, it will be returned.  If not, a new one is
   * generated, placed in the result set, and then returned.
   */
-  private QS_OtherResult getOther(String otherKey, String dataType)
+  private OtherResult getOther(String otherKey, String dataType)
   {
     if (searchResults.containsKey(otherKey+"::"+dataType)) {
-        return (QS_OtherResult)searchResults.get( otherKey+"::"+dataType);
+        return (OtherResult)searchResults.get( otherKey+"::"+dataType);
     }
     else {
-        QS_OtherResult other = new QS_OtherResult(config);
+        OtherResult other = new OtherResult(config);
         other.setDbKey(otherKey);
         other.setDataType(dataType);
         searchResults.put(other.getDbKey()+"::"+other.getDataType(), other);

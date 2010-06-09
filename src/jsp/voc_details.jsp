@@ -1,13 +1,13 @@
 <%@include file="setup.jsp"%>
 
 <%
-    QS_VocabResultContainer vocabResultContainer
-      = (QS_VocabResultContainer)request.getAttribute("VocabResultContainer");
+    VocabResultContainer vocabResultContainer
+      = (VocabResultContainer)request.getAttribute("VocabResultContainer");
 
     String vocabKey = searchInput.getParameter("vocabKey");
     String vocabType = searchInput.getParameter("vocabType");
 
-    QS_VocabResult vocabResult;
+    VocabResult vocabResult;
 
     if (vocabType.equals(IndexConstants.GO_TYPE_NAME))
     {

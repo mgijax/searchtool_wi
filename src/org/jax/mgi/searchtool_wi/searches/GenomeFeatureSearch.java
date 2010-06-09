@@ -16,11 +16,13 @@ import org.apache.lucene.search.*;
 // Quick Search Specific
 import org.jax.mgi.searchtool_wi.lookup.MarkerVocabSearchCache;
 import org.jax.mgi.searchtool_wi.matches.MatchTypeScorer;
-import org.jax.mgi.searchtool_wi.matches.MarkerMatch;
-import org.jax.mgi.searchtool_wi.matches.MarkerMatchFactory;
+import org.jax.mgi.searchtool_wi.matches.MarkerNomenMatch;
+import org.jax.mgi.searchtool_wi.matches.MarkerNomenMatchFactory;
+import org.jax.mgi.searchtool_wi.matches.AlleleNomenMatch;
+import org.jax.mgi.searchtool_wi.matches.AlleleNomenMatchFactory;
 import org.jax.mgi.searchtool_wi.matches.MarkerVocabMatch;
 import org.jax.mgi.searchtool_wi.matches.MarkerVocabMatchFactory;
-import org.jax.mgi.searchtool_wi.results.QS_MarkerResult;
+import org.jax.mgi.searchtool_wi.results.GenomeFeatureResult;
 import org.jax.mgi.searchtool_wi.utils.SearchHelper;
 import org.jax.mgi.searchtool_wi.utils.SearchInput;
 import org.jax.mgi.searchtool_wi.utils.ScoreConstants;
@@ -30,7 +32,7 @@ import org.jax.mgi.shr.searchtool.IndexConstants;
 * This concrete Search is responsible for gathering all data required for
 * the Quick Search to display the "Marker Bucket"
 */
-public class QS_MarkerSearch extends AbstractSearch
+public class GenomeFeatureSearch extends AbstractSearch
 {
   //--------//
   // Fields
@@ -40,13 +42,14 @@ public class QS_MarkerSearch extends AbstractSearch
   private HashMap searchResults = new HashMap();
 
   // logger
-  private static Logger logger = Logger.getLogger(QS_MarkerSearch.class.getName());
+  private static Logger logger = Logger.getLogger(GenomeFeatureSearch.class.getName());
 
   // search cache; will get singleton reference in constructor
   private MarkerVocabSearchCache markerVocabSearchCache;
 
   // match holders
-  private List nomenMatches             = new ArrayList();
+  private List markerNomenMatches       = new ArrayList();
+  private List alleleNomenMatches       = new ArrayList();
   private List adMatches                = new ArrayList();
   private List goMatches                = new ArrayList();
   private List omimMatches              = new ArrayList();
@@ -79,30 +82,37 @@ public class QS_MarkerSearch extends AbstractSearch
   private boolean incIp                 = true;
 
   // Match factories we'll need generate the matches
-  MarkerMatchFactory markerMatchFactory
-    = new MarkerMatchFactory(config);
+  MarkerNomenMatchFactory markerNomenMatchFactory
+    = new MarkerNomenMatchFactory(config);
+  AlleleNomenMatchFactory alleleNomenMatchFactory
+    = new AlleleNomenMatchFactory(config);
   MarkerVocabMatchFactory markerVocabMatchFactory
     = new MarkerVocabMatchFactory(config);
 
   // Match Type Scorers we'll need to score the matches
-  MatchTypeScorer markerExactTypeScorer =
-    new MatchTypeScorer(ScoreConstants.getMarkerExactScoreMap() );
-  MatchTypeScorer markerAndTypeScorer =
-    new MatchTypeScorer(ScoreConstants.getMrkAndScoreMap() );
-  MatchTypeScorer markerOrTypeScorer =
-    new MatchTypeScorer(ScoreConstants.getMrkOrScoreMap() );
-  MatchTypeScorer markerOrWeightTypeScorer =
-    new MatchTypeScorer(ScoreConstants.getMrkOrWeightMap() );
+  MatchTypeScorer gfExactTypeScorer =
+    new MatchTypeScorer( ScoreConstants.getMarkerExactScoreMap() );
+  MatchTypeScorer gfAndTypeScorer =
+    new MatchTypeScorer( ScoreConstants.getMrkAndScoreMap() );
+  MatchTypeScorer gfOrTypeScorer =
+    new MatchTypeScorer( ScoreConstants.getMrkOrScoreMap() );
+  MatchTypeScorer gfOrWeightTypeScorer =
+    new MatchTypeScorer( ScoreConstants.getMrkOrWeightMap() );
 
+  // threshold
+  private int matchCounter = 0;
+  private int maxMatches;
 
   //-------------//
   // Constructor //
   //-------------//
-  public QS_MarkerSearch(Configuration c)
+  public GenomeFeatureSearch(Configuration c)
   {
     super(c);
     markerVocabSearchCache =
       MarkerVocabSearchCache.getMarkerVocabSearchCache();
+
+    maxMatches = new Integer(config.get("MAX_MATCHES")).intValue();
   }
 
   //----------------------------------------//
@@ -124,27 +134,27 @@ public class QS_MarkerSearch extends AbstractSearch
     parseParms(searchInput);
 
     // exact nomenclature matches - tier1
-    searchExactMarkerMatches(searchInput);
-    timer.record("Marker - Done searching Exact");
+    searchGenomeFeature_NomenExact(searchInput);
+    timer.record("GenomeFeatre Search - Done searching Exact");
 
     // exact vocabulary matches - tier1
     searchExactVocabMatches(searchInput);
-    timer.record("Marker - Done searching Vocab Exact");
+    timer.record("GenomeFeatre Search - Done searching Vocab Exact");
 
     // 'and' matches - tier2
-    searchAndMatches(searchInput);
-    timer.record("Marker - Done searching 'and' matches");
+    searchGenomeFeature_AllTokens(searchInput);
+    timer.record("GenomeFeatre Search - Done searching 'and' matches");
 
     // large token matches tier3 (only if we have more than 1 large token)
     if (searchInput.getLargeTokenCount() > 1)
     {
         // exact nomenclature matches - tier3
-        searchLargeTokenMarkerMatches(searchInput);
-        timer.record("Marker - Done searching large tokens for marker nomen");
+        searchGenomeFeature_LargeToken(searchInput);
+        timer.record("GenomeFeatre Search - large tokens nomen");
 
         // exact vocabulary matches - tier3
-        searchLargeTokenVocabMatches(searchInput);
-        timer.record("Marker - Done searching large tokens for vocab");
+        searchVocab_LargeToken(searchInput);
+        timer.record("GenomeFeatre Search - Done searching large tokens for vocab");
     }
 
     // 'or' matches - tier4 (only if we have more than 1 small token)
@@ -157,7 +167,7 @@ public class QS_MarkerSearch extends AbstractSearch
 
     // assign matches
     assignMatches();
-    timer.record("Marker - Done Assigning Matches");
+    timer.record("GenomeFeatre Search - Done Assigning Matches");
 
     return new ArrayList( searchResults.values() );
   }
@@ -167,7 +177,7 @@ public class QS_MarkerSearch extends AbstractSearch
   //---------------------//
   // Search Exact Matches
   //---------------------//
-  private void searchExactMarkerMatches (SearchInput searchInput)
+  private void searchGenomeFeature_NomenExact (SearchInput searchInput)
     throws Exception
   {
     Hit hit;
@@ -175,7 +185,7 @@ public class QS_MarkerSearch extends AbstractSearch
 
     // search for ID matches of entire user input string
     hits =  indexAccessor.searchMarkerAccIDByWholeTerm(searchInput);
-    logger.debug("MarkerSearch.searchMarkerAccIDByWholeTerm number of hits ->"
+    logger.debug("GenomeFeatureSearch.searchMarkerAccIDByWholeTerm number of hits ->"
         + hits.length());
     for (Iterator hitIter = hits.iterator(); hitIter.hasNext();)
     {
@@ -186,7 +196,7 @@ public class QS_MarkerSearch extends AbstractSearch
 
     // search for symbol matches of entire user input string
     hits =  indexAccessor.searchMarkerSymbolExactByWholeTerm(searchInput);
-    logger.debug("MarkerSearch.searchMarkerSymbolExactByWholeTerm number of hits ->"
+    logger.debug("GenomeFeatureSearch.searchMarkerSymbolExactByWholeTerm number of hits ->"
         + hits.length());
     for (Iterator hitIter = hits.iterator(); hitIter.hasNext();)
     {
@@ -197,7 +207,7 @@ public class QS_MarkerSearch extends AbstractSearch
 
     // search for name/synonym matches of entire user input string
     hits =  indexAccessor.searchMarkerExactByWholeTerm(searchInput);
-    logger.debug("MarkerSearch.searchMarkerExactByWholeTerm number of hits ->"
+    logger.debug("GenomeFeatureSearch.searchMarkerExactByWholeTerm number of hits ->"
         + hits.length());
     for (Iterator hitIter = hits.iterator(); hitIter.hasNext();)
     {
@@ -213,10 +223,25 @@ public class QS_MarkerSearch extends AbstractSearch
   private void handleTier1NomenHit (Hit hit)
     throws IOException
   {
-    MarkerMatch markerMatch = markerMatchFactory.getMatch(hit);
-    markerExactTypeScorer.addScore(markerMatch);
-    markerMatch.flagAsTier1();
-    nomenMatches.add(markerMatch);
+    // marker hit
+    if (hit.get(IndexConstants.COL_OBJ_TYPE).equals(IndexConstants.MARKER_TYPE_NAME)) {
+
+
+        MarkerNomenMatch markerNomenMatch = markerNomenMatchFactory.getMatch(hit);
+        gfExactTypeScorer.addScore(markerNomenMatch);
+        markerNomenMatch.flagAsTier1();
+        markerNomenMatches.add(markerNomenMatch);
+    }
+
+    // allele hit
+    else if (hit.get(IndexConstants.COL_OBJ_TYPE).equals(IndexConstants.ALLELE_TYPE_NAME)) {
+
+        AlleleNomenMatch alleleNomenMatch = alleleNomenMatchFactory.getMatch(hit);
+        gfExactTypeScorer.addScore(alleleNomenMatch);
+        alleleNomenMatch.flagAsTier1();
+        alleleNomenMatches.add(alleleNomenMatch);
+    }
+
     return;
   }
 
@@ -233,7 +258,7 @@ public class QS_MarkerSearch extends AbstractSearch
     String vocabID;
 
     hits =  indexAccessor.searchMarkerVocabExactByWholeTerm(searchInput);
-    logger.debug("MarkerSearch.searchMarkerVocabExactByWholeTerm ->" + hits.length());
+    logger.debug("GenomeFeatureSearch.searchMarkerVocabExactByWholeTerm ->" + hits.length());
     for (Iterator iter = hits.iterator(); iter.hasNext();)
     {
         hit = (Hit) iter.next();
@@ -241,7 +266,7 @@ public class QS_MarkerSearch extends AbstractSearch
     }
 
     hits =  indexAccessor.searchMarkerVocabAccIDByWholeTerm(searchInput);
-    logger.debug("MarkerSearch.searchMarkerVocabAccIDByWholeTerm ->" + hits.length());
+    logger.debug("GenomeFeatureSearch.searchMarkerVocabAccIDByWholeTerm ->" + hits.length());
     for (Iterator iter = hits.iterator(); iter.hasNext();)
     {
         hit = (Hit) iter.next();
@@ -264,9 +289,10 @@ public class QS_MarkerSearch extends AbstractSearch
 
       //ensure we haven't already done this term
       if (!handledAdTerms.contains(hit.get(IndexConstants.COL_DB_KEY))) {
+
         markerVocabMatch = markerVocabMatchFactory.getMatch(hit);
         markerVocabMatch.flagAsTier1();
-        markerExactTypeScorer.addScore(markerVocabMatch);
+        gfExactTypeScorer.addScore(markerVocabMatch);
         adMatches.add(markerVocabMatch);
         handledAdTerms.add( markerVocabMatch.getDbKey() );
 
@@ -278,7 +304,7 @@ public class QS_MarkerSearch extends AbstractSearch
             if ( !handledAdTerms.contains(childTermKey) ) {
               markerVocabMatch = markerVocabMatchFactory.getMatch(hit);
               markerVocabMatch.flagAsTier1();
-              markerExactTypeScorer.addScore(markerVocabMatch);
+              gfExactTypeScorer.addScore(markerVocabMatch);
 
               // change db key to reflect the 'down-dag' term we're dealing
               // with, and penalize the scores of these, slightly
@@ -300,7 +326,7 @@ public class QS_MarkerSearch extends AbstractSearch
       if (!handledGoTerms.contains(hit.get(IndexConstants.COL_DB_KEY))) {
         markerVocabMatch = markerVocabMatchFactory.getMatch(hit);
         markerVocabMatch.flagAsTier1();
-        markerExactTypeScorer.addScore(markerVocabMatch);
+        gfExactTypeScorer.addScore(markerVocabMatch);
         goMatches.add(markerVocabMatch);
         handledGoTerms.add( markerVocabMatch.getDbKey() );
 
@@ -312,7 +338,7 @@ public class QS_MarkerSearch extends AbstractSearch
             if ( !handledGoTerms.contains(childTermKey) ) {
               markerVocabMatch = markerVocabMatchFactory.getMatch(hit);
               markerVocabMatch.flagAsTier1();
-              markerExactTypeScorer.addScore(markerVocabMatch);
+              gfExactTypeScorer.addScore(markerVocabMatch);
 
               // change db key to reflect the 'down-dag' term we're dealing
               // with, and penalize the scores of these, slightly
@@ -334,7 +360,7 @@ public class QS_MarkerSearch extends AbstractSearch
       if (!handledMpTerms.contains(hit.get(IndexConstants.COL_DB_KEY))) {
         markerVocabMatch = markerVocabMatchFactory.getMatch(hit);
         markerVocabMatch.flagAsTier1();
-        markerExactTypeScorer.addScore(markerVocabMatch);
+        gfExactTypeScorer.addScore(markerVocabMatch);
         mpMatches.add(markerVocabMatch);
         handledMpTerms.add( markerVocabMatch.getDbKey() );
 
@@ -346,7 +372,7 @@ public class QS_MarkerSearch extends AbstractSearch
             if ( !handledMpTerms.contains(childTermKey) ) {
               markerVocabMatch = markerVocabMatchFactory.getMatch(hit);
               markerVocabMatch.flagAsTier1();
-              markerExactTypeScorer.addScore(markerVocabMatch);
+              gfExactTypeScorer.addScore(markerVocabMatch);
 
               // change db key to reflect the 'down-dag' term we're dealing
               // with, and penalize the scores of these, slightly
@@ -368,7 +394,7 @@ public class QS_MarkerSearch extends AbstractSearch
       if (!handledOmimTerms.contains(hit.get(IndexConstants.COL_DB_KEY))) {
         markerVocabMatch = markerVocabMatchFactory.getMatch(hit);
         markerVocabMatch.flagAsTier1();
-        markerExactTypeScorer.addScore(markerVocabMatch);
+        gfExactTypeScorer.addScore(markerVocabMatch);
         omimMatches.add(markerVocabMatch);
         handledOmimTerms.add( markerVocabMatch.getDbKey() );
 
@@ -381,7 +407,7 @@ public class QS_MarkerSearch extends AbstractSearch
       if (!handledOmimOrthoTerms.contains(hit.get(IndexConstants.COL_DB_KEY))) {
         markerVocabMatch = markerVocabMatchFactory.getMatch(hit);
         markerVocabMatch.flagAsTier1();
-        markerExactTypeScorer.addScore(markerVocabMatch);
+        gfExactTypeScorer.addScore(markerVocabMatch);
         omimOrthoMatches.add(markerVocabMatch);
         handledOmimOrthoTerms.add( markerVocabMatch.getDbKey() );
 
@@ -395,7 +421,7 @@ public class QS_MarkerSearch extends AbstractSearch
       if (!handledPirsfTerms.contains(hit.get(IndexConstants.COL_DB_KEY))) {
         markerVocabMatch = markerVocabMatchFactory.getMatch(hit);
         markerVocabMatch.flagAsTier1();
-        markerExactTypeScorer.addScore(markerVocabMatch);
+        gfExactTypeScorer.addScore(markerVocabMatch);
         pirsfMatches.add(markerVocabMatch);
         handledPirsfTerms.add( markerVocabMatch.getDbKey() );
 
@@ -409,7 +435,7 @@ public class QS_MarkerSearch extends AbstractSearch
       if (!handledIpTerms.contains(hit.get(IndexConstants.COL_DB_KEY))) {
         markerVocabMatch = markerVocabMatchFactory.getMatch(hit);
         markerVocabMatch.flagAsTier1();
-        markerExactTypeScorer.addScore(markerVocabMatch);
+        gfExactTypeScorer.addScore(markerVocabMatch);
         ipMatches.add(markerVocabMatch);
         handledIpTerms.add( markerVocabMatch.getDbKey() );
 
@@ -417,7 +443,7 @@ public class QS_MarkerSearch extends AbstractSearch
     }
 
     else { // shouldn't be hitting this part of the code, so log value
-      logger.error("***Bad Object Type in Exact Vocab MarkerSearch ->"
+      logger.error("***Bad Object Type in Exact Vocab GenomeFeatureSearch ->"
         + hit.get(IndexConstants.COL_VOCABULARY) );
     }
   }
@@ -426,36 +452,52 @@ public class QS_MarkerSearch extends AbstractSearch
   //-------------------------//
   // Search for 'AND' matches
   //-------------------------//
-  private void searchAndMatches (SearchInput searchInput)
+  private void searchGenomeFeature_AllTokens (SearchInput searchInput)
     throws Exception
   {
 
     // defined outside loops to avoid repeated instantiation of references
     Hit hit;
     String termKey;
-    MarkerMatch markerMatch;
+    MarkerNomenMatch markerNomenMatch;
+    AlleleNomenMatch alleleMatch;
     MarkerVocabMatch markerVocabMatch;
     List childIDs;
     String childTermKey;
 
     // execute the search, and handle each textual match
     Hits hits =  indexAccessor.searchMarkerAnd(searchInput);
-    logger.debug("MarkerSearch.searchAndMatches number of hits ->" + hits.length());
+    logger.debug("GenomeFeatureSearch.searchGenomeFeature_AllTokens number of hits ->" + hits.length());
 
     // examine each hit
     for (Iterator iter = hits.iterator(); iter.hasNext();) {
+
+	  // ensure we're not over the max allowable number of and/or matches
+	  if (matchCounter > maxMatches) {
+		break;
+	  }
+	  matchCounter++;
 
       hit = (Hit) iter.next();
 
       // mark this doc ID as having been handled; will skip in 'or' search
       handledDocIDs.add( hit.getId() );
 
-      // marker nomen
+      // marker hit
       if (hit.get(IndexConstants.COL_OBJ_TYPE).equals(IndexConstants.MARKER_TYPE_NAME)) {
-          markerMatch = markerMatchFactory.getMatch(hit);
-          markerMatch.flagAsTier2();
-          markerAndTypeScorer.addScore(markerMatch);
-          nomenMatches.add(markerMatch);
+          markerNomenMatch = markerNomenMatchFactory.getMatch(hit);
+          markerNomenMatch.flagAsTier2();
+          gfAndTypeScorer.addScore(markerNomenMatch);
+          markerNomenMatches.add(markerNomenMatch);
+      }
+
+      // allele hit
+      else if (hit.get(IndexConstants.COL_OBJ_TYPE).equals(IndexConstants.ALLELE_TYPE_NAME)) {
+
+          alleleMatch = alleleNomenMatchFactory.getMatch(hit);
+          alleleMatch.flagAsTier2();
+          gfAndTypeScorer.addScore(alleleMatch);
+          alleleNomenMatches.add(alleleMatch);
       }
 
       // anatomical dictionary hit
@@ -465,7 +507,7 @@ public class QS_MarkerSearch extends AbstractSearch
         if (!handledAdTerms.contains(hit.get(IndexConstants.COL_DB_KEY))) {
           markerVocabMatch = markerVocabMatchFactory.getMatch(hit);
           markerVocabMatch.flagAsTier2();
-          markerAndTypeScorer.addScore(markerVocabMatch);
+          gfAndTypeScorer.addScore(markerVocabMatch);
           adMatches.add(markerVocabMatch);
           handledAdTerms.add( markerVocabMatch.getDbKey() );
 
@@ -477,7 +519,7 @@ public class QS_MarkerSearch extends AbstractSearch
               if ( !handledAdTerms.contains(childTermKey) ) {
                 markerVocabMatch = markerVocabMatchFactory.getMatch(hit);
                 markerVocabMatch.flagAsTier2();
-                markerAndTypeScorer.addScore(markerVocabMatch);
+                gfAndTypeScorer.addScore(markerVocabMatch);
 
                 // change db key to reflect the 'down-dag' term we're dealing
                 // with, and penalize the scores of these, slightly
@@ -499,7 +541,7 @@ public class QS_MarkerSearch extends AbstractSearch
         if (!handledGoTerms.contains(hit.get(IndexConstants.COL_DB_KEY))) {
           markerVocabMatch = markerVocabMatchFactory.getMatch(hit);
           markerVocabMatch.flagAsTier2();
-          markerAndTypeScorer.addScore(markerVocabMatch);
+          gfAndTypeScorer.addScore(markerVocabMatch);
           goMatches.add(markerVocabMatch);
           handledGoTerms.add( markerVocabMatch.getDbKey() );
 
@@ -511,7 +553,7 @@ public class QS_MarkerSearch extends AbstractSearch
               if ( !handledGoTerms.contains(childTermKey) ) {
                 markerVocabMatch = markerVocabMatchFactory.getMatch(hit);
                 markerVocabMatch.flagAsTier2();
-                markerAndTypeScorer.addScore(markerVocabMatch);
+                gfAndTypeScorer.addScore(markerVocabMatch);
 
                 // change db key to reflect the 'down-dag' term we're dealing
                 // with, and penalize the scores of these, slightly
@@ -533,7 +575,7 @@ public class QS_MarkerSearch extends AbstractSearch
         if (!handledMpTerms.contains(hit.get(IndexConstants.COL_DB_KEY))) {
           markerVocabMatch = markerVocabMatchFactory.getMatch(hit);
           markerVocabMatch.flagAsTier2();
-          markerAndTypeScorer.addScore(markerVocabMatch);
+          gfAndTypeScorer.addScore(markerVocabMatch);
           mpMatches.add(markerVocabMatch);
           handledMpTerms.add( markerVocabMatch.getDbKey() );
 
@@ -545,7 +587,7 @@ public class QS_MarkerSearch extends AbstractSearch
               if ( !handledMpTerms.contains(childTermKey) ) {
                 markerVocabMatch = markerVocabMatchFactory.getMatch(hit);
                 markerVocabMatch.flagAsTier2();
-                markerAndTypeScorer.addScore(markerVocabMatch);
+                gfAndTypeScorer.addScore(markerVocabMatch);
 
                 // change db key to reflect the 'down-dag' term we're dealing
                 // with, and penalize the scores of these, slightly
@@ -567,7 +609,7 @@ public class QS_MarkerSearch extends AbstractSearch
         if (!handledOmimTerms.contains(hit.get(IndexConstants.COL_DB_KEY))) {
           markerVocabMatch = markerVocabMatchFactory.getMatch(hit);
           markerVocabMatch.flagAsTier2();
-          markerAndTypeScorer.addScore(markerVocabMatch);
+          gfAndTypeScorer.addScore(markerVocabMatch);
           omimMatches.add(markerVocabMatch);
           handledOmimTerms.add( markerVocabMatch.getDbKey() );
 
@@ -581,7 +623,7 @@ public class QS_MarkerSearch extends AbstractSearch
         if (!handledOmimOrthoTerms.contains(hit.get(IndexConstants.COL_DB_KEY))) {
           markerVocabMatch = markerVocabMatchFactory.getMatch(hit);
           markerVocabMatch.flagAsTier2();
-          markerAndTypeScorer.addScore(markerVocabMatch);
+          gfAndTypeScorer.addScore(markerVocabMatch);
           omimOrthoMatches.add(markerVocabMatch);
           handledOmimOrthoTerms.add( markerVocabMatch.getDbKey() );
 
@@ -595,7 +637,7 @@ public class QS_MarkerSearch extends AbstractSearch
         if (!handledPirsfTerms.contains(hit.get(IndexConstants.COL_DB_KEY))) {
           markerVocabMatch = markerVocabMatchFactory.getMatch(hit);
           markerVocabMatch.flagAsTier2();
-          markerAndTypeScorer.addScore(markerVocabMatch);
+          gfAndTypeScorer.addScore(markerVocabMatch);
           pirsfMatches.add(markerVocabMatch);
           handledPirsfTerms.add( markerVocabMatch.getDbKey() );
 
@@ -609,7 +651,7 @@ public class QS_MarkerSearch extends AbstractSearch
         if (!handledIpTerms.contains(hit.get(IndexConstants.COL_DB_KEY))) {
           markerVocabMatch = markerVocabMatchFactory.getMatch(hit);
           markerVocabMatch.flagAsTier2();
-          markerAndTypeScorer.addScore(markerVocabMatch);
+          gfAndTypeScorer.addScore(markerVocabMatch);
           ipMatches.add(markerVocabMatch);
           handledIpTerms.add( markerVocabMatch.getDbKey() );
 
@@ -623,15 +665,15 @@ public class QS_MarkerSearch extends AbstractSearch
   //-------------------------------------------------------------//
   // Search for 'Large Token' matches against marker nomen & IDs
   //-------------------------------------------------------------//
-  private void searchLargeTokenMarkerMatches (SearchInput searchInput)
+  private void searchGenomeFeature_LargeToken (SearchInput searchInput)
     throws Exception
   {
     Hit hit;
     Hits hits;
 
-    // search each token against marker IDs
+    // search each token against IDs
     List idHits =  indexAccessor.searchMarkerAccIDByLargeToken(searchInput);
-    logger.debug("MarkerSearch.searchMarkerAccID ->"
+    logger.debug("GenomeFeatureSearch.searchMarkerAccID ->"
         + idHits.size());
     for (Iterator hitIter = idHits.iterator(); hitIter.hasNext();)
     {
@@ -640,9 +682,9 @@ public class QS_MarkerSearch extends AbstractSearch
         handleLargeTokenNomenHit(hit);
     }
 
-    // search each token against marker symbols
+    // search each token against symbols
     List symbolHits =  indexAccessor.searchMarkerSymbolExactByLargeToken(searchInput);
-    logger.debug("MarkerSearch.searchMarkerSymbolExact ->"
+    logger.debug("GenomeFeatureSearch.searchMarkerSymbolExact ->"
         + symbolHits.size());
     for (Iterator hitIter = symbolHits.iterator(); hitIter.hasNext();)
     {
@@ -653,7 +695,7 @@ public class QS_MarkerSearch extends AbstractSearch
 
     // search each token against marker names/synonyms
     List nameSynonymHits =  indexAccessor.searchMarkerExactByLargeToken(searchInput);
-    logger.debug("MarkerSearch.searchMarkerExactByBigToken ->"
+    logger.debug("GenomeFeatureSearch.searchMarkerExactByBigToken ->"
         + nameSynonymHits.size());
     for (Iterator hitIter = nameSynonymHits.iterator(); hitIter.hasNext();)
     {
@@ -663,21 +705,34 @@ public class QS_MarkerSearch extends AbstractSearch
     }
   }
 
-  //handler for Tier1 nomen
+  //handler for Tier3 nomen
   private void handleLargeTokenNomenHit (Hit hit)
     throws IOException
   {
-    MarkerMatch markerMatch = markerMatchFactory.getMatch(hit);
-    markerExactTypeScorer.addScore(markerMatch);
-    markerMatch.flagAsTier3();
-    nomenMatches.add(markerMatch);
+    if (hit.get(IndexConstants.COL_OBJ_TYPE).equals(IndexConstants.MARKER_TYPE_NAME)) {
+
+        MarkerNomenMatch markerNomenMatch = markerNomenMatchFactory.getMatch(hit);
+        gfExactTypeScorer.addScore(markerNomenMatch);
+        markerNomenMatch.flagAsTier3();
+        markerNomenMatches.add(markerNomenMatch);
+    }
+    else if (hit.get(IndexConstants.COL_OBJ_TYPE).equals(IndexConstants.ALLELE_TYPE_NAME)) {
+
+        AlleleNomenMatch alleleNomenMatch = alleleNomenMatchFactory.getMatch(hit);
+        gfExactTypeScorer.addScore(alleleNomenMatch);
+        alleleNomenMatch.flagAsTier3();
+        alleleNomenMatches.add(alleleNomenMatch);
+
+	}
+
     return;
   }
+
 
   //------------------------------------------------//
   // Search for 'Large Token' matches against vocab
   //------------------------------------------------//
-  private void searchLargeTokenVocabMatches (SearchInput searchInput)
+  private void searchVocab_LargeToken (SearchInput searchInput)
     throws Exception
   {
     Hit hit;
@@ -685,7 +740,7 @@ public class QS_MarkerSearch extends AbstractSearch
 
     // search each token against vocab IDs
     hits =  indexAccessor.searchMarkerVocabAccIDByLargeToken(searchInput);
-    logger.debug("MarkerSearch.searchMarkerVocabAccIDByLargeToken ->"
+    logger.debug("GenomeFeatureSearch.searchMarkerVocabAccIDByLargeToken ->"
         + hits.size());
     for (Iterator hitIter = hits.iterator(); hitIter.hasNext();)
     {
@@ -710,7 +765,7 @@ public class QS_MarkerSearch extends AbstractSearch
       if (!handledAdTerms.contains(hit.get(IndexConstants.COL_DB_KEY))) {
         markerVocabMatch = markerVocabMatchFactory.getMatch(hit);
         markerVocabMatch.flagAsTier3();
-        markerExactTypeScorer.addScore(markerVocabMatch);
+        gfExactTypeScorer.addScore(markerVocabMatch);
         adMatches.add(markerVocabMatch);
         handledAdTerms.add( markerVocabMatch.getDbKey() );
 
@@ -722,7 +777,7 @@ public class QS_MarkerSearch extends AbstractSearch
             if ( !handledAdTerms.contains(childTermKey) ) {
               markerVocabMatch = markerVocabMatchFactory.getMatch(hit);
               markerVocabMatch.flagAsTier3();
-              markerExactTypeScorer.addScore(markerVocabMatch);
+              gfExactTypeScorer.addScore(markerVocabMatch);
 
               // change db key to reflect the 'down-dag' term we're dealing
               // with, and penalize the scores of these, slightly
@@ -744,7 +799,7 @@ public class QS_MarkerSearch extends AbstractSearch
       if (!handledGoTerms.contains(hit.get(IndexConstants.COL_DB_KEY))) {
         markerVocabMatch = markerVocabMatchFactory.getMatch(hit);
         markerVocabMatch.flagAsTier3();
-        markerExactTypeScorer.addScore(markerVocabMatch);
+        gfExactTypeScorer.addScore(markerVocabMatch);
         goMatches.add(markerVocabMatch);
         handledGoTerms.add( markerVocabMatch.getDbKey() );
 
@@ -756,7 +811,7 @@ public class QS_MarkerSearch extends AbstractSearch
             if ( !handledGoTerms.contains(childTermKey) ) {
               markerVocabMatch = markerVocabMatchFactory.getMatch(hit);
               markerVocabMatch.flagAsTier3();
-              markerExactTypeScorer.addScore(markerVocabMatch);
+              gfExactTypeScorer.addScore(markerVocabMatch);
 
               // change db key to reflect the 'down-dag' term we're dealing
               // with, and penalize the scores of these, slightly
@@ -778,7 +833,7 @@ public class QS_MarkerSearch extends AbstractSearch
       if (!handledMpTerms.contains(hit.get(IndexConstants.COL_DB_KEY))) {
         markerVocabMatch = markerVocabMatchFactory.getMatch(hit);
         markerVocabMatch.flagAsTier3();
-        markerExactTypeScorer.addScore(markerVocabMatch);
+        gfExactTypeScorer.addScore(markerVocabMatch);
         mpMatches.add(markerVocabMatch);
         handledMpTerms.add( markerVocabMatch.getDbKey() );
 
@@ -790,7 +845,7 @@ public class QS_MarkerSearch extends AbstractSearch
             if ( !handledMpTerms.contains(childTermKey) ) {
               markerVocabMatch = markerVocabMatchFactory.getMatch(hit);
               markerVocabMatch.flagAsTier3();
-              markerExactTypeScorer.addScore(markerVocabMatch);
+              gfExactTypeScorer.addScore(markerVocabMatch);
 
               // change db key to reflect the 'down-dag' term we're dealing
               // with, and penalize the scores of these, slightly
@@ -812,7 +867,7 @@ public class QS_MarkerSearch extends AbstractSearch
       if (!handledOmimTerms.contains(hit.get(IndexConstants.COL_DB_KEY))) {
         markerVocabMatch = markerVocabMatchFactory.getMatch(hit);
         markerVocabMatch.flagAsTier3();
-        markerExactTypeScorer.addScore(markerVocabMatch);
+        gfExactTypeScorer.addScore(markerVocabMatch);
         omimMatches.add(markerVocabMatch);
         handledOmimTerms.add( markerVocabMatch.getDbKey() );
 
@@ -825,7 +880,7 @@ public class QS_MarkerSearch extends AbstractSearch
       if (!handledOmimOrthoTerms.contains(hit.get(IndexConstants.COL_DB_KEY))) {
         markerVocabMatch = markerVocabMatchFactory.getMatch(hit);
         markerVocabMatch.flagAsTier3();
-        markerExactTypeScorer.addScore(markerVocabMatch);
+        gfExactTypeScorer.addScore(markerVocabMatch);
         omimOrthoMatches.add(markerVocabMatch);
         handledOmimOrthoTerms.add( markerVocabMatch.getDbKey() );
 
@@ -839,7 +894,7 @@ public class QS_MarkerSearch extends AbstractSearch
       if (!handledPirsfTerms.contains(hit.get(IndexConstants.COL_DB_KEY))) {
         markerVocabMatch = markerVocabMatchFactory.getMatch(hit);
         markerVocabMatch.flagAsTier3();
-        markerExactTypeScorer.addScore(markerVocabMatch);
+        gfExactTypeScorer.addScore(markerVocabMatch);
         pirsfMatches.add(markerVocabMatch);
         handledPirsfTerms.add( markerVocabMatch.getDbKey() );
 
@@ -853,7 +908,7 @@ public class QS_MarkerSearch extends AbstractSearch
       if (!handledIpTerms.contains(hit.get(IndexConstants.COL_DB_KEY))) {
         markerVocabMatch = markerVocabMatchFactory.getMatch(hit);
         markerVocabMatch.flagAsTier3();
-        markerExactTypeScorer.addScore(markerVocabMatch);
+        gfExactTypeScorer.addScore(markerVocabMatch);
         ipMatches.add(markerVocabMatch);
         handledIpTerms.add( markerVocabMatch.getDbKey() );
 
@@ -861,7 +916,7 @@ public class QS_MarkerSearch extends AbstractSearch
     }
 
     else { // shouldn't be hitting this part of the code, so log value
-      logger.error("***Bad Object Type in Large Token Vocab MarkerSearch ->"
+      logger.error("***Bad Object Type in Large Token Vocab GenomeFeatureSearch ->"
         + hit.get(IndexConstants.COL_VOCABULARY) );
     }
   }
@@ -875,15 +930,22 @@ public class QS_MarkerSearch extends AbstractSearch
     // defined outside loops to avoid repeated instantiation of references
     Hit hit;
     String termKey;
-    MarkerMatch markerMatch;
+    MarkerNomenMatch markerNomenMatch;
+    AlleleNomenMatch alleleNomenMatch;
     MarkerVocabMatch markerVocabMatch;
     List childIDs;
     String childTermKey;
 
     // execute the search, and handle each textual match
     Hits hits =  indexAccessor.searchMarkerOr(searchInput);
-    logger.debug("MarkerSearch.searchOrMatches number of hits ->" + hits.length());
+    logger.debug("GenomeFeatureSearch.searchOrMatches number of hits ->" + hits.length());
     for (Iterator iter = hits.iterator(); iter.hasNext();) {
+
+	  // ensure we're not over the max allowable number of and/or matches
+	  if (matchCounter > maxMatches) {
+		break;
+	  }
+	  matchCounter++;
 
       hit = (Hit) iter.next();
 
@@ -892,10 +954,18 @@ public class QS_MarkerSearch extends AbstractSearch
       {
           // marker nomen
           if (hit.get(IndexConstants.COL_OBJ_TYPE).equals(IndexConstants.MARKER_TYPE_NAME)) {
-              markerMatch = markerMatchFactory.getMatch(hit);
-              markerOrWeightTypeScorer.addLuceneWeight(markerMatch);
-              markerOrTypeScorer.addScore(markerMatch);
-              nomenMatches.add(markerMatch);
+              markerNomenMatch = markerNomenMatchFactory.getMatch(hit);
+              gfOrWeightTypeScorer.addLuceneWeight(markerNomenMatch);
+              gfOrTypeScorer.addScore(markerNomenMatch);
+              markerNomenMatches.add(markerNomenMatch);
+          }
+
+          // allele hit
+          else if (hit.get(IndexConstants.COL_OBJ_TYPE).equals(IndexConstants.ALLELE_TYPE_NAME)) {
+              alleleNomenMatch = alleleNomenMatchFactory.getMatch(hit);
+              gfOrWeightTypeScorer.addLuceneWeight(alleleNomenMatch);
+              gfOrTypeScorer.addScore(alleleNomenMatch);
+              alleleNomenMatches.add(alleleNomenMatch);
           }
 
           // anatomical dictionary hit
@@ -1037,7 +1107,7 @@ public class QS_MarkerSearch extends AbstractSearch
           }
 
           else { // shouldn't be hitting this part of the code, so log value
-            logger.error("***Bad Object Type in 'OR' MarkerSearch ->"
+            logger.error("***Bad Object Type in 'OR' GenomeFeatureSearch ->"
               + hit.get(IndexConstants.COL_OBJ_TYPE) );
           }
       }
@@ -1055,16 +1125,19 @@ public class QS_MarkerSearch extends AbstractSearch
   * already been created, it will be returned.  If not, a new one is
   * generated (and db_key set), placed in the result set, and then returned.
   */
-  private QS_MarkerResult getMarker(String markerKey) {
+  private GenomeFeatureResult getGfResult(String objectType, String objectKey) {
 
-    if (searchResults.containsKey(markerKey)) {
-        return (QS_MarkerResult)searchResults.get(markerKey);
+	String cacheKey = objectType + "_" + objectKey;
+
+    if (searchResults.containsKey(cacheKey)) {
+        return (GenomeFeatureResult)searchResults.get(cacheKey);
     }
     else {
-        QS_MarkerResult marker = new QS_MarkerResult(config);
-        marker.setDbKey(markerKey);
-        searchResults.put(marker.getDbKey(), marker);
-        return marker;
+        GenomeFeatureResult gfResult = new GenomeFeatureResult(config);
+        gfResult.setDbKey(objectKey);
+        gfResult.setGenomeFeatureType(objectType);
+        searchResults.put(cacheKey, gfResult);
+        return gfResult;
     }
   }
 
@@ -1074,20 +1147,33 @@ public class QS_MarkerSearch extends AbstractSearch
 
   private void assignMatches() {
 
+	String MARKER_TYPE = "MARKER";
+	String ALLELE_TYPE = "ALLELE";
+
     List markerKeys;
-    MarkerMatch markerMatch;
+    List alleleKeys;
+    MarkerNomenMatch markerNomenMatch;
+    AlleleNomenMatch alleleMatch;
     MarkerVocabMatch markerVocabMatch;
-    MarkerMatch nm;
-    QS_MarkerResult thisMarker;
+    MarkerNomenMatch nm;
+    GenomeFeatureResult thisGenomeFeature;
 
     // assign exact input string matches to their markers
     if (incNomen) {
 
-        for (Iterator iter = nomenMatches.iterator(); iter.hasNext();) {
-            markerMatch = (MarkerMatch)iter.next();
-            thisMarker = getMarker( markerMatch.getDbKey() );
-            thisMarker.addNomenMatch(markerMatch);
+        for (Iterator iter = markerNomenMatches.iterator(); iter.hasNext();) {
+            markerNomenMatch = (MarkerNomenMatch)iter.next();
+            thisGenomeFeature = getGfResult(MARKER_TYPE, markerNomenMatch.getDbKey() );
+            thisGenomeFeature.addMarkerNomenMatch(markerNomenMatch);
         }
+
+        for (Iterator iter = alleleNomenMatches.iterator(); iter.hasNext();) {
+            alleleMatch = (AlleleNomenMatch)iter.next();
+            thisGenomeFeature = getGfResult(ALLELE_TYPE, alleleMatch.getDbKey() );
+            thisGenomeFeature.addAlleleNomenMatch(alleleMatch);
+        }
+
+
     }
 
     // assign AD matches to their markers
@@ -1097,8 +1183,8 @@ public class QS_MarkerSearch extends AbstractSearch
             markerKeys = markerVocabSearchCache.getAdAnnotMarkers(markerVocabMatch.getDbKey());
             if (markerKeys != null) {
                 for (Iterator mrkKeyIter = markerKeys.iterator(); mrkKeyIter.hasNext();) {
-                    thisMarker = getMarker((String)mrkKeyIter.next());
-                    thisMarker.addAdMatch(markerVocabMatch);
+                    thisGenomeFeature = getGfResult(MARKER_TYPE, (String)mrkKeyIter.next() );
+                    thisGenomeFeature.addAdMatch(markerVocabMatch);
                 }
             }
         }
@@ -1111,22 +1197,23 @@ public class QS_MarkerSearch extends AbstractSearch
             markerKeys = markerVocabSearchCache.getGoAnnotMarkers(markerVocabMatch.getDbKey());
             if (markerKeys != null) {
                 for (Iterator mrkKeyIter = markerKeys.iterator(); mrkKeyIter.hasNext();) {
-                    thisMarker = getMarker((String)mrkKeyIter.next());
-                    thisMarker.addGoMatch(markerVocabMatch);
+                    thisGenomeFeature = getGfResult(MARKER_TYPE, (String)mrkKeyIter.next() );
+                    thisGenomeFeature.addGoMatch(markerVocabMatch);
                 }
             }
         }
     }
 
+
     // assign MP matches to their markers
     if (incMp) {
         for (Iterator iter = mpMatches.iterator(); iter.hasNext();) {
             markerVocabMatch = (MarkerVocabMatch)iter.next();
-            markerKeys = markerVocabSearchCache.getMpAnnotMarkers(markerVocabMatch.getDbKey());
-            if (markerKeys != null) {
-                for (Iterator mrkKeyIter = markerKeys.iterator(); mrkKeyIter.hasNext();) {
-                    thisMarker = getMarker((String)mrkKeyIter.next());
-                    thisMarker.addMpMatch(markerVocabMatch);
+            alleleKeys = markerVocabSearchCache.getMpAnnotAlleles(markerVocabMatch.getDbKey());
+            if (alleleKeys != null) {
+                for (Iterator mrkKeyIter = alleleKeys.iterator(); mrkKeyIter.hasNext();) {
+                    thisGenomeFeature = getGfResult(ALLELE_TYPE, (String)mrkKeyIter.next() );
+                    thisGenomeFeature.addMpMatch(markerVocabMatch);
                 }
             }
         }
@@ -1136,11 +1223,11 @@ public class QS_MarkerSearch extends AbstractSearch
     if (incOmim) {
         for (Iterator iter = omimMatches.iterator(); iter.hasNext();) {
             markerVocabMatch = (MarkerVocabMatch)iter.next();
-            markerKeys = markerVocabSearchCache.getOmimAnnotMarkers(markerVocabMatch.getDbKey());
-            if (markerKeys != null) {
-                for (Iterator mrkKeyIter = markerKeys.iterator(); mrkKeyIter.hasNext();) {
-                    thisMarker = getMarker((String)mrkKeyIter.next());
-                    thisMarker.addOmimMatch(markerVocabMatch);
+            alleleKeys = markerVocabSearchCache.getOmimAnnotAlleles(markerVocabMatch.getDbKey());
+            if (alleleKeys != null) {
+                for (Iterator mrkKeyIter = alleleKeys.iterator(); mrkKeyIter.hasNext();) {
+                    thisGenomeFeature = getGfResult(ALLELE_TYPE, (String)mrkKeyIter.next() );
+                    thisGenomeFeature.addOmimMatch(markerVocabMatch);
                 }
             }
         }
@@ -1153,8 +1240,8 @@ public class QS_MarkerSearch extends AbstractSearch
             markerKeys = markerVocabSearchCache.getOmimOrthoAnnotMarkers(markerVocabMatch.getDbKey());
             if (markerKeys != null) {
                 for (Iterator mrkKeyIter = markerKeys.iterator(); mrkKeyIter.hasNext();) {
-                    thisMarker = getMarker((String)mrkKeyIter.next());
-                    thisMarker.addOmimOrthoMatch(markerVocabMatch);
+                    thisGenomeFeature = getGfResult(MARKER_TYPE, (String)mrkKeyIter.next() );
+                    thisGenomeFeature.addOmimOrthoMatch(markerVocabMatch);
                 }
             }
         }
@@ -1167,8 +1254,8 @@ public class QS_MarkerSearch extends AbstractSearch
             markerKeys = markerVocabSearchCache.getPsAnnotMarkers(markerVocabMatch.getDbKey());
             if (markerKeys != null) {
                 for (Iterator mrkKeyIter = markerKeys.iterator(); mrkKeyIter.hasNext();) {
-                    thisMarker = getMarker((String)mrkKeyIter.next());
-                    thisMarker.addPirsfMatch(markerVocabMatch);
+                    thisGenomeFeature = getGfResult(MARKER_TYPE, (String)mrkKeyIter.next() );
+                    thisGenomeFeature.addPirsfMatch(markerVocabMatch);
                 }
             }
         }
@@ -1181,8 +1268,8 @@ public class QS_MarkerSearch extends AbstractSearch
             markerKeys = markerVocabSearchCache.getIpAnnotMarkers(markerVocabMatch.getDbKey());
             if (markerKeys != null) {
                 for (Iterator mrkKeyIter = markerKeys.iterator(); mrkKeyIter.hasNext();) {
-                    thisMarker = getMarker((String)mrkKeyIter.next());
-                    thisMarker.addIpMatch(markerVocabMatch);
+                    thisGenomeFeature = getGfResult(MARKER_TYPE, (String)mrkKeyIter.next() );
+                    thisGenomeFeature.addIpMatch(markerVocabMatch);
                 }
             }
         }

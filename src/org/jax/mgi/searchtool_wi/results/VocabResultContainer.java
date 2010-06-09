@@ -5,25 +5,25 @@ import java.util.*;
 
 import org.jax.mgi.shr.searchtool.IndexConstants;
 
-public class QS_VocabResultContainer extends ResultContainer {
+public class VocabResultContainer extends ResultContainer {
 
-  HashMap<String, QS_VocabResult> goMappedResults = new HashMap<String, QS_VocabResult>();
-  HashMap<String, QS_VocabResult> omimMappedResults = new HashMap<String, QS_VocabResult>();
-  HashMap<String, QS_VocabResult> adMappedResults = new HashMap<String, QS_VocabResult>();
-  HashMap<String, QS_VocabResult> mpMappedResults = new HashMap<String, QS_VocabResult>();
-  HashMap<String, QS_VocabResult> psMappedResults = new HashMap<String, QS_VocabResult>();
-  HashMap<String, QS_VocabResult> ipMappedResults = new HashMap<String, QS_VocabResult>();
+  HashMap<String, VocabResult> goMappedResults = new HashMap<String, VocabResult>();
+  HashMap<String, VocabResult> omimMappedResults = new HashMap<String, VocabResult>();
+  HashMap<String, VocabResult> adMappedResults = new HashMap<String, VocabResult>();
+  HashMap<String, VocabResult> mpMappedResults = new HashMap<String, VocabResult>();
+  HashMap<String, VocabResult> psMappedResults = new HashMap<String, VocabResult>();
+  HashMap<String, VocabResult> ipMappedResults = new HashMap<String, VocabResult>();
 
   // ////////////
   // Constructor
   // ////////////
-  public QS_VocabResultContainer(List l) {
+  public VocabResultContainer(List l) {
 
       super(l);
 
-      for (Iterator<QS_VocabResult> iter = l.iterator(); iter.hasNext();) {
+      for (Iterator<VocabResult> iter = l.iterator(); iter.hasNext();) {
           // seperate the score-sorted list into individual vocabs
-          QS_VocabResult current = iter.next();
+          VocabResult current = iter.next();
           if (current.getVocabulary().equals(IndexConstants.GO_TYPE_NAME)) {
               goMappedResults.put(current.getDbKey().toString(), current);
           } else if (current.getVocabulary().equals(IndexConstants.OMIM_TYPE_NAME)) {
@@ -42,33 +42,33 @@ public class QS_VocabResultContainer extends ResultContainer {
   }
 
   // GO
-  public QS_VocabResult getGoByKey(String key) {
-      return (QS_VocabResult) goMappedResults.get(key);
+  public VocabResult getGoByKey(String key) {
+      return (VocabResult) goMappedResults.get(key);
   }
 
   // Omim
-  public QS_VocabResult getOmimByKey(String key) {
-      return (QS_VocabResult) omimMappedResults.get(key);
+  public VocabResult getOmimByKey(String key) {
+      return (VocabResult) omimMappedResults.get(key);
   }
 
   // MP
-  public QS_VocabResult getMpByKey(String key) {
-      return (QS_VocabResult) mpMappedResults.get(key);
+  public VocabResult getMpByKey(String key) {
+      return (VocabResult) mpMappedResults.get(key);
   }
 
   // AD
-  public QS_VocabResult getAdByKey(String key) {
-      return (QS_VocabResult) adMappedResults.get(key);
+  public VocabResult getAdByKey(String key) {
+      return (VocabResult) adMappedResults.get(key);
   }
 
   // PIRSF
-  public QS_VocabResult getPsByKey(String key) {
-      return (QS_VocabResult) psMappedResults.get(key);
+  public VocabResult getPsByKey(String key) {
+      return (VocabResult) psMappedResults.get(key);
   }
 
   // Inter Prot
-  public QS_VocabResult getIpByKey(String key) {
-      return (QS_VocabResult) ipMappedResults.get(key);
+  public VocabResult getIpByKey(String key) {
+      return (VocabResult) ipMappedResults.get(key);
   }
 
   // /////////////////

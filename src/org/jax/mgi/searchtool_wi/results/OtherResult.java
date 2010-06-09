@@ -20,7 +20,7 @@ import org.jax.mgi.searchtool_wi.matches.OtherMatch;
 * See AbstractResult for additional implementation details, and Search Tool
 * wiki documentation for design and usage patterns
 */
-public class QS_OtherResult extends AbstractResult {
+public class OtherResult extends AbstractResult {
 
   // uniquely identify this object
   private String accId;
@@ -47,7 +47,7 @@ public class QS_OtherResult extends AbstractResult {
   /**
   * Constructs the MarkerResult, calling the parent class constructor with config
   */
-  public QS_OtherResult(Configuration c) {
+  public OtherResult(Configuration c) {
       super(c);
   }
 

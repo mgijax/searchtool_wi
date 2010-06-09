@@ -4,7 +4,7 @@ package org.jax.mgi.searchtool_wi.lookup;
 import java.util.*;
 
 // Quick Search Classes
-import org.jax.mgi.searchtool_wi.results.QS_MarkerResultContainer;
+import org.jax.mgi.searchtool_wi.results.GenomeFeatureResultContainer;
 
 /**
 * In-memory cache to hold marker result-sets of/for user search strings.
@@ -12,7 +12,7 @@ import org.jax.mgi.searchtool_wi.results.QS_MarkerResultContainer;
 * All accessor methods to this object should be synchronized.  Use care to
 * minimize logic, avoiding possible access bottle-necks to this class.
 */
-public class QS_MarkerResultCache {
+public class GenomeFeatureResultCache {
 
   //--------//
   // Fields
@@ -22,12 +22,12 @@ public class QS_MarkerResultCache {
   private LinkedList markerContainerOrderQue;
 
   // Time-ordered list of input strings
-  private Map<String,QS_MarkerResultContainer> markerResultContainers;
+  private Map<String,GenomeFeatureResultContainer> markerResultContainers;
 
   //-------------//
   // Constructor //
   //-------------//
-  public QS_MarkerResultCache(String resultCacheSizeStr)
+  public GenomeFeatureResultCache(String resultCacheSizeStr)
   {
     int resultCacheSize = new Integer(resultCacheSizeStr).intValue();
 
@@ -40,7 +40,7 @@ public class QS_MarkerResultCache {
     }
 
     // Initialize holder of result-sets
-    markerResultContainers = new HashMap<String, QS_MarkerResultContainer>();
+    markerResultContainers = new HashMap<String, GenomeFeatureResultContainer>();
   }
 
   //-------------------------//
@@ -50,21 +50,21 @@ public class QS_MarkerResultCache {
   /**
   * Retrieves a marker result-set, if it's cached
   * @param user's input string
-  * @return a QS_MarkerResultContainer, or NULL is none found in cache
+  * @return a GenomeFeatureResultContainer, or NULL is none found in cache
   */
-  public synchronized QS_MarkerResultContainer getMarkerContainer(String inputString) {
+  public synchronized GenomeFeatureResultContainer getMarkerContainer(String inputString) {
     return markerResultContainers.get(inputString);
   }
 
   /**
   * Add marker result-set to cache
   * @param String - User's input string
-  * @param QS_MarkerResultContainer - Result set to cache
+  * @param GenomeFeatureResultContainer - Result set to cache
   *
   * Note that no logic is used; leveraging speed of map-based storage and
   * que's end-point access (for trimming out the oldest results)
   */
-  public synchronized void addMarkerContainer (String inputStr, QS_MarkerResultContainer mrc) {
+  public synchronized void addMarkerContainer (String inputStr, GenomeFeatureResultContainer mrc) {
 
     // adding entries to the que and mapping
     markerResultContainers.put(inputStr, mrc);

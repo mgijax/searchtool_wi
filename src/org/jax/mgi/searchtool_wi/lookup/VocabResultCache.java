@@ -4,7 +4,7 @@ package org.jax.mgi.searchtool_wi.lookup;
 import java.util.*;
 
 // Quick Search Classes
-import org.jax.mgi.searchtool_wi.results.QS_VocabResultContainer;
+import org.jax.mgi.searchtool_wi.results.VocabResultContainer;
 
 /**
 * In-memory cache to hold vocab result-sets of/for user search strings.
@@ -12,7 +12,7 @@ import org.jax.mgi.searchtool_wi.results.QS_VocabResultContainer;
 * All accessor methods to this object should be synchronized.  Use care to
 * minimize logic, avoiding possible access bottle-necks to this class.
 */
-public class QS_VocabResultCache {
+public class VocabResultCache {
 
   //--------//
   // Fields
@@ -22,12 +22,12 @@ public class QS_VocabResultCache {
   private LinkedList vocabContainerOrderQue;
 
   // Time-ordered list of input strings
-  private Map<String,QS_VocabResultContainer> vocabResultContainers;
+  private Map<String,VocabResultContainer> vocabResultContainers;
 
   //-------------//
   // Constructor //
   //-------------//
-  public QS_VocabResultCache(String resultCacheSizeStr)
+  public VocabResultCache(String resultCacheSizeStr)
   {
     int resultCacheSize = new Integer(resultCacheSizeStr).intValue();
 
@@ -40,7 +40,7 @@ public class QS_VocabResultCache {
     }
 
     // Initialize holder of result-sets
-    vocabResultContainers = new HashMap<String, QS_VocabResultContainer>();
+    vocabResultContainers = new HashMap<String, VocabResultContainer>();
   }
 
   //-------------------------//
@@ -50,21 +50,21 @@ public class QS_VocabResultCache {
   /**
   * Retrieves a vocab result-set, if it's cached
   * @param user's input string
-  * @return a QS_VocabResultContainer, or NULL is none found in cache
+  * @return a VocabResultContainer, or NULL is none found in cache
   */
-  public synchronized QS_VocabResultContainer getVocabContainer(String inputString) {
+  public synchronized VocabResultContainer getVocabContainer(String inputString) {
     return vocabResultContainers.get(inputString);
   }
 
   /**
   * Add vocab result-set to cache
   * @param String - User's input string
-  * @param QS_VocabResultContainer - Result set to cache
+  * @param VocabResultContainer - Result set to cache
   *
   * Note that no logic is used; leveraging speed of map-based storage and
   * que's end-point access (for trimming out the oldest results)
   */
-  public synchronized void addVocabContainer (String inputStr, QS_VocabResultContainer vrc) {
+  public synchronized void addVocabContainer (String inputStr, VocabResultContainer vrc) {
 
     // adding entries to the que and mapping
     vocabResultContainers.put(inputStr, vrc);

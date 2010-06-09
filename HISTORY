@@ -1,3 +1,15 @@
+TAG: searchtool_wi-4-3-5-1
+DATE: 6/8/10
+STAFF: pf
+CHANGES: 4.35 release tags
+
+TAG: searchtool_wi-tr9983-3
+TAG: searchtool_wi-tr9983-2
+TAG: searchtool_wi-tr9983-1
+DATE: 5/20/10
+STAFF:pf
+CHANGES: alleles-in-searchtool dev tags
+
 TAG: searchtool_wi-tr9983-BP
 DATE: 1/6/10
 STAFF: pf
@@ -7,18 +19,6 @@ TAG: searchtool_wi-4-3-2-0
 DATE: 12/2/09
 STAFF:pf
 CHANGES: 4.32 release tags
-
-TAG: searchtool_wi-tr9924-3
-TAG: searchtool_wi-tr9924-2
-TAG: searchtool_wi-tr9924-1
-DATE: 11/20/09
-STAFF:pf
-CHANGES: dev tags
-
-TAG: searchtool_wi-tr9923-BP
-DATE: 11/20/09
-STAFF: pf
-CHANGES: branch point for tr9923
 
 TAG: searchtool_wi-4-2-0-x )1 -> 5)
 DATE: 12/1/2008 -> 12/19/2008

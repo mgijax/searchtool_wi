@@ -14,7 +14,7 @@ import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.TermQuery;
 import org.jax.mgi.searchtool_wi.dataAccess.IndexSearcherContainer;
 import org.jax.mgi.searchtool_wi.exception.QuickSearchException;
-import org.jax.mgi.searchtool_wi.results.QS_OtherResult;
+import org.jax.mgi.searchtool_wi.results.OtherResult;
 import org.jax.mgi.shr.config.Configuration;
 import org.jax.mgi.shr.searchtool.IndexConstants;
 
@@ -96,8 +96,8 @@ public class OtherDisplayLookup
      * Return the otherDisplay information if its in the cache, if not look it
      * up, and add it to the cache, and then return it.
      */
-    
-    public OtherDisplay getOther(QS_OtherResult otherResult)
+
+    public OtherDisplay getOther(OtherResult otherResult)
     {
         OtherDisplay thisOtherDisplay = (OtherDisplay)otherCacheMap.get(otherResult.getDbKey()+"::"+otherResult.getDataType());
 
@@ -118,7 +118,7 @@ public class OtherDisplayLookup
      * @param type
      * @return
      */
-    
+
     private OtherDisplay lookupOther(String dbKey, String type)
     {
 

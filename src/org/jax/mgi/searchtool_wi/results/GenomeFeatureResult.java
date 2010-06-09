@@ -10,12 +10,12 @@ import org.apache.lucene.search.*;
 import org.jax.mgi.shr.config.Configuration;
 
 // searchtool classes
-import org.jax.mgi.searchtool_wi.lookup.MarkerDisplayCache;
+import org.jax.mgi.searchtool_wi.lookup.GenomeFeatureDisplayCache;
 import org.jax.mgi.searchtool_wi.lookup.MarkerVocabSearchCache;
 import org.jax.mgi.searchtool_wi.matches.AbstractMatch;
-import org.jax.mgi.searchtool_wi.matches.MarkerMatch;
 import org.jax.mgi.searchtool_wi.matches.MatchSorter;
-import org.jax.mgi.searchtool_wi.matches.MarkerMatch;
+import org.jax.mgi.searchtool_wi.matches.MarkerNomenMatch;
+import org.jax.mgi.searchtool_wi.matches.AlleleNomenMatch;
 import org.jax.mgi.searchtool_wi.matches.MarkerVocabMatch;
 import org.jax.mgi.searchtool_wi.utils.ScoreConstants;
 
@@ -25,11 +25,14 @@ import org.jax.mgi.searchtool_wi.utils.ScoreConstants;
 * See AbstractResult for additional implementation details, and Search Tool
 * wiki documentation for design and usage patterns
 */
-public class QS_MarkerResult extends AbstractResult {
+public class GenomeFeatureResult extends AbstractResult {
 
   // -------//
   // Fields
   // -------//
+
+  // type of genomic feature (marker, allele, etc...)
+  private String genomeFeatureType = "";
 
   // number of total matches
   private int matchCount;
@@ -39,8 +42,10 @@ public class QS_MarkerResult extends AbstractResult {
   private List allVocMatches;
 
   // lists of specific types of matches
-  private  ArrayList<MarkerMatch> nomenMatches
-    = new ArrayList<MarkerMatch>();
+  private ArrayList<MarkerNomenMatch> markerNomenMatches
+    = new ArrayList<MarkerNomenMatch>();
+  private ArrayList<AlleleNomenMatch> alleleNomenMatches
+    = new ArrayList<AlleleNomenMatch>();
   private ArrayList<MarkerVocabMatch> adMatches
     = new ArrayList<MarkerVocabMatch>();
   private ArrayList<MarkerVocabMatch> goMatches
@@ -63,18 +68,19 @@ public class QS_MarkerResult extends AbstractResult {
   private Map   resultBoostMap  = ScoreConstants.getMarkerResultBoostMap();
 
   // matches
-  private MarkerVocabMatch bestVocabMatch;
-  private MarkerMatch bestNomenMatch;
+  private AbstractMatch bestVocabMatch;
+  private AbstractMatch bestNomenMatch;
 
   // data lookups
   private static MarkerVocabSearchCache markerVocabSearchCache
     = MarkerVocabSearchCache.getMarkerVocabSearchCache();
-  private static MarkerDisplayCache markerDisplayCache
-    = MarkerDisplayCache.getMarkerDisplayCache();
+  private static GenomeFeatureDisplayCache gfDisplayCache
+    = GenomeFeatureDisplayCache.getGenomeFeatureDisplayCache();
 
   // holds unique key values for matches; used to avoid dupe hits across
   // different indexes (exact/inexact)
-  private HashSet handledNomenMatches   = new HashSet();
+  private HashSet handledMarkerNomenMatches   = new HashSet();
+  private HashSet handledAlleleNomenMatches   = new HashSet();
 
   // -------------//
   // Constructor //
@@ -83,7 +89,7 @@ public class QS_MarkerResult extends AbstractResult {
   /**
   * Constructs the MarkerResult, calling the parent class constructor with config
   */
-  public QS_MarkerResult(Configuration c) {
+  public GenomeFeatureResult(Configuration c) {
       super(c);
   }
 
@@ -104,7 +110,7 @@ public class QS_MarkerResult extends AbstractResult {
   * if the scores (from getScore) are the same
   */
   public String getAlphaSortBy() {
-    return markerDisplayCache.getMarker(this).getSymbol().toLowerCase();
+    return gfDisplayCache.getGenomeFeature(this).getSymbol().toLowerCase();
   }
 
   /**
@@ -123,8 +129,11 @@ public class QS_MarkerResult extends AbstractResult {
   public void finalizeResult() {
 
     // sort our match arrays
-    if (nomenMatches.size() > 0) {
-        Collections.sort(nomenMatches, matchSorter);
+    if (markerNomenMatches.size() > 0) {
+        Collections.sort(markerNomenMatches, matchSorter);
+    }
+    if (alleleNomenMatches.size() > 0) {
+        Collections.sort(alleleNomenMatches, matchSorter);
     }
     if (adMatches.size() > 0) {
         Collections.sort(adMatches, matchSorter);
@@ -155,10 +164,11 @@ public class QS_MarkerResult extends AbstractResult {
         bestVocabScore = bestVocabMatch.getScore();
     }
 
+
     // Best Nomen match
     allNomenMatches = getAllMarkerNomenMatches();
     if (allNomenMatches.size() > 0) {
-        bestNomenMatch = (MarkerMatch)allNomenMatches.get(0);
+        bestNomenMatch = (AbstractMatch)allNomenMatches.get(0);
         bestNomenScore = bestNomenMatch.getScore();
     }
 
@@ -191,19 +201,70 @@ public class QS_MarkerResult extends AbstractResult {
     }
   }
 
+  // -------------------//
+  // Genome Feature Type
+  // -------------------//
+
+  public void setGenomeFeatureType(String s) {
+    genomeFeatureType = s;
+  }
+  public String getGenomeFeatureType() {
+    return genomeFeatureType;
+  }
+
+  public boolean isMarker() {
+    boolean b = false;
+    if (genomeFeatureType.equals("MARKER")) {
+        b = true;
+    }
+    return b;
+  }
+  public boolean isAllele() {
+    boolean b = false;
+    if (genomeFeatureType.equals("ALLELE")) {
+        b = true;
+    }
+    return b;
+  }
+
+  // ----------//
+  // Cache key
+  // ----------//
+  public String getCacheKey() {
+    return genomeFeatureType + "_" + dbKey;
+  }
+
+  /**
+  * Returns the result key of the object hit; overridding method in Abstract
+  * @return String - the result key of object hit
+  */
+  public String getResultKey() {
+    return getCacheKey();
+  }
 
   // ----------------//
-  // Marker Matches
+  // Nomen Matches
   // ----------------//
 
   /**
   * Adds a nomen match to this result
-  * @param MarkerMatch
+  * @param MarkerNomenMatch
   */
-  public void addNomenMatch(MarkerMatch nm) {
-    if (!handledNomenMatches.contains( nm.getUniqueKey() ) ) {
-        nomenMatches.add(nm);
-        handledNomenMatches.add( nm.getUniqueKey() );
+  public void addMarkerNomenMatch(MarkerNomenMatch nm) {
+    if (!handledMarkerNomenMatches.contains( nm.getUniqueKey() ) ) {
+        markerNomenMatches.add(nm);
+        handledMarkerNomenMatches.add( nm.getUniqueKey() );
+    }
+  }
+
+  /**
+  * Adds a nomen match to this result
+  * @param AlleleNomenMatch
+  */
+  public void addAlleleNomenMatch(AlleleNomenMatch nm) {
+    if (!handledAlleleNomenMatches.contains( nm.getUniqueKey() ) ) {
+        alleleNomenMatches.add(nm);
+        handledAlleleNomenMatches.add( nm.getUniqueKey() );
     }
   }
 
@@ -212,7 +273,7 @@ public class QS_MarkerResult extends AbstractResult {
   * @return List of Match Objects
   */
   public List getNomenMatches() {
-    return nomenMatches;
+    return markerNomenMatches;
   }
 
   /**
@@ -221,7 +282,7 @@ public class QS_MarkerResult extends AbstractResult {
   */
   public boolean hasMarkerMatches() {
     boolean b = false;
-    if (nomenMatches.size() > 0) {
+    if (markerNomenMatches.size() > 0) {
         b = true;
     }
     return b;
@@ -378,13 +439,14 @@ public class QS_MarkerResult extends AbstractResult {
   }
 
   /**
-  * Returns all marker nomenclature matches
+  * Returns all nomenclature matches
   * @return List of Match Objects
   */
   public List getAllMarkerNomenMatches() {
     if (allNomenMatches == null) {
       allNomenMatches = new ArrayList();
-      allNomenMatches.addAll(nomenMatches);
+      allNomenMatches.addAll(markerNomenMatches);
+      allNomenMatches.addAll(alleleNomenMatches);
       Collections.sort(allNomenMatches, matchSorter);
     }
     return allNomenMatches;

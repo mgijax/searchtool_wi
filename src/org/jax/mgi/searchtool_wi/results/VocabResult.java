@@ -22,7 +22,7 @@ import org.jax.mgi.shr.searchtool.IndexConstants;
 * See AbstractResult for additional implementation details, and Search Tool
 * wiki documentation for design and usage patterns
 */
-public class QS_VocabResult extends AbstractResult {
+public class VocabResult extends AbstractResult {
 
   // --------//
   // Fields
@@ -57,7 +57,7 @@ public class QS_VocabResult extends AbstractResult {
   /**
   * Constructs the MarkerResult, calling the parent class constructor with config
   */
-  public QS_VocabResult(Configuration c) {
+  public VocabResult(Configuration c) {
       super(c);
   }
 

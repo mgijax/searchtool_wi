@@ -4,28 +4,37 @@
 
 <!--============================================ Setup Scriptlet Variables -->
 <%
-    // get results for this request
-    QS_MarkerResultContainer markerResultContainer
-      = (QS_MarkerResultContainer)request.getAttribute("MarkerResultContainer");
+  // get results for this request
+  GenomeFeatureResultContainer genomeFeatureResultContainer
+    = (GenomeFeatureResultContainer)request.getAttribute("MarkerResultContainer");
 
-    // derive needed data from passed request arrributes
-    String markerKey = searchInput.getParameter("markerKey");
-    QS_MarkerResult thisMarkerResult
-      = markerResultContainer.getMarkerByKey(markerKey);
-    MarkerDisplay thisMarkerDisplay
-      = markerDisplayCache.getMarker(thisMarkerResult);
+  // derive needed data from passed request arrributes
+  String resultKey = searchInput.getParameter("resultKey");
+  GenomeFeatureResult thisGenomeFeatureResult
+    = genomeFeatureResultContainer.getResultByKey(resultKey);
+  GenomeFeatureDisplay thisGenomeFeatureDisplay
+    = gfDisplayCache.getGenomeFeature(thisGenomeFeatureResult);
 
-    // matches for this marker result
-    List nomenMatches = thisMarkerResult.getAllMarkerNomenMatches();
-    List vocabMatches = thisMarkerResult.getAllMarkerVocabMatches();
+  // matches for this marker result
+  List nomenMatches = thisGenomeFeatureResult.getAllMarkerNomenMatches();
+  List vocabMatches = thisGenomeFeatureResult.getAllMarkerVocabMatches();
 
-    // colors and color iteration
-    String rowClass = "";
-    StringAlternator bucketRowAlternator
-        = new StringAlternator( "qsBucketRow1", "qsBucketRow2" );
+  // colors and color iteration
+  String rowClass = "";
+  StringAlternator bucketRowAlternator
+      = new StringAlternator( "qsBucketRow1", "qsBucketRow2" ); 
 
-    // misc values used in scriptlets below
-    String matchScore = "";
+  // misc values used in scriptlets below
+  String matchScore = "";
+
+  // URLS
+  String detailPageUrl = "";
+  if ( thisGenomeFeatureResult.isMarker() ) {
+    detailPageUrl = javawi_url + "WIFetch?page=markerDetail&key=" + thisGenomeFeatureResult.getDbKey();
+  }
+  else if ( thisGenomeFeatureResult.isAllele() ) {
+    detailPageUrl = javawi_url + "WIFetch?page=alleleDetail&key=" + thisGenomeFeatureResult.getDbKey();
+  }
 %>
 
 
@@ -43,7 +52,7 @@
 <!--========================================================== Page Header -->
 <div id="detailTitleBarWrapper">
   <span class="fontSize22 fontBold">
-    All Matches for <%=displayHelper.superscript(thisMarkerDisplay.getSymbol())%>
+    All Matches for <%=displayHelper.superscript(thisGenomeFeatureDisplay.getSymbol())%>
   </span>
 </div>
 
@@ -60,13 +69,13 @@
   </td>
   <td class="whyMatchData" bgcolor="#ffffff">
     <span class="fontSize18 fontBold">
-      <a href="<%=javawi_url%>WIFetch?page=markerDetail&amp;key=<%=thisMarkerDisplay.getDbKey()%>">
-      <%=displayHelper.superscript(thisMarkerDisplay.getSymbol())%></a>
+      <a href="<%=detailPageUrl%>">
+      <%=displayHelper.superscript(thisGenomeFeatureDisplay.getSymbol())%></a>
     </span>
     <br/>
-    <span class="fontBold"><%=displayHelper.superscript(thisMarkerDisplay.getName())%></span>
+    <span class="fontBold"><%=displayHelper.superscript(thisGenomeFeatureDisplay.getName())%></span>
     <br/>
-    <span class="fontBold"><%=thisMarkerDisplay.getMgiId()%></span>
+    <span class="fontBold"><%=thisGenomeFeatureDisplay.getMgiId()%></span>
   </td>
 </tr>
 </table>
@@ -100,7 +109,7 @@
 
 <% // generate a row for each nomen match
 for (Iterator iter = nomenMatches.iterator(); iter.hasNext();) {
-  MarkerMatch thisMatch = (MarkerMatch)iter.next();
+  AbstractMatch thisMatch = (AbstractMatch)iter.next();
   rowClass = bucketRowAlternator.getString();
   if (debug) {matchScore="(" + thisMatch.getScore().toString() + ")";}
 %>

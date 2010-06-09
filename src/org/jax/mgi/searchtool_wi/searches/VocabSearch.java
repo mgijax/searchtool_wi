@@ -17,7 +17,7 @@ import org.apache.lucene.search.*;
 import org.jax.mgi.searchtool_wi.matches.VocabMatch;
 import org.jax.mgi.searchtool_wi.matches.VocabMatchFactory;
 import org.jax.mgi.searchtool_wi.matches.MatchTypeScorer;
-import org.jax.mgi.searchtool_wi.results.QS_VocabResult;
+import org.jax.mgi.searchtool_wi.results.VocabResult;
 import org.jax.mgi.searchtool_wi.utils.SearchInput;
 import org.jax.mgi.searchtool_wi.utils.ScoreConstants;
 import org.jax.mgi.shr.searchtool.IndexConstants;
@@ -26,7 +26,7 @@ import org.jax.mgi.shr.searchtool.IndexConstants;
 * This concrete search is responsible for gathering all data required for
 * the Quick Search to display the "Vocab Bucket"
 */
-public class QS_VocabSearch extends AbstractSearch {
+public class VocabSearch extends AbstractSearch {
 
   //--------//
   // Fields
@@ -34,11 +34,11 @@ public class QS_VocabSearch extends AbstractSearch {
 
   // Set up the logger
   private static Logger logger
-    = Logger.getLogger(QS_VocabSearch.class.getName());
+    = Logger.getLogger(VocabSearch.class.getName());
 
   // results to be returned
-  private HashMap <String, QS_VocabResult> searchResults
-    = new HashMap <String, QS_VocabResult>();
+  private HashMap <String, VocabResult> searchResults
+    = new HashMap <String, VocabResult>();
 
   // both the "and" and the "or" search use the same index; if the have
   // an "and" hit, do not keep the "or" hit for the same document
@@ -56,7 +56,7 @@ public class QS_VocabSearch extends AbstractSearch {
   //--------------//
   // Constructors
   //--------------//
-  public QS_VocabSearch(Configuration c)
+  public VocabSearch(Configuration c)
   {
     super(c);
   }
@@ -108,7 +108,7 @@ public class QS_VocabSearch extends AbstractSearch {
     Hit hit;
     String vocabID;
     VocabMatch vocabMatch;
-    QS_VocabResult vocabResult;
+    VocabResult vocabResult;
 
     // execute the search
     Hits hits =  indexAccessor.searchVocabExactByWholeTerm(searchInput);
@@ -148,7 +148,7 @@ public class QS_VocabSearch extends AbstractSearch {
     Hit hit;
     String vocabID;
     VocabMatch vocabMatch;
-    QS_VocabResult vocabResult;
+    VocabResult vocabResult;
 
     // execute the search
     List idHits =  indexAccessor.searchVocabAccIDByLargeToken(searchInput);
@@ -189,7 +189,7 @@ public class QS_VocabSearch extends AbstractSearch {
     throws Exception
   {
     Hit hit;
-    QS_VocabResult vocabResult;
+    VocabResult vocabResult;
     VocabMatch vocabMatch;
 
     // execute the search
@@ -222,7 +222,7 @@ public class QS_VocabSearch extends AbstractSearch {
     throws Exception
   {
     Hit hit;
-    QS_VocabResult vocabResult;
+    VocabResult vocabResult;
     VocabMatch vocabMatch;
 
     // execute the search
@@ -259,13 +259,13 @@ public class QS_VocabSearch extends AbstractSearch {
   * already been created, it will be returned.  If not, a new one is
   * generated, placed in the result set, and then returned.
   */
-  private QS_VocabResult getVocabResult(String vocabKey, String voc_type) {
+  private VocabResult getVocabResult(String vocabKey, String voc_type) {
 
     if (searchResults.containsKey( vocabKey + voc_type )) {
-        return (QS_VocabResult)searchResults.get( vocabKey + voc_type );
+        return (VocabResult)searchResults.get( vocabKey + voc_type );
     }
     else {
-        QS_VocabResult vocab = new QS_VocabResult(config);
+        VocabResult vocab = new VocabResult(config);
         vocab.setDbKey(vocabKey);
         vocab.setVocabulary(voc_type);
         searchResults.put(vocab.getDbKey()+vocab.getVocabulary(), vocab);
