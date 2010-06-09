@@ -11,7 +11,6 @@ import org.jax.mgi.shr.config.Configuration;
 
 // searchtool classes
 import org.jax.mgi.searchtool_wi.lookup.GenomeFeatureDisplayCache;
-import org.jax.mgi.searchtool_wi.lookup.MarkerVocabSearchCache;
 import org.jax.mgi.searchtool_wi.matches.AbstractMatch;
 import org.jax.mgi.searchtool_wi.matches.MatchSorter;
 import org.jax.mgi.searchtool_wi.matches.MarkerNomenMatch;
@@ -72,8 +71,6 @@ public class GenomeFeatureResult extends AbstractResult {
   private AbstractMatch bestNomenMatch;
 
   // data lookups
-  private static MarkerVocabSearchCache markerVocabSearchCache
-    = MarkerVocabSearchCache.getMarkerVocabSearchCache();
   private static GenomeFeatureDisplayCache gfDisplayCache
     = GenomeFeatureDisplayCache.getGenomeFeatureDisplayCache();
 

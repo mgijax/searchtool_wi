@@ -14,7 +14,7 @@ import org.apache.log4j.Logger;
 import org.apache.lucene.search.*;
 
 // Quick Search Specific
-import org.jax.mgi.searchtool_wi.lookup.MarkerVocabSearchCache;
+import org.jax.mgi.searchtool_wi.lookup.VocabInfoCache;
 import org.jax.mgi.searchtool_wi.matches.MatchTypeScorer;
 import org.jax.mgi.searchtool_wi.matches.MarkerNomenMatch;
 import org.jax.mgi.searchtool_wi.matches.MarkerNomenMatchFactory;
@@ -45,7 +45,7 @@ public class GenomeFeatureSearch extends AbstractSearch
   private static Logger logger = Logger.getLogger(GenomeFeatureSearch.class.getName());
 
   // search cache; will get singleton reference in constructor
-  private MarkerVocabSearchCache markerVocabSearchCache;
+  private VocabInfoCache vocabInfoCache;
 
   // match holders
   private List markerNomenMatches       = new ArrayList();
@@ -109,8 +109,8 @@ public class GenomeFeatureSearch extends AbstractSearch
   public GenomeFeatureSearch(Configuration c)
   {
     super(c);
-    markerVocabSearchCache =
-      MarkerVocabSearchCache.getMarkerVocabSearchCache();
+    vocabInfoCache =
+      VocabInfoCache.getVocabInfoCache();
 
     maxMatches = new Integer(config.get("MAX_MATCHES")).intValue();
   }
@@ -297,7 +297,7 @@ public class GenomeFeatureSearch extends AbstractSearch
         handledAdTerms.add( markerVocabMatch.getDbKey() );
 
         //children of this term;
-        childIDs = markerVocabSearchCache.getAdChildTerms(hit.get(IndexConstants.COL_DB_KEY));
+        childIDs = vocabInfoCache.getAdChildTerms(hit.get(IndexConstants.COL_DB_KEY));
         if (childIDs != null) {
           for (Iterator childIter = childIDs.iterator(); childIter.hasNext();) {
             childTermKey = (String)childIter.next();
@@ -331,7 +331,7 @@ public class GenomeFeatureSearch extends AbstractSearch
         handledGoTerms.add( markerVocabMatch.getDbKey() );
 
         //children of this term;
-        childIDs = markerVocabSearchCache.getGoChildTerms(hit.get(IndexConstants.COL_DB_KEY));
+        childIDs = vocabInfoCache.getGoChildTerms(hit.get(IndexConstants.COL_DB_KEY));
         if (childIDs != null) {
           for (Iterator childIter = childIDs.iterator(); childIter.hasNext();) {
             childTermKey = (String)childIter.next();
@@ -365,7 +365,7 @@ public class GenomeFeatureSearch extends AbstractSearch
         handledMpTerms.add( markerVocabMatch.getDbKey() );
 
         //children of this term;
-        childIDs = markerVocabSearchCache.getMpChildTerms(hit.get(IndexConstants.COL_DB_KEY));
+        childIDs = vocabInfoCache.getMpChildTerms(hit.get(IndexConstants.COL_DB_KEY));
         if (childIDs != null) {
           for (Iterator childIter = childIDs.iterator(); childIter.hasNext();) {
             childTermKey = (String)childIter.next();
@@ -512,7 +512,7 @@ public class GenomeFeatureSearch extends AbstractSearch
           handledAdTerms.add( markerVocabMatch.getDbKey() );
 
           //children of this term;
-          childIDs = markerVocabSearchCache.getAdChildTerms(hit.get(IndexConstants.COL_DB_KEY));
+          childIDs = vocabInfoCache.getAdChildTerms(hit.get(IndexConstants.COL_DB_KEY));
           if (childIDs != null) {
             for (Iterator childIter = childIDs.iterator(); childIter.hasNext();) {
               childTermKey = (String)childIter.next();
@@ -546,7 +546,7 @@ public class GenomeFeatureSearch extends AbstractSearch
           handledGoTerms.add( markerVocabMatch.getDbKey() );
 
           //children of this term;
-          childIDs = markerVocabSearchCache.getGoChildTerms(hit.get(IndexConstants.COL_DB_KEY));
+          childIDs = vocabInfoCache.getGoChildTerms(hit.get(IndexConstants.COL_DB_KEY));
           if (childIDs != null) {
             for (Iterator childIter = childIDs.iterator(); childIter.hasNext();) {
               childTermKey = (String)childIter.next();
@@ -580,7 +580,7 @@ public class GenomeFeatureSearch extends AbstractSearch
           handledMpTerms.add( markerVocabMatch.getDbKey() );
 
           //children of this term;
-          childIDs = markerVocabSearchCache.getMpChildTerms(hit.get(IndexConstants.COL_DB_KEY));
+          childIDs = vocabInfoCache.getMpChildTerms(hit.get(IndexConstants.COL_DB_KEY));
           if (childIDs != null) {
             for (Iterator childIter = childIDs.iterator(); childIter.hasNext();) {
               childTermKey = (String)childIter.next();
@@ -770,7 +770,7 @@ public class GenomeFeatureSearch extends AbstractSearch
         handledAdTerms.add( markerVocabMatch.getDbKey() );
 
         //children of this term;
-        childIDs = markerVocabSearchCache.getAdChildTerms(hit.get(IndexConstants.COL_DB_KEY));
+        childIDs = vocabInfoCache.getAdChildTerms(hit.get(IndexConstants.COL_DB_KEY));
         if (childIDs != null) {
           for (Iterator childIter = childIDs.iterator(); childIter.hasNext();) {
             childTermKey = (String)childIter.next();
@@ -804,7 +804,7 @@ public class GenomeFeatureSearch extends AbstractSearch
         handledGoTerms.add( markerVocabMatch.getDbKey() );
 
         //children of this term;
-        childIDs = markerVocabSearchCache.getGoChildTerms(hit.get(IndexConstants.COL_DB_KEY));
+        childIDs = vocabInfoCache.getGoChildTerms(hit.get(IndexConstants.COL_DB_KEY));
         if (childIDs != null) {
           for (Iterator childIter = childIDs.iterator(); childIter.hasNext();) {
             childTermKey = (String)childIter.next();
@@ -838,7 +838,7 @@ public class GenomeFeatureSearch extends AbstractSearch
         handledMpTerms.add( markerVocabMatch.getDbKey() );
 
         //children of this term;
-        childIDs = markerVocabSearchCache.getMpChildTerms(hit.get(IndexConstants.COL_DB_KEY));
+        childIDs = vocabInfoCache.getMpChildTerms(hit.get(IndexConstants.COL_DB_KEY));
         if (childIDs != null) {
           for (Iterator childIter = childIDs.iterator(); childIter.hasNext();) {
             childTermKey = (String)childIter.next();
@@ -978,7 +978,7 @@ public class GenomeFeatureSearch extends AbstractSearch
               handledAdTerms.add( markerVocabMatch.getDbKey() );
 
               //children of this term;
-              childIDs = markerVocabSearchCache.getAdChildTerms(hit.get(IndexConstants.COL_DB_KEY));
+              childIDs = vocabInfoCache.getAdChildTerms(hit.get(IndexConstants.COL_DB_KEY));
               if (childIDs != null) {
                 for (Iterator childIter = childIDs.iterator(); childIter.hasNext();) {
                   childTermKey = (String)childIter.next();
@@ -1008,7 +1008,7 @@ public class GenomeFeatureSearch extends AbstractSearch
               handledGoTerms.add( markerVocabMatch.getDbKey() );
 
               //children of this term;
-              childIDs = markerVocabSearchCache.getGoChildTerms(hit.get(IndexConstants.COL_DB_KEY));
+              childIDs = vocabInfoCache.getGoChildTerms(hit.get(IndexConstants.COL_DB_KEY));
               if (childIDs != null) {
                 for (Iterator childIter = childIDs.iterator(); childIter.hasNext();) {
                   childTermKey = (String)childIter.next();
@@ -1038,7 +1038,7 @@ public class GenomeFeatureSearch extends AbstractSearch
               handledMpTerms.add( markerVocabMatch.getDbKey() );
 
               //children of this term;
-              childIDs = markerVocabSearchCache.getMpChildTerms(hit.get(IndexConstants.COL_DB_KEY));
+              childIDs = vocabInfoCache.getMpChildTerms(hit.get(IndexConstants.COL_DB_KEY));
               if (childIDs != null) {
                 for (Iterator childIter = childIDs.iterator(); childIter.hasNext();) {
                   childTermKey = (String)childIter.next();
@@ -1180,7 +1180,7 @@ public class GenomeFeatureSearch extends AbstractSearch
     if (incAd) {
         for (Iterator iter = adMatches.iterator(); iter.hasNext();) {
             markerVocabMatch = (MarkerVocabMatch)iter.next();
-            markerKeys = markerVocabSearchCache.getAdAnnotMarkers(markerVocabMatch.getDbKey());
+            markerKeys = vocabInfoCache.getAdAnnotMarkers(markerVocabMatch.getDbKey());
             if (markerKeys != null) {
                 for (Iterator mrkKeyIter = markerKeys.iterator(); mrkKeyIter.hasNext();) {
                     thisGenomeFeature = getGfResult(MARKER_TYPE, (String)mrkKeyIter.next() );
@@ -1194,7 +1194,7 @@ public class GenomeFeatureSearch extends AbstractSearch
     if (incGo) {
         for (Iterator iter = goMatches.iterator(); iter.hasNext();) {
             markerVocabMatch = (MarkerVocabMatch)iter.next();
-            markerKeys = markerVocabSearchCache.getGoAnnotMarkers(markerVocabMatch.getDbKey());
+            markerKeys = vocabInfoCache.getGoAnnotMarkers(markerVocabMatch.getDbKey());
             if (markerKeys != null) {
                 for (Iterator mrkKeyIter = markerKeys.iterator(); mrkKeyIter.hasNext();) {
                     thisGenomeFeature = getGfResult(MARKER_TYPE, (String)mrkKeyIter.next() );
@@ -1209,7 +1209,7 @@ public class GenomeFeatureSearch extends AbstractSearch
     if (incMp) {
         for (Iterator iter = mpMatches.iterator(); iter.hasNext();) {
             markerVocabMatch = (MarkerVocabMatch)iter.next();
-            alleleKeys = markerVocabSearchCache.getMpAnnotAlleles(markerVocabMatch.getDbKey());
+            alleleKeys = vocabInfoCache.getMpAnnotAlleles(markerVocabMatch.getDbKey());
             if (alleleKeys != null) {
                 for (Iterator mrkKeyIter = alleleKeys.iterator(); mrkKeyIter.hasNext();) {
                     thisGenomeFeature = getGfResult(ALLELE_TYPE, (String)mrkKeyIter.next() );
@@ -1223,7 +1223,7 @@ public class GenomeFeatureSearch extends AbstractSearch
     if (incOmim) {
         for (Iterator iter = omimMatches.iterator(); iter.hasNext();) {
             markerVocabMatch = (MarkerVocabMatch)iter.next();
-            alleleKeys = markerVocabSearchCache.getOmimAnnotAlleles(markerVocabMatch.getDbKey());
+            alleleKeys = vocabInfoCache.getOmimAnnotAlleles(markerVocabMatch.getDbKey());
             if (alleleKeys != null) {
                 for (Iterator mrkKeyIter = alleleKeys.iterator(); mrkKeyIter.hasNext();) {
                     thisGenomeFeature = getGfResult(ALLELE_TYPE, (String)mrkKeyIter.next() );
@@ -1237,7 +1237,7 @@ public class GenomeFeatureSearch extends AbstractSearch
     if (incOmim) {
         for (Iterator iter = omimOrthoMatches.iterator(); iter.hasNext();) {
             markerVocabMatch = (MarkerVocabMatch)iter.next();
-            markerKeys = markerVocabSearchCache.getOmimOrthoAnnotMarkers(markerVocabMatch.getDbKey());
+            markerKeys = vocabInfoCache.getOmimOrthoAnnotMarkers(markerVocabMatch.getDbKey());
             if (markerKeys != null) {
                 for (Iterator mrkKeyIter = markerKeys.iterator(); mrkKeyIter.hasNext();) {
                     thisGenomeFeature = getGfResult(MARKER_TYPE, (String)mrkKeyIter.next() );
@@ -1251,7 +1251,7 @@ public class GenomeFeatureSearch extends AbstractSearch
     if (incPirsf) {
         for (Iterator iter = pirsfMatches.iterator(); iter.hasNext();) {
             markerVocabMatch = (MarkerVocabMatch)iter.next();
-            markerKeys = markerVocabSearchCache.getPsAnnotMarkers(markerVocabMatch.getDbKey());
+            markerKeys = vocabInfoCache.getPsAnnotMarkers(markerVocabMatch.getDbKey());
             if (markerKeys != null) {
                 for (Iterator mrkKeyIter = markerKeys.iterator(); mrkKeyIter.hasNext();) {
                     thisGenomeFeature = getGfResult(MARKER_TYPE, (String)mrkKeyIter.next() );
@@ -1265,7 +1265,7 @@ public class GenomeFeatureSearch extends AbstractSearch
     if (incOmim) {
         for (Iterator iter = ipMatches.iterator(); iter.hasNext();) {
             markerVocabMatch = (MarkerVocabMatch)iter.next();
-            markerKeys = markerVocabSearchCache.getIpAnnotMarkers(markerVocabMatch.getDbKey());
+            markerKeys = vocabInfoCache.getIpAnnotMarkers(markerVocabMatch.getDbKey());
             if (markerKeys != null) {
                 for (Iterator mrkKeyIter = markerKeys.iterator(); mrkKeyIter.hasNext();) {
                     thisGenomeFeature = getGfResult(MARKER_TYPE, (String)mrkKeyIter.next() );

@@ -15,7 +15,7 @@ import org.apache.log4j.Logger;
 
 // Search Tool Classes
 import org.jax.mgi.searchtool_wi.lookup.GenomeFeatureDisplayCache;
-import org.jax.mgi.searchtool_wi.lookup.MarkerVocabSearchCache;
+import org.jax.mgi.searchtool_wi.lookup.VocabInfoCache;
 import org.jax.mgi.searchtool_wi.lookup.OtherDisplayLookup;
 import org.jax.mgi.searchtool_wi.lookup.GenomeFeatureResultCache;
 import org.jax.mgi.searchtool_wi.lookup.VocabResultCache;
@@ -50,7 +50,7 @@ public class SearchTool extends HttpServlet {
   private static GenomeFeatureDisplayCache gfDisplayCache;
   private static VocabDisplayCache vocabDisplayCache;
   private static OtherDisplayLookup otherDisplayLookup;
-  private static MarkerVocabSearchCache markerVocabSearchCache;
+  private static VocabInfoCache vocabInfoCache;
   private static Logger logger;
   private static ServletContext servletContext;
 
@@ -96,7 +96,7 @@ public class SearchTool extends HttpServlet {
     webTemplate.addJs("searchTool.js");
 
     // Setup any servlet level caches the searches or servlet may need
-    markerVocabSearchCache = MarkerVocabSearchCache.getMarkerVocabSearchCache(stConfig);
+    vocabInfoCache = VocabInfoCache.getVocabInfoCache(stConfig);
     tokenExistanceCache = TokenExistanceCache.getTokenExistanceCache(stConfig);
 
     // Caching of result sets returned from Search execution
@@ -168,16 +168,16 @@ public class SearchTool extends HttpServlet {
         // Determine which page to display.  Private 'sendTo' methods handle
         // forwarding to our display layer
         if (request.getParameter("page") == null) {
-            sendToSummary(request, response, searchInput);
+            sendToMainSummary(request, response, searchInput);
         }
         else if ( request.getParameter("page").equals("summary") ) {
-            sendToSummary(request, response, searchInput);
+            sendToMainSummary(request, response, searchInput);
         }
         else if ( request.getParameter("page").equals("featureList") ) {
-            sendToMarker(request, response, searchInput);
+            sendToGenomeFeatureList(request, response, searchInput);
         }
         else if ( request.getParameter("page").equals("featureDetails") ) {
-            sendToMarkerDetails(request, response, searchInput);
+            sendToGenomeFeatureListDetails(request, response, searchInput);
         }
         else if ( request.getParameter("page").equals("vocab") ) {
             sendToVocab(request, response, searchInput);
@@ -190,7 +190,7 @@ public class SearchTool extends HttpServlet {
             sendToError(request, response, qse);
         }
         else { // if page wasn't NULL, but had an unrecognized value
-            sendToSummary(request, response, searchInput);
+            sendToMainSummary(request, response, searchInput);
         }
     }
     catch (Exception e) {
@@ -208,13 +208,13 @@ public class SearchTool extends HttpServlet {
   /**
   * MAIN SUMMARY - Gather the data, and forward to the view layer
   */
-  private void sendToSummary(HttpServletRequest request,
+  private void sendToMainSummary(HttpServletRequest request,
     HttpServletResponse response, SearchInput searchInput)
     throws Exception
   {
-    // Search for markers results
-    GenomeFeatureResultContainer markerResultContainer = getMarkerResults(searchInput);
-    request.setAttribute("MarkerResultContainer", markerResultContainer);
+    // Search for genome feature results
+    GenomeFeatureResultContainer gfResultContainer = getGenomeFeatureResults(searchInput);
+    request.setAttribute("GenomeFeatureResultContainer", gfResultContainer);
 
     // Search for vocab results
     VocabResultContainer vocabResultContainer = getVocabResults(searchInput);
@@ -232,15 +232,15 @@ public class SearchTool extends HttpServlet {
   }
 
   /**
-  * MARKER SUMMARY - Gather the data, and forward to the view layer
+  * GENOME FEATURE SUMMARY - Gather the data, and forward to the view layer
   */
-  private void sendToMarker(HttpServletRequest request,
+  private void sendToGenomeFeatureList(HttpServletRequest request,
     HttpServletResponse response, SearchInput searchInput)
     throws Exception
   {
-    // Search markers
-    GenomeFeatureResultContainer markerResultContainer = getMarkerResults(searchInput);
-    request.setAttribute("MarkerResultContainer", markerResultContainer);
+    // Execute Search
+    GenomeFeatureResultContainer gfResultContainer = getGenomeFeatureResults(searchInput);
+    request.setAttribute("GenomeFeatureResultContainer", gfResultContainer);
 
     // prep request and forward to display
     response.setContentType("text/html");
@@ -249,15 +249,15 @@ public class SearchTool extends HttpServlet {
   }
 
   /**
-  * MARKER DETAIL - Gather the data, and forward to the view layer
+  * GENOME FEATURE DETAIL - Gather the data, and forward to the view layer
   */
-  private void sendToMarkerDetails(HttpServletRequest request,
+  private void sendToGenomeFeatureListDetails(HttpServletRequest request,
     HttpServletResponse response, SearchInput searchInput)
     throws Exception
   {
-    // Search markers
-    GenomeFeatureResultContainer markerResultContainer = getMarkerResults(searchInput);
-    request.setAttribute("MarkerResultContainer", markerResultContainer);
+    // Execute Search
+    GenomeFeatureResultContainer gfResultContainer = getGenomeFeatureResults(searchInput);
+    request.setAttribute("GenomeFeatureResultContainer", gfResultContainer);
 
     // prep request and forward to display
     response.setContentType("text/html");
@@ -321,37 +321,37 @@ public class SearchTool extends HttpServlet {
   //------------------//
 
   /**
-  * encapsulation of marker result container retrieval - if the result
+  * encapsulation of genome feature result container retrieval - if the result
   * container is cached, retrieve it; otherwise generate a new set of
   * results, and cache it.
   *
   * The caller of this method doesn't need to know whether the result set
   * was pulled from cache, or dynamically generated
   */
-  private GenomeFeatureResultContainer getMarkerResults(SearchInput searchInput)
+  private GenomeFeatureResultContainer getGenomeFeatureResults(SearchInput searchInput)
     throws Exception
   {
     // first, try to retrieve this result set from cache
-    GenomeFeatureResultContainer markerResultContainer
+    GenomeFeatureResultContainer gfResultContainer
       = genomeFeatureResultCache.getMarkerContainer( searchInput.getCacheString() );
 
     // if a filter has been submitted, bypass cache
     if (searchInput.hasFilter()) {
-        markerResultContainer = null;
+        gfResultContainer = null;
     }
 
     // if not found in cache (or we cleared it), generarate the result set
-    if (markerResultContainer == null) {
-        GenomeFeatureSearch markerSearch = new GenomeFeatureSearch(stConfig);
-        markerResultContainer = new GenomeFeatureResultContainer(markerSearch.search(searchInput));
+    if (gfResultContainer == null) {
+        GenomeFeatureSearch gfSearch = new GenomeFeatureSearch(stConfig);
+        gfResultContainer = new GenomeFeatureResultContainer(gfSearch.search(searchInput));
     }
 
     // and add to servlet-level cache if a filter was not submitted
     if (!searchInput.hasFilter()) {
-        genomeFeatureResultCache.addMarkerContainer(searchInput.getCacheString(), markerResultContainer);
+        genomeFeatureResultCache.addMarkerContainer(searchInput.getCacheString(), gfResultContainer);
     }
 
-    return markerResultContainer;
+    return gfResultContainer;
   }
 
 

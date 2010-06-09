@@ -9,7 +9,6 @@ import org.apache.lucene.search.*;
 // MGI homegrown classes
 import org.jax.mgi.shr.config.Configuration;
 
-import org.jax.mgi.searchtool_wi.lookup.MarkerVocabSearchCache;
 import org.jax.mgi.searchtool_wi.lookup.VocabDisplayCache;
 import org.jax.mgi.searchtool_wi.matches.AbstractMatch;
 import org.jax.mgi.searchtool_wi.matches.MatchSorter;

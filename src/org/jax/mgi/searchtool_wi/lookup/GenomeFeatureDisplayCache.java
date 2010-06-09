@@ -131,9 +131,9 @@ public class GenomeFeatureDisplayCache
 
             thisGenomeFeatureDisplay.setDbKey(doc.get(IndexConstants.COL_DB_KEY));
             thisGenomeFeatureDisplay.setObjectType(doc.get(IndexConstants.COL_OBJECT_TYPE));
-            thisGenomeFeatureDisplay.setSymbol(doc.get(IndexConstants.COL_MARKER_SYMBOL));
-            thisGenomeFeatureDisplay.setName(doc.get(IndexConstants.COL_MARKER_NAME));
-            thisGenomeFeatureDisplay.setMarkerType(doc.get(IndexConstants.COL_MARKER_TYPE));
+            thisGenomeFeatureDisplay.setSymbol(doc.get(IndexConstants.COL_FEATURE_SYMBOL));
+            thisGenomeFeatureDisplay.setName(doc.get(IndexConstants.COL_FEATURE_NAME));
+            thisGenomeFeatureDisplay.setMarkerType(doc.get(IndexConstants.COL_FEATURE_TYPE));
             thisGenomeFeatureDisplay.setChromosome(doc.get(IndexConstants.COL_CHROMOSOME));
             thisGenomeFeatureDisplay.setMgiId(doc.get(IndexConstants.COL_MGI_ID));
             thisGenomeFeatureDisplay.setStrand(doc.get(IndexConstants.COL_STRAND));

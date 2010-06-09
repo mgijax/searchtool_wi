@@ -2,7 +2,7 @@
 
 <%
     GenomeFeatureResultContainer genomeFeatureResultContainer =
-        (GenomeFeatureResultContainer)request.getAttribute("MarkerResultContainer");
+        (GenomeFeatureResultContainer)request.getAttribute("GenomeFeatureResultContainer");
 
     // derive needed data from passed request attributes
     Integer markerStart = new Integer(1);   //default

@@ -6,7 +6,7 @@
 <%
   // get results for this request
   GenomeFeatureResultContainer genomeFeatureResultContainer
-    = (GenomeFeatureResultContainer)request.getAttribute("MarkerResultContainer");
+    = (GenomeFeatureResultContainer)request.getAttribute("GenomeFeatureResultContainer");
 
   // derive needed data from passed request arrributes
   String resultKey = searchInput.getParameter("resultKey");
