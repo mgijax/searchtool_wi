@@ -25,16 +25,11 @@ function updateBatchTabForwardForm()
 %>
 
 <form style='display:inline;' name='batchWeb' enctype='multipart/form-data' target='_blank'
-  method='post' action='<%=javawi_url%>WIFetch'>
-<input name='page' value='batchSummary' type='hidden'>
-<input name='params' value='show' type='hidden'>
-<input name='IDType' value='Symbol' type='hidden'>
-<input name='returnSet' value='Nomenclature' type='hidden'>
-<input name='returnSet' value='Location' type='hidden'>
-<input name='returnRad' value='None' type='hidden'>
-<input name='printFormat' value='toolbar' type='hidden'>
-<input name='column' value='1' type='hidden'>
-<input name='IDSet' value='' id='batchSymbolListWeb' type='hidden'>
+  method='get' action='<%=fewi_url%>batch/summary'>
+<input name='idType' value='current symbol' type='hidden'>
+<input name='attributes' value='Nomenclature' type='hidden'>
+<input name='attributes' value='Location' type='hidden'>
+<input name='ids' value='' id='batchSymbolListWeb' type='hidden'>
 <span onClick='JAVASCRIPT:updateBatchWebForwardForm();batchWeb.submit();'
   class='qsButton'> Get more data </span>
 </form>

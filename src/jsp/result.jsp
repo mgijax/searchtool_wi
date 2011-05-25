@@ -132,7 +132,7 @@
     rowClass = bucketRowAlternator.getString();
 
     if ( thisGenomeFeatureResult.isMarker() ) {
-      detailPageUrl = javawi_url + "WIFetch?page=markerDetail&key=" + thisGenomeFeatureResult.getDbKey();
+      detailPageUrl = fewi_url + "marker/" + thisGenomeFeatureDisplay.getMgiId();
     }
     else if ( thisGenomeFeatureResult.isAllele() ) {
       detailPageUrl = javawi_url + "WIFetch?page=alleleDetail&key=" + thisGenomeFeatureResult.getDbKey();
@@ -419,10 +419,10 @@
             out.print("</td>");
         }
         else if (data_type.equals(IndexConstants.OTHER_REFERENCE)) {
-            out.print("<td><a href='"+stConfig.get("WI_URL")+"searches/reference.cgi?" +thisOtherResult.getDbKey()+"'>Reference</a></td>");
+            out.print("<td><a href='"+fewi_url+"reference/" +thisOtherResult.getAccId()+"'>Reference</a></td>");
         }
         else if (data_type.equals(IndexConstants.OTHER_SEQUENCE)) {
-            out.print("<td><a href='"+stConfig.get("JAVAWI_URL")+"WIFetch?page=sequenceDetail&key=" +thisOtherResult.getDbKey()+"'>Sequence</a>");
+            out.print("<td><a href='"+fewi_url+"sequence/" +thisOtherResult.getAccId()+"'>Sequence</a>");
             if (!thisOtherDisplay.getQualifier1().equals("")) {
 	        	out.print(", "+ thisOtherDisplay.getQualifier1());
 	        }
@@ -453,7 +453,7 @@
 		    out.print("</td>");
         }
         else if (data_type.equals(IndexConstants.OTHER_IMAGE)) {
-            out.print("<td><a href='"+stConfig.get("WI_URL")+"searches/image.cgi?" +thisOtherResult.getDbKey()+"'>Expression Image</a></td>");
+            out.print("<td><a href='"+fewi_url+"image/" +thisOtherResult.getAccId()+"'>Expression Image</a></td>");
         }
         else if (data_type.equals(IndexConstants.OTHER_SNP)) {
             out.print("<td><a href='"+stConfig.get("JAVAWI_URL")+"WIFetch?page=snpDetail&key=" +thisOtherResult.getDbKey()+"'>SNP</a></td>");
