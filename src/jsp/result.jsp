@@ -310,7 +310,7 @@
         {
         out.print("<a href='"
             + stConfig.get("JAVAWI_URL") + "WIFetch?page=pirsfDetail&key="
-            + thisVocabDisplay.getDbKey() + "'>"
+            + thisVocabDisplay.getAcc_id() + "'>"
             + thisVocabDisplay.getName() + "</a>");
         }
         else if (thisVocabDisplay.getVocabType().equals(IndexConstants.INTERPRO_TYPE_NAME))
