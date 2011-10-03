@@ -41,7 +41,7 @@ String javawi_url = stConfig.get("JAVAWI_URL");
 String wi_url = stConfig.get("WI_URL");
 String fewi_url = stConfig.get("FEWI_URL");
 String webshare_url = stConfig.get("WEBSHARE_URL");
-String userdocs_url = stConfig.get("USERDOCS_URL");
+String userhelp_url = stConfig.get("USERHELP_URL");
 String mgihome_url = stConfig.get("MGIHOME_URL");
 
 %>
