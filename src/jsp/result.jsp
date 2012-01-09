@@ -422,7 +422,7 @@
             out.print("<td><a href='"+fewi_url+"reference/" +thisOtherResult.getAccId()+"'>Reference</a></td>");
         }
         else if (data_type.equals(IndexConstants.OTHER_SEQUENCE)) {
-            out.print("<td><a href='"+fewi_url+"sequence/" +thisOtherResult.getAccId()+"'>Sequence</a>");
+            out.print("<td><a href='"+fewi_url+"sequence/key/" +thisOtherResult.getDbKey()+"'>Sequence</a>");
             if (!thisOtherDisplay.getQualifier1().equals("")) {
 	        	out.print(", "+ thisOtherDisplay.getQualifier1());
 	        }
