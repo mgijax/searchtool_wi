@@ -2,7 +2,7 @@
 <tr>
 <td width="1%">
   <span onmouseover="<%=displayHelper.getHelpIconPopup()%>" onmouseout="nd();">
-  <a href="<%=userdocs_url%>searchtool_help.shtml">
+  <a href="<%=userhelp_url%>QUICK_SEARCH_help.shtml">
     <img src="<%=webshare_url%>/images/help_small_transp.gif" alt="help" border="0">
   </a>
   </span>

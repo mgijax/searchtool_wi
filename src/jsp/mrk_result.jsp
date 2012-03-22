@@ -118,7 +118,7 @@
         <%=thisMarkerDisplay.getMarkerType()%>
     </td>
     <td>
-      <a href='<%=javawi_url%>WIFetch?page=markerDetail&key=<%=thisMarkerDisplay.getDbKey()%>'>
+      <a href='<%=fewi_url%>marker/<%=thisMarkerDisplay.getMgiId()%>'>
         <%=DisplayHelper.superscript(thisMarkerDisplay.getSymbol())%>
       </a>
     </td>

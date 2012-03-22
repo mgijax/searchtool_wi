@@ -87,8 +87,8 @@ public class DisplayHelper
 
   public String getUserDocAnchorString() {
     return "<div class=\\\'detailRowType\\\'>See <a href=\\\'"
-      + stConfig.get("USERDOCS_URL")
-      + "searchtool_help.shtml\\\'>Using the Quick Search Tool</a> "
+      + stConfig.get("USERHELP_URL")
+      + "QUICK_SEARCH_help.shtml\\\'>Using the Quick Search Tool</a> "
       + "for more information and examples.</div>";
   }
 
@@ -340,8 +340,8 @@ public class DisplayHelper
       + "</ul></div>"
       + "Advanced searches are listed under the Search menu.<BR/>"
       +	"See <a href=\\\'"
-      + stConfig.get("USERDOCS_URL")
-      + "searchtool_help.shtml\\\'>"
+      + stConfig.get("USERHELP_URL")
+      + "QUICK_SEARCH_help.shtml\\\'>"
       +	"Using the Quick Search Tool</a> for more information."
       + "', STICKY, CAPTION, "
       + "'Quick Search Tips', HAUTO, BELOW, WIDTH, 450, DELAY, "
@@ -842,7 +842,7 @@ public class DisplayHelper
     }
     else if (vocab.equals(IndexConstants.PIRSF_TYPE_NAME))
     {
-    	url = "<a href='"+ stConfig.get("JAVAWI_URL")+"WIFetch?page=pirsfDetail&key=" + vocabDisplay.getDbKey()+ "'>"+vocabDisplay.getAnnotDisplay()+"</a>";
+    	url = "<a href='"+ stConfig.get("JAVAWI_URL")+"WIFetch?page=pirsfDetail&id=" + vocabDisplay.getAcc_id()+ "'>"+vocabDisplay.getAnnotDisplay()+"</a>";
     }
     else if (vocab.equals(IndexConstants.INTERPRO_TYPE_NAME))
     {

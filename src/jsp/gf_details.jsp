@@ -30,7 +30,7 @@
   // URLS
   String detailPageUrl = "";
   if ( thisGenomeFeatureResult.isMarker() ) {
-    detailPageUrl = javawi_url + "WIFetch?page=markerDetail&key=" + thisGenomeFeatureResult.getDbKey();
+    detailPageUrl = fewi_url + "marker/" + thisGenomeFeatureDisplay.getMgiId();
   }
   else if ( thisGenomeFeatureResult.isAllele() ) {
     detailPageUrl = javawi_url + "WIFetch?page=alleleDetail&key=" + thisGenomeFeatureResult.getDbKey();
