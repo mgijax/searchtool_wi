@@ -25,7 +25,7 @@ function updateBatchTabForwardForm()
 %>
 
 <form style='display:inline;' name='batchWeb' enctype='multipart/form-data' target='_blank'
-  method='get' action='<%=fewi_url%>batch/summary'>
+  method='post' action='<%=fewi_url%>batch/summary'>
 <input name='idType' value='current symbol' type='hidden'>
 <input name='attributes' value='Nomenclature' type='hidden'>
 <input name='attributes' value='Location' type='hidden'>
