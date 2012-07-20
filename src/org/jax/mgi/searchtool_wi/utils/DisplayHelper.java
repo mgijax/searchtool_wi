@@ -826,10 +826,11 @@ public class DisplayHelper
   {
     String vocab = vocabResult.getVocabulary();
     VocabDisplay vocabDisplay = vocabDisplayCache.getVocab(vocabResult);
-
+System.out.println("---> vocabDisplay.getAcc_id():" + vocabDisplay.getAcc_id());
     String url = "";
     if (vocab.equals(IndexConstants.AD_TYPE_NAME)) {
-        url ="<a href = '" + stConfig.get("WI_URL") + "searches/expression_report.cgi?_Structure_key=" + vocabDisplay.getDbKey() + "&sort=Gene%20Symbol&returnType=assay%20results&substructures=substructures'>" + vocabDisplay.getAnnotDisplay()+ "</a>";
+        //url ="<a href = '" + stConfig.get("WI_URL") + "searches/expression_report.cgi?_Structure_key=" + vocabDisplay.getDbKey() + "&sort=Gene%20Symbol&returnType=assay%20results&substructures=substructures'>" + vocabDisplay.getAnnotDisplay()+ "</a>";
+        url ="<a href = '" + stConfig.get("FEWI_URL") + "gxd/summary?structureKey=" + vocabDisplay.getDbKey() + "'>" + vocabDisplay.getAnnotDisplay()+ "</a>";
     }
     else if (vocab.equals(IndexConstants.MP_TYPE_NAME)) {
         url = "<a href='"+stConfig.get("JAVAWI_URL")+"WIFetch?page=mpAnnotSummary&id=" + vocabDisplay.getAcc_id() + "'> "+ vocabDisplay.getAnnotDisplay()+"</a>";
