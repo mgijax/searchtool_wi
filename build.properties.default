@@ -1,0 +1,4 @@
+servlet.dir=/usr/local/mgi/live/lib/java
+log4j.dir=/usr/local/mgi/live/lib/java
+mgilib.dir=/usr/local/mgi/live/lib/java
+lucene.dir=/usr/local/lucene-2.3.2

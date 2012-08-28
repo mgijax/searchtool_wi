@@ -1,4 +1,4 @@
-#!/bin/sh
+ #!/bin/sh
 if [ "${MGICONFIG}" = "" ]
 then
     MGICONFIG=/usr/local/mgi/live/mgiconfig
@@ -14,7 +14,4 @@ export JAVA_HOME
 echo $JAVA_HOME
 echo $PATH
 
-rm -Rf ./build/*
-
 ant
-
