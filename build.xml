@@ -24,8 +24,8 @@
   <!-- compile -->
   <target name="compile" depends="init" >
     <javac srcdir="${src}" destdir="${build}" classpath="
-    	${servlet.dir}/javaee-api-5.jar; 
-    	${log4j.dir}/log4j.jar; 
+    	${lib.dir}/javaee-api-5.jar; 
+    	${lib.dir}/log4j.jar; 
     	${mgilib.dir}/core.jar; 
     	${mgilib.dir}/searchtool.jar; 
     	${lucene.dir}/luceneweb.war; 
@@ -45,6 +45,12 @@
       <lib file="${lucene.dir}/lucene-core-2.3.2.jar" />
       <lib file="${lucene.dir}/contrib/snowball/lucene-snowball-2.3.2.jar" />
     </war>
+  </target>
+	
+  <!--deploy -->
+  <target name="deploy" depends="war">
+	<echo>Deploy war</echo>
+	<move file="${dist}/searchtool_wi.war" todir="${deploy.dir}" overwrite="true" />
   </target>
 
 </project>
