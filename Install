@@ -1,4 +1,4 @@
-#!/bin/sh
+ #!/bin/sh
 if [ "${MGICONFIG}" = "" ]
 then
     MGICONFIG=/usr/local/mgi/live/mgiconfig
@@ -8,13 +8,10 @@ fi
 . ${MGICONFIG}/master.config.sh
 
 # Play around with JAVA_HOME
-JAVA_HOME=/usr/jdk/jdk1.6.0_07/
+JAVA_HOME=/usr/mgijava6
 export JAVA_HOME
 
 echo $JAVA_HOME
 echo $PATH
 
-rm -Rf ./build/*
-
 ant
-

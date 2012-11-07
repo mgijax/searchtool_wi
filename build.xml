@@ -1,5 +1,7 @@
 <project name="searchtool_wi" default="war" basedir=".">
 
+  <property file="build.properties" />
+
   <description>
     Search Tool WebApp build file
   </description>
@@ -7,9 +9,14 @@
   <property name="src" location="src"/>
   <property name="build" location="build"/>
   <property name="dist" location="dist"/>
+	
+  <target name="clean">
+  	<delete dir="${build}" />
+  	<delete dir="${dist}" />
+  </target>
 
   <!-- init -->
-  <target name="init">
+  <target name="init" depends="clean">
     <mkdir dir="${build}"/>
     <mkdir dir="${dist}"/>
   </target>
@@ -17,13 +24,13 @@
   <!-- compile -->
   <target name="compile" depends="init" >
     <javac srcdir="${src}" destdir="${build}" classpath="
-      /usr/local/mgi/jboss/server/searchtool_template/lib/servlet-api.jar; 
-      /usr/local/mgi/jboss/server/searchtool_template/lib/log4j.jar; 
-      /usr/local/mgi/live/lib/java/core.jar; 
-      /usr/local/mgi/live/lib/java/searchtool.jar; 
-      /usr/local/lucene-2.3.2/luceneweb.war; 
-      /usr/local/lucene-2.3.2/lucene-core-2.3.2.jar; 
-      /usr/local/lucene-2.3.2/contrib/snowball/lucene-snowball-2.3.2.jar; "
+    	${lib.dir}/javaee-api-5.jar; 
+    	${lib.dir}/log4j.jar; 
+    	${mgilib.dir}/core.jar; 
+    	${mgilib.dir}/searchtool.jar; 
+    	${lucene.dir}/luceneweb.war; 
+    	${lucene.dir}/lucene-core-2.3.2.jar; 
+    	${lucene.dir}/contrib/snowball/lucene-snowball-2.3.2.jar; "
     />
   </target>
 
@@ -32,12 +39,18 @@
       <fileset dir="src/html/"/>
       <fileset dir="src/jsp/"/>
       <classes dir="build/"/>
-      <lib file="/usr/local/mgi/live/lib/java/core.jar" />
-      <lib file="/usr/local/mgi/live/lib/java/searchtool.jar" />
-      <lib file="/usr/local/lucene-2.3.2/luceneweb.war" />
-      <lib file="/usr/local/lucene-2.3.2/lucene-core-2.3.2.jar" />
-      <lib file="/usr/local/lucene-2.3.2/contrib/snowball/lucene-snowball-2.3.2.jar" />
+      <lib file="${mgilib.dir}/core.jar" />
+      <lib file="${mgilib.dir}/searchtool.jar" />
+      <lib file="${lucene.dir}/luceneweb.war" />
+      <lib file="${lucene.dir}/lucene-core-2.3.2.jar" />
+      <lib file="${lucene.dir}/contrib/snowball/lucene-snowball-2.3.2.jar" />
     </war>
+  </target>
+	
+  <!--deploy -->
+  <target name="deploy" depends="war">
+	<echo>Deploy war</echo>
+	<move file="${dist}/searchtool_wi.war" todir="${deploy.dir}" overwrite="true" />
   </target>
 
 </project>
