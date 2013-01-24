@@ -439,7 +439,7 @@
             out.print("<td><a href='"+stConfig.get("WI_URL")+"searches/antibody.cgi?" +thisOtherResult.getDbKey()+"'>Antibody</a></td>");
         }
         else if (data_type.equals(IndexConstants.OTHER_ORTHOLOG)) {
-            out.print("<td><a href='"+fewi_url+"homology/" +thisOtherResult.getDbKey()+"'>Homolog</a></td>");
+            out.print("<td><a href='"+fewi_url+"homology/key/" +thisOtherResult.getDbKey()+"'>Homolog</a></td>");
         }
         else if (data_type.equals(IndexConstants.OTHER_HOMOLOGY)) {
             out.print("<td><a href='"+fewi_url+"homology/" +thisOtherResult.getDbKey()+"'>Homology</a></td>");
