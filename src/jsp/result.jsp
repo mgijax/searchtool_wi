@@ -288,7 +288,7 @@
         if (thisVocabDisplay.getVocabType().equals(IndexConstants.OMIM_TYPE_NAME))
         {
         out.print("<a href='"
-            + stConfig.get("JAVAWI_URL") + "WIFetch?page=humanDisease&key="
+            + fewi_url + "disease/key/"
             + thisVocabDisplay.getDbKey() + "'>"
             + thisVocabDisplay.getName() + "</a>");
         }

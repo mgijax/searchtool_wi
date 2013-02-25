@@ -839,7 +839,7 @@ System.out.println("---> vocabDisplay.getAcc_id():" + vocabDisplay.getAcc_id());
         url = "<a href='"+ stConfig.get("WI_URL")+"searches/GOannot_report.cgi?id=" + vocabDisplay.getAcc_id() + "'> "+vocabDisplay.getAnnotDisplay()+"</a>";
     }
     else if (vocab.equals(IndexConstants.OMIM_TYPE_NAME)) {
-        url = "<a href='"+ stConfig.get("JAVAWI_URL")+"WIFetch?page=humanDisease&key=" + vocabDisplay.getDbKey()+ "'>"+vocabDisplay.getAnnotDisplay()+"</a>";
+        url = "<a href='"+ stConfig.get("FEWI_URL")+"disease/key/" + vocabDisplay.getDbKey()+ "'>"+vocabDisplay.getAnnotDisplay()+"</a>";
     }
     else if (vocab.equals(IndexConstants.PIRSF_TYPE_NAME))
     {
