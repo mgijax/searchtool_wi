@@ -455,14 +455,8 @@
         else if (data_type.equals(IndexConstants.OTHER_IMAGE)) {
             out.print("<td><a href='"+fewi_url+"image/" +thisOtherResult.getAccId()+"'>Expression Image</a></td>");
         }
-        else if (data_type.equals(IndexConstants.OTHER_SNP)) {
-            out.print("<td><a href='"+stConfig.get("JAVAWI_URL")+"WIFetch?page=snpDetail&key=" +thisOtherResult.getDbKey()+"'>SNP</a></td>");
-        }
-        else if (data_type.equals(IndexConstants.OTHER_SUBSNP)) {
-            out.print("<td><a href='"+stConfig.get("JAVAWI_URL")+"WIFetch?page=snpDetail&key=" +thisOtherResult.getDbKey()+"'>SNP</a></td>");
-        }
         else if (data_type.equals(IndexConstants.OTHER_ASSAY)) {
-            out.print("<td><a href='"+fewi_url+"assay/key/" +thisOtherResult.getDbKey()+"'>Expression Assay</a></td>");
+            out.print("<td><a href='"+fewi_url+"assay/" + thisOtherResult.getAccId().toUpperCase()  +"'>Expression Assay</a></td>");
         }
         else if (data_type.equals(IndexConstants.OTHER_AMA)) {
             out.print("<td><a href='"+stConfig.get("WI_URL")+"searches/AMA.cgi?id=" +thisOtherResult.getAccId().toUpperCase()+"'>AMA Browser Detail</a></td>");
