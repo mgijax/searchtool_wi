@@ -288,7 +288,7 @@
         if (thisVocabDisplay.getVocabType().equals(IndexConstants.OMIM_TYPE_NAME))
         {
         out.print("<a href='"
-            + stConfig.get("JAVAWI_URL") + "WIFetch?page=humanDisease&key="
+            + fewi_url + "disease/key/"
             + thisVocabDisplay.getDbKey() + "'>"
             + thisVocabDisplay.getName() + "</a>");
         }
@@ -439,7 +439,10 @@
             out.print("<td><a href='"+stConfig.get("WI_URL")+"searches/antibody.cgi?" +thisOtherResult.getDbKey()+"'>Antibody</a></td>");
         }
         else if (data_type.equals(IndexConstants.OTHER_ORTHOLOG)) {
-            out.print("<td><a href='"+stConfig.get("WI_URL")+"searches/homology_report.cgi?_Marker_key=" +thisOtherResult.getDbKey()+"'>Ortholog</a></td>");
+            out.print("<td><a href='"+fewi_url+"homology/key/" +thisOtherResult.getDbKey()+"'>Homolog</a></td>");
+        }
+        else if (data_type.equals(IndexConstants.OTHER_HOMOLOGY)) {
+            out.print("<td><a href='"+fewi_url+"homology/" +thisOtherResult.getDbKey()+"'>Homology</a></td>");
         }
         else if (data_type.equals(IndexConstants.OTHER_ANTIGEN)) {
             out.print("<td><a href='"+stConfig.get("WI_URL")+"searches/antigen.cgi?" +thisOtherResult.getDbKey()+"'>Antigen</a></td>");
