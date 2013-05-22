@@ -419,7 +419,7 @@
             out.print("</td>");
         }
         else if (data_type.equals(IndexConstants.OTHER_REFERENCE)) {
-            out.print("<td><a href='"+fewi_url+"reference/" +thisOtherResult.getAccId()+"'>Reference</a></td>");
+            out.print("<td><a href='"+fewi_url+"reference/summary?id=" +thisOtherResult.getAccId()+"'>Reference</a></td>");
         }
         else if (data_type.equals(IndexConstants.OTHER_SEQUENCE)) {
             out.print("<td><a href='"+fewi_url+"sequence/key/" +thisOtherResult.getDbKey()+"'>Sequence</a>");
