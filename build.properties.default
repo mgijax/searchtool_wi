@@ -1,4 +1,4 @@
 lib.dir=./lib
 mgilib.dir=/usr/local/mgi/live/lib/java
-lucene.dir=/usr/local/lucene-2.3.2
+lucene.dir=/usr/local/mgi/libs/lucene-2.3.2
 deploy.dir=/usr/local/mgi/jboss/searchtool_pub1/deployments
