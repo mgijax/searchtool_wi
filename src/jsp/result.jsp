@@ -135,7 +135,7 @@
       detailPageUrl = fewi_url + "marker/" + thisGenomeFeatureDisplay.getMgiId();
     }
     else if ( thisGenomeFeatureResult.isAllele() ) {
-      detailPageUrl = javawi_url + "WIFetch?page=alleleDetail&key=" + thisGenomeFeatureResult.getDbKey();
+      detailPageUrl = fewi_url + "allele/key/" + thisGenomeFeatureResult.getDbKey();
     }
 
 %>
@@ -429,7 +429,7 @@
             out.print("</td>");
         }
         else if (data_type.equals(IndexConstants.OTHER_ALLELE)) {
-            out.print("<td><a href='"+stConfig.get("JAVAWI_URL")+"WIFetch?page=alleleDetail&key=" +thisOtherResult.getDbKey()+"'>Allele</a>");
+            out.print("<td><a href='"+fewi_url+"allele/key/" +thisOtherResult.getDbKey()+"'>Allele</a>");
             if (!thisOtherDisplay.getQualifier1().equals("")) {
         	   out.print(", "+ thisOtherDisplay.getQualifier1());
             }
@@ -466,7 +466,7 @@
         }
 
         else if (data_type.equals(IndexConstants.OTHER_ESCELL)) {
-            out.print("<td><a href='"+stConfig.get("JAVAWI_URL")+"WIFetch?page=alleleDetail&key=" +thisOtherResult.getDbKey()+"'>Allele</a>");
+            out.print("<td><a href='"+fewi_url+"allele/key/" +thisOtherResult.getDbKey()+"'>Allele</a>");
             if (!thisOtherDisplay.getQualifier1().equals("")) {
                 out.print(", "+ thisOtherDisplay.getQualifier1());
             }
