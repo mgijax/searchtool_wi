@@ -309,7 +309,7 @@
         else if (thisVocabDisplay.getVocabType().equals(IndexConstants.PIRSF_TYPE_NAME))
         {
         out.print("<a href='"
-            + stConfig.get("JAVAWI_URL") + "WIFetch?page=pirsfDetail&id="
+            + stConfig.get("FEWI_URL") + "vocab/pirsf/"
             + thisVocabDisplay.getAcc_id() + "'>"
             + thisVocabDisplay.getName() + "</a>");
         }

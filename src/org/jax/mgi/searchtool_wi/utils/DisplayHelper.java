@@ -843,7 +843,7 @@ System.out.println("---> vocabDisplay.getAcc_id():" + vocabDisplay.getAcc_id());
     }
     else if (vocab.equals(IndexConstants.PIRSF_TYPE_NAME))
     {
-    	url = "<a href='"+ stConfig.get("JAVAWI_URL")+"WIFetch?page=pirsfDetail&id=" + vocabDisplay.getAcc_id()+ "'>"+vocabDisplay.getAnnotDisplay()+"</a>";
+    	url = "<a href='"+ stConfig.get("FEWI_URL")+"vocab/pirsf/" + vocabDisplay.getAcc_id()+ "'>"+vocabDisplay.getAnnotDisplay()+"</a>";
     }
     else if (vocab.equals(IndexConstants.INTERPRO_TYPE_NAME))
     {
