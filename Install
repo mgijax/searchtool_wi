@@ -8,7 +8,7 @@ fi
 . ${MGICONFIG}/master.config.sh
 
 # Play around with JAVA_HOME
-JAVA_HOME=/usr/mgijava6
+JAVA_HOME=/usr/mgijava7
 export JAVA_HOME
 
 echo $JAVA_HOME
