@@ -33,7 +33,7 @@
     detailPageUrl = fewi_url + "marker/" + thisGenomeFeatureDisplay.getMgiId();
   }
   else if ( thisGenomeFeatureResult.isAllele() ) {
-    detailPageUrl = javawi_url + "WIFetch?page=alleleDetail&key=" + thisGenomeFeatureResult.getDbKey();
+    detailPageUrl = fewi_url + "allele/key/" + thisGenomeFeatureResult.getDbKey();
   }
 %>
 

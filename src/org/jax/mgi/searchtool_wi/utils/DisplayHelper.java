@@ -833,7 +833,7 @@ System.out.println("---> vocabDisplay.getAcc_id():" + vocabDisplay.getAcc_id());
         url ="<a href = '" + stConfig.get("FEWI_URL") + "gxd/summary?structureKey=" + vocabDisplay.getDbKey() + "'>" + vocabDisplay.getAnnotDisplay()+ "</a>";
     }
     else if (vocab.equals(IndexConstants.MP_TYPE_NAME)) {
-        url = "<a href='"+stConfig.get("JAVAWI_URL")+"WIFetch?page=mpAnnotSummary&id=" + vocabDisplay.getAcc_id() + "'> "+ vocabDisplay.getAnnotDisplay()+"</a>";
+        url = "<a href='"+stConfig.get("FEWI_URL")+"mp/annotations/" + vocabDisplay.getAcc_id() + "'> "+ vocabDisplay.getAnnotDisplay()+"</a>";
     }
     else if (vocab.equals(IndexConstants.GO_TYPE_NAME)) {
         url = "<a href='"+ stConfig.get("WI_URL")+"searches/GOannot_report.cgi?id=" + vocabDisplay.getAcc_id() + "'> "+vocabDisplay.getAnnotDisplay()+"</a>";
@@ -843,7 +843,7 @@ System.out.println("---> vocabDisplay.getAcc_id():" + vocabDisplay.getAcc_id());
     }
     else if (vocab.equals(IndexConstants.PIRSF_TYPE_NAME))
     {
-    	url = "<a href='"+ stConfig.get("JAVAWI_URL")+"WIFetch?page=pirsfDetail&id=" + vocabDisplay.getAcc_id()+ "'>"+vocabDisplay.getAnnotDisplay()+"</a>";
+    	url = "<a href='"+ stConfig.get("FEWI_URL")+"vocab/pirsf/" + vocabDisplay.getAcc_id()+ "'>"+vocabDisplay.getAnnotDisplay()+"</a>";
     }
     else if (vocab.equals(IndexConstants.INTERPRO_TYPE_NAME))
     {

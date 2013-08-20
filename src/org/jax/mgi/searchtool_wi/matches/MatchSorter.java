@@ -30,7 +30,7 @@ public class MatchSorter implements Comparator {
     } else { // resort to secondary sort
         if (match_1.getAlphaSortBy().compareTo(match_2.getAlphaSortBy()) < 0) {
             iReturn = -1;
-        } else {
+        } else if (match_1.getAlphaSortBy().compareTo(match_2.getAlphaSortBy()) > 0) {
             iReturn = 1;
         }
     }
