@@ -1,3 +1,8 @@
+TAG: searchtool_wi-5-1-5-2
+DATE: 09/30/2013
+STAFF: dbm
+CHANGES: fix Lucene dir in build.properties.default
+
 TAG: searchtool_wi-5-1-5-1
 DATE: 08/20/2013
 STAFF: jsb
