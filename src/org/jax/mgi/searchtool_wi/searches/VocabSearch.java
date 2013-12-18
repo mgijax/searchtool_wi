@@ -56,8 +56,7 @@ public class VocabSearch extends AbstractSearch {
   //--------------//
   // Constructors
   //--------------//
-  public VocabSearch(Configuration c)
-  {
+  public VocabSearch(Configuration c) {
     super(c);
   }
 

@@ -268,10 +268,7 @@ public class SearchTool extends HttpServlet {
   /**
   * VOCAB SUMMARY - Gather the data, and forward to the view layer
   */
-  private void sendToVocab(HttpServletRequest request,
-    HttpServletResponse response, SearchInput searchInput)
-    throws Exception
-  {
+  private void sendToVocab(HttpServletRequest request, HttpServletResponse response, SearchInput searchInput) throws Exception {
     // Search vocab
     VocabResultContainer vocabResultContainer = getVocabResults(searchInput);
     request.setAttribute("VocabResultContainer", vocabResultContainer);
@@ -328,12 +325,9 @@ public class SearchTool extends HttpServlet {
   * The caller of this method doesn't need to know whether the result set
   * was pulled from cache, or dynamically generated
   */
-  private GenomeFeatureResultContainer getGenomeFeatureResults(SearchInput searchInput)
-    throws Exception
-  {
+  private GenomeFeatureResultContainer getGenomeFeatureResults(SearchInput searchInput) throws Exception {
     // first, try to retrieve this result set from cache
-    GenomeFeatureResultContainer gfResultContainer
-      = genomeFeatureResultCache.getMarkerContainer( searchInput.getCacheString() );
+    GenomeFeatureResultContainer gfResultContainer = genomeFeatureResultCache.getMarkerContainer( searchInput.getCacheString() );
 
     // if a filter has been submitted, bypass cache
     if (searchInput.hasFilter()) {
@@ -363,12 +357,9 @@ public class SearchTool extends HttpServlet {
   * The caller of this method doesn't need to know whether the result set
   * was pulled from cache, or dynamically generated
   */
-  private VocabResultContainer getVocabResults(SearchInput searchInput)
-    throws Exception
-  {
+  private VocabResultContainer getVocabResults(SearchInput searchInput) throws Exception {
     // first, try to retrieve this result set from cache
-    VocabResultContainer vocabResultContainer
-      = vocabResultCache.getVocabContainer( searchInput.getCacheString() );
+    VocabResultContainer vocabResultContainer = vocabResultCache.getVocabContainer( searchInput.getCacheString() );
 
     // if not found in cache, generarate the result set and add to cache
     if (vocabResultContainer == null) {
@@ -386,9 +377,7 @@ public class SearchTool extends HttpServlet {
   /**
   * Check each token to see if we'll not get a hit for it
   */
-  private void parseSearchString(SearchInput searchInput)
-    throws Exception
-  {
+  private void parseSearchString(SearchInput searchInput) throws Exception {
     List tokens = searchInput.getTokenizedInputString();
 
     // for each token, check existance cache
@@ -411,10 +400,7 @@ public class SearchTool extends HttpServlet {
   /**
   * Validation of user's input
   */
-  private void validateUserInput(HttpServletRequest request,
-    HttpServletResponse response, SearchInput searchInput)
-    throws IOException, ServletException
-  {
+  private void validateUserInput(HttpServletRequest request, HttpServletResponse response, SearchInput searchInput) throws IOException, ServletException {
     QuickSearchException qse = new QuickSearchException();
     String inputString = searchInput.getSearchString();
     String largeToken;
