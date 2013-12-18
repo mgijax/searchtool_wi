@@ -13,8 +13,7 @@ import org.jax.mgi.shr.config.Configuration;
 public class IndexReaderContainer {
 
     // Single instance of IndexReaderContainer
-    private static IndexReaderContainer readerInstance =
-      new IndexReaderContainer();
+    private static IndexReaderContainer readerInstance = new IndexReaderContainer();
 
     // Readers
     private IndexReader genomeFeatureDisplayReader = null;

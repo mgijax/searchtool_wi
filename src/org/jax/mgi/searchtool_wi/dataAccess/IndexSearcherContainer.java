@@ -60,10 +60,8 @@ public class IndexSearcherContainer {
             searcherInstance.setGenomeFeatureAccIDIndex(baseDir + "genomeFeatureAccID/index");
             searcherInstance.setGenomeFeatureSymbolIndex(baseDir + "genomeFeatureSymbol/index");
             searcherInstance.setGenomeFeatureInexactIndex(baseDir + "genomeFeatureInexact/index");
-            searcherInstance.setGenomeFeatureVocabAccIDIndex(baseDir
-                    + "genomeFeatureVocabAccID/index");
-            searcherInstance.setGenomeFeatureVocabExactIndex(baseDir
-                    + "genomeFeatureVocabExact/index");
+            searcherInstance.setGenomeFeatureVocabAccIDIndex(baseDir + "genomeFeatureVocabAccID/index");
+            searcherInstance.setGenomeFeatureVocabExactIndex(baseDir + "genomeFeatureVocabExact/index");
 
             // Vocab Searches
             searcherInstance.setVocabInexact(baseDir + "vocabInexact/index");
