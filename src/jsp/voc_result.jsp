@@ -2,8 +2,7 @@
 
 <%
 
-    VocabResultContainer vocabResultContainer =
-        (VocabResultContainer)request.getAttribute("VocabResultContainer");
+    VocabResultContainer vocabResultContainer = (VocabResultContainer)request.getAttribute("VocabResultContainer");
 
     // derive needed data from passed request attributes
     Integer vocabStart = new Integer(1);   //default
@@ -129,6 +128,13 @@
     out.print("<a href='"
         + stConfig.get("WI_URL") + "searches/anatdict.cgi?id="
         + thisVocabDisplay.getDbKey() + "'>"
+        + thisVocabDisplay.getName() + "</a>");
+    }
+    else if (thisVocabDisplay.getVocabType().equals(IndexConstants.EMAPA_TYPE_NAME))
+    {
+    out.print("<a href='"
+        + stConfig.get("FEWI_URL") + "vocab/gxd/anatomy/"
+        + thisVocabDisplay.getAcc_id() + "'>"
         + thisVocabDisplay.getName() + "</a>");
     }
     else if (thisVocabDisplay.getVocabType().equals(IndexConstants.GO_TYPE_NAME))

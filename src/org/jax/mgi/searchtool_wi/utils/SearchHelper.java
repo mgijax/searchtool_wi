@@ -20,16 +20,16 @@ public class SearchHelper {
 	// Vocab Identification //
 	//----------------------//
 
-//	// AD
-//	public static boolean isAD(Hit hit) {
-//		try {
-//			return IndexConstants.AD_TYPE_NAME.equals(hit.get(IndexConstants.COL_OBJ_TYPE));
-//		} catch (Exception e) {e.printStackTrace();}
-//		return false;
-//	}
-//	public static boolean isAD(String str) {
-//		return IndexConstants.AD_TYPE_NAME.equals(str);
-//	}
+	// AD
+	public static boolean isAD(Hit hit) {
+		try {
+			return IndexConstants.AD_TYPE_NAME.equals(hit.get(IndexConstants.COL_OBJ_TYPE));
+		} catch (Exception e) {e.printStackTrace();}
+		return false;
+	}
+	public static boolean isAD(String str) {
+		return IndexConstants.AD_TYPE_NAME.equals(str);
+	}
 
 	// MP
 	public static boolean isMP(Hit hit) {
