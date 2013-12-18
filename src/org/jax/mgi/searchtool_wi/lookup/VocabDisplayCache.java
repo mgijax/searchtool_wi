@@ -40,8 +40,7 @@ public class VocabDisplayCache
     /////////////////
 
     // Create the ONLY instance of this class
-    private static final VocabDisplayCache _theInstance =
-        new VocabDisplayCache();
+    private static final VocabDisplayCache _theInstance = new VocabDisplayCache();
 
     // private constructor to avoid outside instantiation
     private VocabDisplayCache(){}
@@ -54,7 +53,7 @@ public class VocabDisplayCache
     private static Boolean loadNeeded = true;
 
     private static HashMap<String, VocabDisplay> vocabCacheMap;
-    private static HashMap<String, VocabDisplay> vocabADCacheMap;
+    //private static HashMap<String, VocabDisplay> vocabADCacheMap;
 
     /////////////////////////////
     // Singleton retrieval method
@@ -82,60 +81,29 @@ public class VocabDisplayCache
      public VocabDisplay getVocab(VocabResult s)
     {
 
-        if (s.getVocabulary().equals(IndexConstants.AD_TYPE_NAME)) {
-            return (VocabDisplay)vocabADCacheMap.get(s.getDbKey());
-        }
-        else {
+
             return (VocabDisplay)vocabCacheMap.get(s.getDbKey());
-        }
+
     }
 
      public VocabDisplay getVocab(VocabMatch vm)
     {
+    	 return (VocabDisplay)vocabCacheMap.get(vm.getDbKey());
 
-        VocabDisplay vocabDisplay;
-
-        if (vm.getVocabulary().equals(IndexConstants.AD_TYPE_NAME)) {
-            vocabDisplay = (VocabDisplay)vocabADCacheMap.get(vm.getDbKey());
-        }
-        else {
-            vocabDisplay = (VocabDisplay)vocabCacheMap.get(vm.getDbKey());
-        }
-        return vocabDisplay;
     }
 
-     public VocabDisplay getVocab(MarkerVocabMatch vm)
-    {
-
-        VocabDisplay vocabDisplay;
-
-        if (vm.getVocabulary().equals(IndexConstants.AD_TYPE_NAME)) {
-            vocabDisplay = (VocabDisplay)vocabADCacheMap.get(vm.getDbKey());
-        }
-        else {
-            vocabDisplay = (VocabDisplay)vocabCacheMap.get(vm.getDbKey());
-        }
-        return vocabDisplay;
+     public VocabDisplay getVocab(MarkerVocabMatch vm) {
+        return (VocabDisplay)vocabCacheMap.get(vm.getDbKey());
     }
 
-     public VocabDisplay getParentVocab(MarkerVocabMatch vm)
-    {
-
-        VocabDisplay vocabDisplay;
-
-        if (vm.getVocabulary().equals(IndexConstants.AD_TYPE_NAME)) {
-            vocabDisplay = (VocabDisplay)vocabADCacheMap.get(vm.getAncestorKey());
-        }
-        else {
-            vocabDisplay = (VocabDisplay)vocabCacheMap.get(vm.getAncestorKey());
-        }
-        return vocabDisplay;
+     public VocabDisplay getParentVocab(MarkerVocabMatch vm) {
+        return (VocabDisplay)vocabCacheMap.get(vm.getAncestorKey());
     }
 
-    public VocabDisplay getAdTerm(String s) {
-        return (VocabDisplay)vocabADCacheMap.get(s);
+    public VocabDisplay getMpTerm2(String s) {
+        return (VocabDisplay)vocabCacheMap.get(s);
     }
-    public VocabDisplay getMpTerm(String s) {
+    public VocabDisplay getEmapaTerm(String s) {
         return (VocabDisplay)vocabCacheMap.get(s);
     }
     public VocabDisplay getGoTerm(String s) {
@@ -213,7 +181,6 @@ public class VocabDisplayCache
     {
         Document doc;
         HashMap <String, VocabDisplay> newVocabCache = new HashMap <String, VocabDisplay>();
-        HashMap <String, VocabDisplay> newVocabADCache = new HashMap <String, VocabDisplay>();
 
         log.info("VocabDisplayCache loading...");
         try {
@@ -239,14 +206,8 @@ public class VocabDisplayCache
             thisVocabDisplay.setAcc_id(doc.get(IndexConstants.COL_ACC_ID));
             thisVocabDisplay.setChildIds(doc.get(IndexConstants.COL_CHILD_IDS));
 
-            if (thisVocabDisplay.getVocabType().equals("AD"))
-            {
-                newVocabADCache.put(thisVocabDisplay.getDbKey(), thisVocabDisplay);
-            }
-            else
-            {
+
             newVocabCache.put(thisVocabDisplay.getDbKey(), thisVocabDisplay);
-            }
 
           }
 
@@ -255,14 +216,12 @@ public class VocabDisplayCache
         }
 
         vocabCacheMap = newVocabCache;
-        vocabADCacheMap = newVocabADCache;
 
         getDAGMarkerCounts(vocabCacheMap);
-        getDAGMarkerCounts(vocabADCacheMap);
 
         loadNeeded = false;
         log.info("VocabDisplayCache finished loading...");
-
+        
         return;
     }
 
