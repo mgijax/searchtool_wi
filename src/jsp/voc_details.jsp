@@ -9,29 +9,30 @@
 
     VocabResult vocabResult;
 
-    switch(vocabType) {
-	    case IndexConstants.GO_TYPE_NAME:
-	    	vocabResult = vocabResultContainer.getGoByKey(vocabKey);
-	    	break;
-	    case IndexConstants.OMIM_TYPE_NAME:
-	    	vocabResult = vocabResultContainer.getOmimByKey(vocabKey);
-	    	break;
-	    case IndexConstants.AD_TYPE_NAME:
-	    	vocabResult = vocabResultContainer.getAdByKey(vocabKey);
-	    	break;
-	    case IndexConstants.EMAPA_TYPE_NAME:
-	    	vocabResult = vocabResultContainer.getEmapaByKey(vocabKey);
-	    	break;
-	    case IndexConstants.PIRSF_TYPE_NAME:
-	    	vocabResult = vocabResultContainer.getPsByKey(vocabKey);
-	    	break;
-	    case IndexConstants.INTERPRO_TYPE_NAME:
-	    	vocabResult = vocabResultContainer.getIpByKey(vocabKey);
-	    	break;
-	    default:
-	    	vocabResult = vocabResultContainer.getMpByKey(vocabKey);
-	    	break;
-    	
+    if (vocabType.equals(IndexConstants.GO_TYPE_NAME))
+    {
+    	vocabResult = vocabResultContainer.getGoByKey(vocabKey);
+    }
+    else if (vocabType.equals(IndexConstants.OMIM_TYPE_NAME))
+    {
+    	vocabResult = vocabResultContainer.getOmimByKey(vocabKey);
+    }
+    else if (vocabType.equals(IndexConstants.AD_TYPE_NAME))
+    {
+    	vocabResult = vocabResultContainer.getAdByKey(vocabKey);
+    }
+    else if (vocabType.equals(IndexConstants.PIRSF_TYPE_NAME))
+    {
+        vocabResult = vocabResultContainer.getPsByKey(vocabKey);
+    }
+    else if (vocabType.equals(IndexConstants.INTERPRO_TYPE_NAME))
+    {
+        vocabResult = vocabResultContainer.getIpByKey(vocabKey);
+    }
+
+    else
+    {
+    	vocabResult = vocabResultContainer.getMpByKey(vocabKey);
     }
 
 %>

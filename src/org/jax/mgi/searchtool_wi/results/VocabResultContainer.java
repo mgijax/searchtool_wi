@@ -13,7 +13,6 @@ public class VocabResultContainer extends ResultContainer {
   HashMap<String, VocabResult> mpMappedResults = new HashMap<String, VocabResult>();
   HashMap<String, VocabResult> psMappedResults = new HashMap<String, VocabResult>();
   HashMap<String, VocabResult> ipMappedResults = new HashMap<String, VocabResult>();
-  HashMap<String, VocabResult> emapaMappedResults = new HashMap<String, VocabResult>();
 
   // ////////////
   // Constructor
@@ -31,15 +30,14 @@ public class VocabResultContainer extends ResultContainer {
               omimMappedResults.put(current.getDbKey().toString(), current);
           } else if (current.getVocabulary().equals(IndexConstants.MP_TYPE_NAME)) {
               mpMappedResults.put(current.getDbKey().toString(), current);
-          //} else if (current.getVocabulary().equals(IndexConstants.AD_TYPE_NAME)) {
-          //    adMappedResults.put(current.getDbKey().toString(), current);
+          } else if (current.getVocabulary().equals(IndexConstants.AD_TYPE_NAME)) {
+              adMappedResults.put(current.getDbKey().toString(), current);
           } else if (current.getVocabulary().equals(IndexConstants.INTERPRO_TYPE_NAME)) {
               ipMappedResults.put(current.getDbKey().toString(), current);
           } else if (current.getVocabulary().equals(IndexConstants.PIRSF_TYPE_NAME)) {
               psMappedResults.put(current.getDbKey().toString(), current);
-          } else if (current.getVocabulary().equals(IndexConstants.EMAPA_TYPE_NAME)) {
-        	  emapaMappedResults.put(current.getDbKey().toString(), current);
           }
+
       }
   }
 
@@ -61,10 +59,6 @@ public class VocabResultContainer extends ResultContainer {
   // AD
   public VocabResult getAdByKey(String key) {
       return (VocabResult) adMappedResults.get(key);
-  }
-  
-  public VocabResult getEmapaByKey(String key) {
-	  return (VocabResult) emapaMappedResults.get(key);
   }
 
   // PIRSF

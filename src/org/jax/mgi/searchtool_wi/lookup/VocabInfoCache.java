@@ -48,7 +48,6 @@ public class VocabInfoCache
     private static HashMap mpChildIds             = new HashMap();
     private static HashMap goChildIds             = new HashMap();
     private static HashMap adChildIds             = new HashMap();
-    private static HashMap emapaChildIds          = new HashMap();
     private static HashMap omimChildIds           = new HashMap();
     private static HashMap omimOrthoChildIds      = new HashMap();
     private static HashMap psChildIds             = new HashMap();
@@ -58,7 +57,6 @@ public class VocabInfoCache
     private static HashMap mpAnnotMarkers         = new HashMap();
     private static HashMap goAnnotMarkers         = new HashMap();
     private static HashMap adAnnotMarkers         = new HashMap();
-    private static HashMap emapaAnnotMarkers      = new HashMap();
     private static HashMap omimAnnotMarkers       = new HashMap();
     private static HashMap omimOrthoAnnotMarkers  = new HashMap();
     private static HashMap psAnnotMarkers         = new HashMap();
@@ -67,7 +65,6 @@ public class VocabInfoCache
     // vocabID -> annotated alleles list
     private static HashMap mpAnnotAlleles         = new HashMap();
     private static HashMap omimAnnotAlleles       = new HashMap();
-    private static HashMap emapaAnnotAlleles      = new HashMap();
 
 
     // IndexReaderContainer
@@ -118,9 +115,7 @@ public class VocabInfoCache
     public List getIpChildTerms(String termKey){
         return (List)ipChildIds.get(termKey);
     }
-    public List getEmapaChildTerms(String termKey){
-        return (List)emapaChildIds.get(termKey);
-    }
+
 
     //------------------------------------//
     // Annotated Marker Retrieval Methods //
@@ -186,14 +181,11 @@ public class VocabInfoCache
                     new ArrayList( Arrays.asList(doc.get(IndexConstants.COL_CHILD_IDS).split(",")) );
 
                 // put the data in the proper mapping
-//                if (doc.get(IndexConstants.COL_VOCABULARY).equals(IndexConstants.AD_TYPE_NAME)) {
-//                  adChildIds.put(doc.get(IndexConstants.COL_DB_KEY), objectKeys);
-//                }
-                if (doc.get(IndexConstants.COL_VOCABULARY).equals(IndexConstants.MP_TYPE_NAME)){
-                  mpChildIds.put(doc.get(IndexConstants.COL_DB_KEY), objectKeys);
+                if (doc.get(IndexConstants.COL_VOCABULARY).equals(IndexConstants.AD_TYPE_NAME)) {
+                  adChildIds.put(doc.get(IndexConstants.COL_DB_KEY), objectKeys);
                 }
-                else if (doc.get(IndexConstants.COL_VOCABULARY).equals(IndexConstants.EMAPA_TYPE_NAME)){
-                    emapaChildIds.put(doc.get(IndexConstants.COL_DB_KEY), objectKeys);
+                else if (doc.get(IndexConstants.COL_VOCABULARY).equals(IndexConstants.MP_TYPE_NAME)){
+                  mpChildIds.put(doc.get(IndexConstants.COL_DB_KEY), objectKeys);
                 }
                 else if (doc.get(IndexConstants.COL_VOCABULARY).equals(IndexConstants.GO_TYPE_NAME)){
                   goChildIds.put(doc.get(IndexConstants.COL_DB_KEY), objectKeys);
@@ -220,14 +212,11 @@ public class VocabInfoCache
                     new ArrayList( Arrays.asList(doc.get("feature_ids").split(",")) );
 
                 // put the data in the proper mapping
-//                if (doc.get(IndexConstants.COL_VOCABULARY).equals(IndexConstants.AD_TYPE_NAME)) {
-//                  adAnnotMarkers.put(doc.get(IndexConstants.COL_DB_KEY), objectKeys);
-//                }
-                if (doc.get(IndexConstants.COL_VOCABULARY).equals(IndexConstants.MP_TYPE_NAME)){
-                  mpAnnotMarkers.put(doc.get(IndexConstants.COL_DB_KEY), objectKeys);
+                if (doc.get(IndexConstants.COL_VOCABULARY).equals(IndexConstants.AD_TYPE_NAME)) {
+                  adAnnotMarkers.put(doc.get(IndexConstants.COL_DB_KEY), objectKeys);
                 }
-                else if (doc.get(IndexConstants.COL_VOCABULARY).equals(IndexConstants.EMAPA_TYPE_NAME)){
-                  emapaAnnotMarkers.put(doc.get(IndexConstants.COL_DB_KEY), objectKeys);
+                else if (doc.get(IndexConstants.COL_VOCABULARY).equals(IndexConstants.MP_TYPE_NAME)){
+                  mpAnnotMarkers.put(doc.get(IndexConstants.COL_DB_KEY), objectKeys);
                 }
                 else if (doc.get(IndexConstants.COL_VOCABULARY).equals(IndexConstants.GO_TYPE_NAME)){
                   goAnnotMarkers.put(doc.get(IndexConstants.COL_DB_KEY), objectKeys);
@@ -258,9 +247,6 @@ public class VocabInfoCache
                 // put the data in the proper mapping
                 if (doc.get(IndexConstants.COL_VOCABULARY).equals(IndexConstants.MP_TYPE_NAME)){
                   mpAnnotAlleles.put(doc.get(IndexConstants.COL_DB_KEY), alleleKeys);
-                }
-                else if (doc.get(IndexConstants.COL_VOCABULARY).equals(IndexConstants.EMAPA_TYPE_NAME)){
-                    emapaAnnotAlleles.put(doc.get(IndexConstants.COL_DB_KEY), alleleKeys);
                 }
                 else if (doc.get(IndexConstants.COL_VOCABULARY).equals(IndexConstants.OMIM_TYPE_NAME)){
                   omimAnnotAlleles.put(doc.get(IndexConstants.COL_DB_KEY), alleleKeys);
