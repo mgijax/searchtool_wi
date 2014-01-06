@@ -42,7 +42,7 @@ public class IndexReaderContainer {
         if (readerInstance.genomeFeatureDisplayReader == null) {
 
             String baseDir = stConfig.get("INDEX_DIR");
-
+            
             readerInstance.setGenomeFeatureDisplayReader(baseDir + "genomeFeatureDisplay/index");
             readerInstance.setVocabDisplayReader(baseDir + "vocabDisplay/index");
             readerInstance.setGenomeFeaturerVocabReader(baseDir + "genomeFeatureVocabDag/index");
@@ -129,6 +129,7 @@ public class IndexReaderContainer {
         try {
             ir = IndexReader.open(path);
         } catch (Exception e) {
+        	logger.error("Can't find index in the following location: " + path);
             logger.error(e.getStackTrace().toString());
         }
         return ir;
