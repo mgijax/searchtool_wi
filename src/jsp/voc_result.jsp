@@ -115,7 +115,7 @@
 <%
     // column 1 (term)
     out.print("<span class='matchDisplayableType small'>"
-      + thisVocabDisplay.getTypeDisplay() + "</span> : ");
+      + thisVocabDisplay.getTypeDisplay() + "</span>: ");
     if (thisVocabDisplay.getVocabType().equals(IndexConstants.OMIM_TYPE_NAME))
     {
     out.print("<a href='"

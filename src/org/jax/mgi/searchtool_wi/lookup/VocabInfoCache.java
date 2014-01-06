@@ -48,6 +48,8 @@ public class VocabInfoCache
     private static HashMap mpChildIds             = new HashMap();
     private static HashMap goChildIds             = new HashMap();
     private static HashMap adChildIds             = new HashMap();
+    private static HashMap emapaChildIds          = new HashMap();
+    private static HashMap emapsChildIds          = new HashMap();
     private static HashMap omimChildIds           = new HashMap();
     private static HashMap omimOrthoChildIds      = new HashMap();
     private static HashMap psChildIds             = new HashMap();
@@ -57,6 +59,8 @@ public class VocabInfoCache
     private static HashMap mpAnnotMarkers         = new HashMap();
     private static HashMap goAnnotMarkers         = new HashMap();
     private static HashMap adAnnotMarkers         = new HashMap();
+    private static HashMap emapaAnnotMarkers      = new HashMap();
+    private static HashMap emapsAnnotMarkers      = new HashMap();
     private static HashMap omimAnnotMarkers       = new HashMap();
     private static HashMap omimOrthoAnnotMarkers  = new HashMap();
     private static HashMap psAnnotMarkers         = new HashMap();
@@ -103,6 +107,12 @@ public class VocabInfoCache
     public List getAdChildTerms(String termKey){
         return (List)adChildIds.get(termKey);
     }
+    public List getEmapaChildTerms(String termKey){
+        return (List)emapaChildIds.get(termKey);
+    }
+    public List getEmapsChildTerms(String termKey){
+        return (List)emapsChildIds.get(termKey);
+    }
     public List getOmimChildTerms(String termKey){
         return (List)omimChildIds.get(termKey);
     }
@@ -129,6 +139,12 @@ public class VocabInfoCache
     }
     public List getAdAnnotMarkers(String termKey){
         return (List)adAnnotMarkers.get(termKey);
+    }
+    public List getEmapaAnnotMarkers(String termKey){
+        return (List)emapaAnnotMarkers.get(termKey);
+    }
+    public List getEmapsAnnotMarkers(String termKey){
+        return (List)emapsAnnotMarkers.get(termKey);
     }
     public List getOmimAnnotMarkers(String termKey){
         return (List)omimAnnotMarkers.get(termKey);
@@ -184,6 +200,12 @@ public class VocabInfoCache
                 if (doc.get(IndexConstants.COL_VOCABULARY).equals(IndexConstants.AD_TYPE_NAME)) {
                   adChildIds.put(doc.get(IndexConstants.COL_DB_KEY), objectKeys);
                 }
+                else if (doc.get(IndexConstants.COL_VOCABULARY).equals(IndexConstants.EMAPA_TYPE_NAME)){
+                    emapaChildIds.put(doc.get(IndexConstants.COL_DB_KEY), objectKeys);
+                }
+                else if (doc.get(IndexConstants.COL_VOCABULARY).equals(IndexConstants.EMAPS_TYPE_NAME)){
+                    emapsChildIds.put(doc.get(IndexConstants.COL_DB_KEY), objectKeys);
+                }
                 else if (doc.get(IndexConstants.COL_VOCABULARY).equals(IndexConstants.MP_TYPE_NAME)){
                   mpChildIds.put(doc.get(IndexConstants.COL_DB_KEY), objectKeys);
                 }
@@ -214,6 +236,12 @@ public class VocabInfoCache
                 // put the data in the proper mapping
                 if (doc.get(IndexConstants.COL_VOCABULARY).equals(IndexConstants.AD_TYPE_NAME)) {
                   adAnnotMarkers.put(doc.get(IndexConstants.COL_DB_KEY), objectKeys);
+                }
+                else if (doc.get(IndexConstants.COL_VOCABULARY).equals(IndexConstants.EMAPA_TYPE_NAME)){
+                    emapaAnnotMarkers.put(doc.get(IndexConstants.COL_DB_KEY), objectKeys);
+                }
+                else if (doc.get(IndexConstants.COL_VOCABULARY).equals(IndexConstants.EMAPS_TYPE_NAME)){
+                    emapsAnnotMarkers.put(doc.get(IndexConstants.COL_DB_KEY), objectKeys);
                 }
                 else if (doc.get(IndexConstants.COL_VOCABULARY).equals(IndexConstants.MP_TYPE_NAME)){
                   mpAnnotMarkers.put(doc.get(IndexConstants.COL_DB_KEY), objectKeys);

@@ -826,28 +826,34 @@ public class DisplayHelper
   {
     String vocab = vocabResult.getVocabulary();
     VocabDisplay vocabDisplay = vocabDisplayCache.getVocab(vocabResult);
-System.out.println("---> vocabDisplay.getAcc_id():" + vocabDisplay.getAcc_id());
+
     String url = "";
     if (vocab.equals(IndexConstants.AD_TYPE_NAME)) {
         //url ="<a href = '" + stConfig.get("WI_URL") + "searches/expression_report.cgi?_Structure_key=" + vocabDisplay.getDbKey() + "&sort=Gene%20Symbol&returnType=assay%20results&substructures=substructures'>" + vocabDisplay.getAnnotDisplay()+ "</a>";
         url ="<a href = '" + stConfig.get("FEWI_URL") + "gxd/summary?structureKey=" + vocabDisplay.getDbKey() + "'>" + vocabDisplay.getAnnotDisplay()+ "</a>";
     }
+    else if (vocab.equals(IndexConstants.EMAPA_TYPE_NAME)) {
+        url = "<a href='" + stConfig.get("FEWI_URL") + "vocab/gxd/anatomy/" + vocabDisplay.getAcc_id() + "'> " + vocabDisplay.getName() + "</a>";
+    }
+    else if (vocab.equals(IndexConstants.EMAPS_TYPE_NAME)) {
+        url = "<a href='" + stConfig.get("FEWI_URL") + "vocab/gxd/anatomy/" + vocabDisplay.getAcc_id() + "'> " + vocabDisplay.getName() + "</a>";
+    }
     else if (vocab.equals(IndexConstants.MP_TYPE_NAME)) {
-        url = "<a href='"+stConfig.get("FEWI_URL")+"mp/annotations/" + vocabDisplay.getAcc_id() + "'> "+ vocabDisplay.getAnnotDisplay()+"</a>";
+        url = "<a href='" + stConfig.get("FEWI_URL") + "mp/annotations/" + vocabDisplay.getAcc_id() + "'> " + vocabDisplay.getAnnotDisplay()+"</a>";
     }
     else if (vocab.equals(IndexConstants.GO_TYPE_NAME)) {
-        url = "<a href='"+ stConfig.get("WI_URL")+"searches/GOannot_report.cgi?id=" + vocabDisplay.getAcc_id() + "'> "+vocabDisplay.getAnnotDisplay()+"</a>";
+        url = "<a href='" + stConfig.get("WI_URL") + "searches/GOannot_report.cgi?id=" + vocabDisplay.getAcc_id() + "'> " + vocabDisplay.getAnnotDisplay() + "</a>";
     }
     else if (vocab.equals(IndexConstants.OMIM_TYPE_NAME)) {
-        url = "<a href='"+ stConfig.get("FEWI_URL")+"disease/key/" + vocabDisplay.getDbKey()+ "'>"+vocabDisplay.getAnnotDisplay()+"</a>";
+        url = "<a href='" + stConfig.get("FEWI_URL") + "disease/key/" + vocabDisplay.getDbKey()+ "'>" + vocabDisplay.getAnnotDisplay() + "</a>";
     }
     else if (vocab.equals(IndexConstants.PIRSF_TYPE_NAME))
     {
-    	url = "<a href='"+ stConfig.get("FEWI_URL")+"vocab/pirsf/" + vocabDisplay.getAcc_id()+ "'>"+vocabDisplay.getAnnotDisplay()+"</a>";
+    	url = "<a href='" + stConfig.get("FEWI_URL") + "vocab/pirsf/" + vocabDisplay.getAcc_id()+ "'>" + vocabDisplay.getAnnotDisplay() + "</a>";
     }
     else if (vocab.equals(IndexConstants.INTERPRO_TYPE_NAME))
     {
-    	url = "<a href ='" + stConfig.get("WI_URL")+"searches/marker_report.cgi?op%3Ago_term=contains&go_term=&interpro="+ vocabDisplay.getAcc_id() +"&clone=&sort=Nomenclature&*limit=500'>"+vocabDisplay.getAnnotDisplay()+"</a>";
+    	url = "<a href='" + stConfig.get("WI_URL") + "searches/marker_report.cgi?op%3Ago_term=contains&go_term=&interpro=" + vocabDisplay.getAcc_id() + "&clone=&sort=Nomenclature&*limit=500'>" + vocabDisplay.getAnnotDisplay() + "</a>";
     }
     else
     {

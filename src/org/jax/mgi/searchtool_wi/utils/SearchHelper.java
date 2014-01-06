@@ -40,7 +40,48 @@ public class SearchHelper
     }
     return isAD;
   }
+  
+  // EMAPA
+  public static boolean isEMAPA (Hit hit) {
 
+    boolean isAD = false;
+    try{
+        if (hit.get(IndexConstants.COL_OBJ_TYPE).equals(IndexConstants.EMAPA_TYPE_NAME)) {
+            isAD = true;
+        }
+    }
+    catch (Exception e) {e.printStackTrace();}
+    return isAD;
+  }
+  public static boolean isEMAPA (String str) {
+
+    boolean isAD = false;
+    if (str.equals(IndexConstants.EMAPA_TYPE_NAME)) {
+        isAD = true;
+    }
+    return isAD;
+  }
+
+  // EMAPS
+  public static boolean isEMAPS (Hit hit) {
+
+    boolean isAD = false;
+    try{
+        if (hit.get(IndexConstants.COL_OBJ_TYPE).equals(IndexConstants.EMAPS_TYPE_NAME)) {
+            isAD = true;
+        }
+    }
+    catch (Exception e) {e.printStackTrace();}
+    return isAD;
+  }
+  public static boolean isEMAPS (String str) {
+
+    boolean isAD = false;
+    if (str.equals(IndexConstants.EMAPS_TYPE_NAME)) {
+        isAD = true;
+    }
+    return isAD;
+  }
 
   // MP
   public static boolean isMP (Hit hit) {

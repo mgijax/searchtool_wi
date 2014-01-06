@@ -108,7 +108,7 @@ public class VocabDisplayCache
     {
 
         VocabDisplay vocabDisplay;
-
+        
         if (vm.getVocabulary().equals(IndexConstants.AD_TYPE_NAME)) {
             vocabDisplay = (VocabDisplay)vocabADCacheMap.get(vm.getDbKey());
         }

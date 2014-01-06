@@ -284,7 +284,7 @@
 <%
         // column 1 (term)
         out.print("<span class='matchDisplayableType small'>"
-          + thisVocabDisplay.getTypeDisplay() + "</span> : ");
+          + thisVocabDisplay.getTypeDisplay() + "</span>: ");
         if (thisVocabDisplay.getVocabType().equals(IndexConstants.OMIM_TYPE_NAME))
         {
         out.print("<a href='"
@@ -300,6 +300,13 @@
             + thisVocabDisplay.getName() + "</a>");
         }
         else if (thisVocabDisplay.getVocabType().equals(IndexConstants.EMAPA_TYPE_NAME))
+        {
+        out.print("<a href='"
+            + stConfig.get("FEWI_URL") + "vocab/gxd/anatomy/"
+            + thisVocabDisplay.getAcc_id() + "'>"
+            + thisVocabDisplay.getName() + "</a>");
+        }
+        else if (thisVocabDisplay.getVocabType().equals(IndexConstants.EMAPS_TYPE_NAME))
         {
         out.print("<a href='"
             + stConfig.get("FEWI_URL") + "vocab/gxd/anatomy/"
@@ -491,13 +498,13 @@
 
         // column 3 (Why did this match, accid)
         out.print("<td class='small'>");
-        //out.print("ID : ");
+        //out.print("ID: ");
 
         OtherMatch oem = (OtherMatch)thisOtherResult.getBestMatch();
 
 
         out.print (oem.display());
-/*        out.print( oem.getDisplayableType() +" : " + oem.getMatchedText());
+/*        out.print( oem.getDisplayableType() +": " + oem.getMatchedText());
 
         if (!oem.getLogicalDb().equals("") && !oem.getLogicalDb().equals("MGI")) {
             out.print(" ("+oem.getLogicalDb()+")");
