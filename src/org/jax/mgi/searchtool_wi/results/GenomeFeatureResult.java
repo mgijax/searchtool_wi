@@ -41,24 +41,15 @@ public class GenomeFeatureResult extends AbstractResult {
   private List allVocMatches;
 
   // lists of specific types of matches
-  private ArrayList<MarkerNomenMatch> markerNomenMatches
-    = new ArrayList<MarkerNomenMatch>();
-  private ArrayList<AlleleNomenMatch> alleleNomenMatches
-    = new ArrayList<AlleleNomenMatch>();
-  private ArrayList<MarkerVocabMatch> adMatches
-    = new ArrayList<MarkerVocabMatch>();
-  private ArrayList<MarkerVocabMatch> goMatches
-    = new ArrayList<MarkerVocabMatch>();
-  private ArrayList<MarkerVocabMatch> mpMatches
-    = new ArrayList<MarkerVocabMatch>();
-  private ArrayList<MarkerVocabMatch> omimMatches
-    = new ArrayList<MarkerVocabMatch>();
-  private ArrayList<MarkerVocabMatch> omimOrthoMatches
-    = new ArrayList<MarkerVocabMatch>();
-  private ArrayList<MarkerVocabMatch> pirsfMatches
-    = new ArrayList<MarkerVocabMatch>();
-  private ArrayList<MarkerVocabMatch> ipMatches
-    = new ArrayList<MarkerVocabMatch>();
+  private ArrayList<MarkerNomenMatch> markerNomenMatches = new ArrayList<MarkerNomenMatch>();
+  private ArrayList<AlleleNomenMatch> alleleNomenMatches = new ArrayList<AlleleNomenMatch>();
+  private ArrayList<MarkerVocabMatch> adMatches = new ArrayList<MarkerVocabMatch>();
+  private ArrayList<MarkerVocabMatch> goMatches = new ArrayList<MarkerVocabMatch>();
+  private ArrayList<MarkerVocabMatch> mpMatches = new ArrayList<MarkerVocabMatch>();
+  private ArrayList<MarkerVocabMatch> omimMatches = new ArrayList<MarkerVocabMatch>();
+  private ArrayList<MarkerVocabMatch> omimOrthoMatches = new ArrayList<MarkerVocabMatch>();
+  private ArrayList<MarkerVocabMatch> pirsfMatches = new ArrayList<MarkerVocabMatch>();
+  private ArrayList<MarkerVocabMatch> ipMatches = new ArrayList<MarkerVocabMatch>();
 
   // scores
   private Float derivedScore    = new Float(0.0);
