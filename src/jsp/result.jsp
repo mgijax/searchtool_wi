@@ -123,9 +123,7 @@
   </tr>
 
 <% // iterate through the marker results
-    for (Iterator iter
-      = genomeFeatureResultContainer.getTopHits(displayLengthMarker).iterator();
-      iter.hasNext();)
+    for (Iterator iter = genomeFeatureResultContainer.getTopHits(displayLengthMarker).iterator(); iter.hasNext();)
   {
     thisGenomeFeatureResult    = (GenomeFeatureResult)iter.next();
     thisGenomeFeatureDisplay   = gfDisplayCache.getGenomeFeature(thisGenomeFeatureResult);

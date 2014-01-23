@@ -1,11 +1,6 @@
 package org.jax.mgi.searchtool_wi.utils;
 
-import java.util.*;
-import org.apache.lucene.search.*;
-import org.apache.lucene.analysis.*;
-import org.apache.lucene.queryParser.*;
-import org.apache.lucene.document.*;
-import org.apache.lucene.index.*;
+import org.apache.lucene.search.Hit;
 import org.jax.mgi.shr.searchtool.IndexConstants;
 
 /**
