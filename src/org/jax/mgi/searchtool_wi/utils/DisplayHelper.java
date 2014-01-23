@@ -848,10 +848,10 @@ public class DisplayHelper
 			url = "<a href = '" + stConfig.get("FEWI_URL") + "gxd/summary?structureKey=" + vocabDisplay.getDbKey() + "'>" + vocabDisplay.getAnnotDisplay() + "</a>";
 		}
 		else if (vocab.equals(IndexConstants.EMAPA_TYPE_NAME)) {
-			url = "<a href='" + stConfig.get("FEWI_URL") + "mgi/gxd/structure/" + vocabDisplay.getAcc_id() + "'> " + vocabDisplay.getAnnotDisplay() + "</a>";
+			url = "<a href='" + stConfig.get("FEWI_URL") + "gxd/structure/" + vocabDisplay.getAcc_id() + "'> " + vocabDisplay.getAnnotDisplay() + "</a>";
 		}
 		else if (vocab.equals(IndexConstants.EMAPS_TYPE_NAME)) {
-			url = "<a href='" + stConfig.get("FEWI_URL") + "mgi/gxd/structure/" + vocabDisplay.getAcc_id() + "'> " + vocabDisplay.getAnnotDisplay() + "</a>";
+			url = "<a href='" + stConfig.get("FEWI_URL") + "gxd/structure/" + vocabDisplay.getAcc_id() + "'> " + vocabDisplay.getAnnotDisplay() + "</a>";
 		}
 		else if (vocab.equals(IndexConstants.MP_TYPE_NAME)) {
 			url = "<a href='" + stConfig.get("FEWI_URL") + "mp/annotations/" + vocabDisplay.getAcc_id() + "'> " + vocabDisplay.getAnnotDisplay() + "</a>";
