@@ -5,15 +5,12 @@
 <!--============================================ Setup Scriptlet Variables -->
 <%
   // get results for this request
-  GenomeFeatureResultContainer genomeFeatureResultContainer
-    = (GenomeFeatureResultContainer)request.getAttribute("GenomeFeatureResultContainer");
+  GenomeFeatureResultContainer genomeFeatureResultContainer = (GenomeFeatureResultContainer)request.getAttribute("GenomeFeatureResultContainer");
 
   // derive needed data from passed request arrributes
   String resultKey = searchInput.getParameter("resultKey");
-  GenomeFeatureResult thisGenomeFeatureResult
-    = genomeFeatureResultContainer.getResultByKey(resultKey);
-  GenomeFeatureDisplay thisGenomeFeatureDisplay
-    = gfDisplayCache.getGenomeFeature(thisGenomeFeatureResult);
+  GenomeFeatureResult thisGenomeFeatureResult = genomeFeatureResultContainer.getResultByKey(resultKey);
+  GenomeFeatureDisplay thisGenomeFeatureDisplay = gfDisplayCache.getGenomeFeature(thisGenomeFeatureResult);
 
   // matches for this marker result
   List nomenMatches = thisGenomeFeatureResult.getAllMarkerNomenMatches();
@@ -21,8 +18,7 @@
 
   // colors and color iteration
   String rowClass = "";
-  StringAlternator bucketRowAlternator
-      = new StringAlternator( "qsBucketRow1", "qsBucketRow2" ); 
+  StringAlternator bucketRowAlternator = new StringAlternator( "qsBucketRow1", "qsBucketRow2" ); 
 
   // misc values used in scriptlets below
   String matchScore = "";

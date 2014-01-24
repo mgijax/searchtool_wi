@@ -11,26 +11,21 @@
 // Pull the objects we'll need from the request.  These have been attached
 // to the request'upstream', either by the servlet or the container
 SearchInput searchInput = (SearchInput)request.getAttribute("SearchInput");
-GenomeFeatureDisplayCache gfDisplayCache =
-    (GenomeFeatureDisplayCache)request.getAttribute("GenomeFeatureDisplayCache");
-VocabDisplayCache vocabDisplayCache =
-    (VocabDisplayCache)request.getAttribute("VocabDisplayCache");
-OtherDisplayLookup otherDisplayLookup =
-    (OtherDisplayLookup)request.getAttribute("OtherDisplayLookup");
+GenomeFeatureDisplayCache gfDisplayCache = (GenomeFeatureDisplayCache)request.getAttribute("GenomeFeatureDisplayCache");
+VocabDisplayCache vocabDisplayCache = (VocabDisplayCache)request.getAttribute("VocabDisplayCache");
+OtherDisplayLookup otherDisplayLookup = (OtherDisplayLookup)request.getAttribute("OtherDisplayLookup");
 Configuration stConfig = (Configuration)request.getAttribute("Configuration");
 WebTemplate webTemplate = (WebTemplate)request.getAttribute("WebTemplate");
 List<String> zeroHitTokens = searchInput.getZeroHitTokens();
 
 // setup debug value for display layer
 boolean debug = false;
-if ( searchInput.hasFormParameter("debug")
-  && searchInput.getParameter("debug").equals("true") ) {
+if ( searchInput.hasFormParameter("debug") && searchInput.getParameter("debug").equals("true") ) {
     debug = true;
 }
 
 // derive needed data from passed request arrributes
-DisplayHelper displayHelper
-    = new DisplayHelper(stConfig, gfDisplayCache, vocabDisplayCache);
+DisplayHelper displayHelper = new DisplayHelper(stConfig, gfDisplayCache, vocabDisplayCache);
 
 // query strings; queryForward to be used in URL generation and forwarding
 String query = searchInput.getSearchString().replaceAll("\"", "&quot;");
