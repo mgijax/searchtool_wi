@@ -230,8 +230,7 @@ public class VocabInfoCache
               && doc.get(IndexConstants.COL_OBJ_TYPE).equals("MARKER"))
 
             {
-                ArrayList objectKeys =
-                    new ArrayList( Arrays.asList(doc.get("feature_ids").split(",")) );
+                ArrayList objectKeys = new ArrayList( Arrays.asList(doc.get(IndexConstants.COL_FEATURE_IDS).split(",")) );
 
                 // put the data in the proper mapping
                 if (doc.get(IndexConstants.COL_VOCABULARY).equals(IndexConstants.AD_TYPE_NAME)) {
@@ -269,8 +268,7 @@ public class VocabInfoCache
 
             {
 
-                ArrayList alleleKeys =
-                    new ArrayList( Arrays.asList(doc.get("feature_ids").split(",")) );
+                ArrayList alleleKeys = new ArrayList( Arrays.asList(doc.get(IndexConstants.COL_FEATURE_IDS).split(",")) );
 
                 // put the data in the proper mapping
                 if (doc.get(IndexConstants.COL_VOCABULARY).equals(IndexConstants.MP_TYPE_NAME)){
