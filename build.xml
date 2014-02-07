@@ -23,7 +23,7 @@
 
   <!-- compile -->
   <target name="compile" depends="init" >
-    <javac srcdir="${src}" destdir="${build}" classpath="
+    <javac debug="true" srcdir="${src}" destdir="${build}" classpath="
     	${lib.dir}/javaee-api-5.jar; 
     	${lib.dir}/log4j.jar; 
     	${mgilib.dir}/core.jar; 

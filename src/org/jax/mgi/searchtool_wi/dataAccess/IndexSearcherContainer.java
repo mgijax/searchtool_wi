@@ -14,8 +14,7 @@ import org.jax.mgi.shr.searchtool.MGISimilarity;
 public class IndexSearcherContainer {
 
     // Single instance of IndexSearcherContainer
-    private static IndexSearcherContainer searcherInstance =
-        new IndexSearcherContainer();
+    private static IndexSearcherContainer searcherInstance = new IndexSearcherContainer();
 
     // Searchers
     private IndexSearcher otherExactIndex = null;
@@ -33,8 +32,7 @@ public class IndexSearcherContainer {
     private static MGISimilarity mgis = new MGISimilarity();
 
     // logging
-    private static Logger logger =
-        Logger.getLogger(IndexSearcherContainer.class.getName());
+    private static Logger logger = Logger.getLogger(IndexSearcherContainer.class.getName());
 
     /**
      * Private default constructor, enforcing singleton pattern
@@ -54,16 +52,14 @@ public class IndexSearcherContainer {
         if (searcherInstance.markerExactIndex == null) {
 
             String baseDir = stConfig.get("INDEX_DIR");
-
+            
             // GenomeFeature Searches
             searcherInstance.setGenomeFeatureExactIndex(baseDir + "genomeFeatureExact/index");
             searcherInstance.setGenomeFeatureAccIDIndex(baseDir + "genomeFeatureAccID/index");
             searcherInstance.setGenomeFeatureSymbolIndex(baseDir + "genomeFeatureSymbol/index");
             searcherInstance.setGenomeFeatureInexactIndex(baseDir + "genomeFeatureInexact/index");
-            searcherInstance.setGenomeFeatureVocabAccIDIndex(baseDir
-                    + "genomeFeatureVocabAccID/index");
-            searcherInstance.setGenomeFeatureVocabExactIndex(baseDir
-                    + "genomeFeatureVocabExact/index");
+            searcherInstance.setGenomeFeatureVocabAccIDIndex(baseDir + "genomeFeatureVocabAccID/index");
+            searcherInstance.setGenomeFeatureVocabExactIndex(baseDir + "genomeFeatureVocabExact/index");
 
             // Vocab Searches
             searcherInstance.setVocabInexact(baseDir + "vocabInexact/index");
@@ -286,6 +282,7 @@ public class IndexSearcherContainer {
             is = new IndexSearcher(index);
             is.setSimilarity(mgis);
         } catch (Exception e) {
+        	logger.error("Can't find index in the following location: " + index);
             logger.error(e.getStackTrace());
         }
         return is;
