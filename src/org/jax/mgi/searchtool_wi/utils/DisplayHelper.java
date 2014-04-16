@@ -868,7 +868,7 @@ public class DisplayHelper
 		}
 		else if (vocab.equals(IndexConstants.INTERPRO_TYPE_NAME))
 		{
-			url = "<a href='" + stConfig.get("WI_URL") + "searches/marker_report.cgi?op%3Ago_term=contains&go_term=&interpro=" + vocabDisplay.getAcc_id() + "&clone=&sort=Nomenclature&*limit=500'>" + vocabDisplay.getAnnotDisplay() + "</a>";
+			url = "<a href='" + stConfig.get("FEWI_URL") + "marker/summary?interpro=" + vocabDisplay.getAcc_id() + "'>" + vocabDisplay.getAnnotDisplay() + "</a>";
 		}
 		else
 		{
