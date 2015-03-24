@@ -1,29 +1,27 @@
 package org.jax.mgi.searchtool_wi.results;
 
-// standard java
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
-// searchtool classes
 import org.jax.mgi.searchtool_wi.lookup.GenomeFeatureDisplayCache;
 import org.jax.mgi.searchtool_wi.matches.AbstractMatch;
 import org.jax.mgi.searchtool_wi.matches.AlleleNomenMatch;
 import org.jax.mgi.searchtool_wi.matches.MarkerNomenMatch;
 import org.jax.mgi.searchtool_wi.matches.MarkerVocabMatch;
 import org.jax.mgi.searchtool_wi.utils.ScoreConstants;
-// MGI homegrown classes
 import org.jax.mgi.shr.config.Configuration;
-// lucene
+
 
 /**
-* A MarkerResult represents a marker object resulting from a textual match
-* with the user's input string.
-* See AbstractResult for additional implementation details, and Search Tool
-* wiki documentation for design and usage patterns
-*/
+ * A MarkerResult represents a marker object resulting from a textual match
+ * with the user's input string.
+ * See AbstractResult for additional implementation details, and Search Tool
+ * wiki documentation for design and usage patterns
+ */
 public class GenomeFeatureResult extends AbstractResult {
 
 	// -------//
@@ -64,8 +62,7 @@ public class GenomeFeatureResult extends AbstractResult {
 	private AbstractMatch bestNomenMatch;
 
 	// data lookups
-	private static GenomeFeatureDisplayCache gfDisplayCache
-		= GenomeFeatureDisplayCache.getGenomeFeatureDisplayCache();
+	private static GenomeFeatureDisplayCache gfDisplayCache = GenomeFeatureDisplayCache.getGenomeFeatureDisplayCache();
 
 	// holds unique key values for matches; used to avoid dupe hits across
 	// different indexes (exact/inexact)
@@ -77,10 +74,10 @@ public class GenomeFeatureResult extends AbstractResult {
 	// -------------//
 
 	/**
-	* Constructs the MarkerResult, calling the parent class constructor with config
-	*/
+	 * Constructs the MarkerResult, calling the parent class constructor with config
+	 */
 	public GenomeFeatureResult(Configuration c) {
-			super(c);
+		super(c);
 	}
 
 	// ----------------------------//
@@ -88,48 +85,48 @@ public class GenomeFeatureResult extends AbstractResult {
 	// ----------------------------//
 
 	/**
-	* returns the score for the result
-	* @return Float - the score of this result
-	*/
+	 * returns the score for the result
+	 * @return Float - the score of this result
+	 */
 	public Float getScore() {
 		return derivedScore;
 	}
 
 	/**
-	* Returns the string for alpha numeric sorting of results.	This is used
-	* if the scores (from getScore) are the same
-	*/
+	 * Returns the string for alpha numeric sorting of results.	This is used
+	 * if the scores (from getScore) are the same
+	 */
 	public String getAlphaSortBy() {
 		return gfDisplayCache.getGenomeFeature(this).getSymbol().toLowerCase();
 	}
 
 	/**
-	* returns the best match for the result
-	* @return AbstractMatch - the best match
-	*/
+	 * returns the best match for the result
+	 * @return AbstractMatch - the best match
+	 */
 	public AbstractMatch getBestMatch() {
 		return bestMatch;
 	}
 
 	/**
-	* Any one-time functionality that needs to happen prior to being sent to
-	* the display layer should be defined here.	The method is called by the
-	* search framework.
-	*/
+	 * Any one-time functionality that needs to happen prior to being sent to
+	 * the display layer should be defined here.	The method is called by the
+	 * search framework.
+	 */
 	public void finalizeResult() {
 
 		// sort our match arrays
 		if (markerNomenMatches.size() > 0) {
-				Collections.sort(markerNomenMatches, matchSorter);
+			Collections.sort(markerNomenMatches, matchSorter);
 		}
 		if (alleleNomenMatches.size() > 0) {
-				Collections.sort(alleleNomenMatches, matchSorter);
+			Collections.sort(alleleNomenMatches, matchSorter);
 		}
 		if (adMatches.size() > 0) {
-				Collections.sort(adMatches, matchSorter);
+			Collections.sort(adMatches, matchSorter);
 		}
 		if (goMatches.size() > 0) {
-				Collections.sort(goMatches, matchSorter);
+			Collections.sort(goMatches, matchSorter);
 		}
 		if (emapaMatches.size() > 0) {
 			Collections.sort(emapaMatches, matchSorter);
@@ -138,68 +135,64 @@ public class GenomeFeatureResult extends AbstractResult {
 			Collections.sort(emapsMatches, matchSorter);
 		}
 		if (omimMatches.size() > 0) {
-				Collections.sort(omimMatches, matchSorter);
+			Collections.sort(omimMatches, matchSorter);
 		}
 		if (omimOrthoMatches.size() > 0) {
-				Collections.sort(omimOrthoMatches, matchSorter);
+			Collections.sort(omimOrthoMatches, matchSorter);
 		}
 		if (mpMatches.size() > 0) {
-				Collections.sort(mpMatches, matchSorter);
+			Collections.sort(mpMatches, matchSorter);
 		}
 		if (pirsfMatches.size() > 0) {
-				Collections.sort(pirsfMatches, matchSorter);
+			Collections.sort(pirsfMatches, matchSorter);
 		}
 		if (ipMatches.size() > 0) {
-				Collections.sort(ipMatches, matchSorter);
+			Collections.sort(ipMatches, matchSorter);
 		}
 
 		// Best vocab match
 		allVocMatches = getAllMarkerVocabMatches();
 		if (allVocMatches.size() > 0) {
-				bestVocabMatch = (MarkerVocabMatch)allVocMatches.get(0);
-				bestVocabScore = bestVocabMatch.getScore();
+			bestVocabMatch = (MarkerVocabMatch)allVocMatches.get(0);
+			bestVocabScore = bestVocabMatch.getScore();
 		}
 
 
 		// Best Nomen match
 		allNomenMatches = getAllMarkerNomenMatches();
 		if (allNomenMatches.size() > 0) {
-				bestNomenMatch = (AbstractMatch)allNomenMatches.get(0);
-				bestNomenScore = bestNomenMatch.getScore();
+			bestNomenMatch = (AbstractMatch)allNomenMatches.get(0);
+			bestNomenScore = bestNomenMatch.getScore();
 		}
 
 		// Best overall match (prefer nomen over vocab if tied)
 		if ( bestVocabScore > bestNomenScore ) {
-				bestMatch = bestVocabMatch;
+			bestMatch = bestVocabMatch;
 		}else {
-				bestMatch = bestNomenMatch;
+			bestMatch = bestNomenMatch;
 		}
 
 		// match count
 		matchCount = getAllMarkerVocabMatches().size()
-							+ getAllMarkerNomenMatches().size();
+				+ getAllMarkerNomenMatches().size();
 
 		// derive the score for this result object
-		if ( this.bestMatch.isTier1() ){
-				derivedScore = new Float(100000);
-				derivedScore += getBestMatchTypeBoost(); //flat type boost
+		if ( bestMatch.isTier1() ){
+			derivedScore = new Float(100000);
+			derivedScore += getBestMatchTypeBoost(); //flat type boost
 		}
-		else if ( this.bestMatch.isTier2() ){
-				derivedScore = new Float(10000);
-				derivedScore += this.bestMatch.getScore(); //use score of best match
+		else if ( bestMatch.isTier2() ){
+			derivedScore = new Float(10000);
+			derivedScore += bestMatch.getScore(); //use score of best match
 		}
-		else if ( this.bestMatch.isTier3() ){
-				derivedScore = new Float(1000);
-				derivedScore += getBestMatchTypeBoost(); //flat type boost
+		else if ( bestMatch.isTier3() ){
+			derivedScore = new Float(1000);
+			derivedScore += getBestMatchTypeBoost(); //flat type boost
 		}
 		else{	// if no exact matches, than score by best match
-				derivedScore = bestMatch.getScore();
+			derivedScore = bestMatch.getScore();
 		}
 	}
-
-	// -------------------//
-	// Genome Feature Type
-	// -------------------//
 
 	public void setGenomeFeatureType(String s) {
 		genomeFeatureType = s;
@@ -211,200 +204,189 @@ public class GenomeFeatureResult extends AbstractResult {
 	public boolean isMarker() {
 		boolean b = false;
 		if (genomeFeatureType.equals("MARKER")) {
-				b = true;
+			b = true;
 		}
 		return b;
 	}
 	public boolean isAllele() {
 		boolean b = false;
 		if (genomeFeatureType.equals("ALLELE")) {
-				b = true;
+			b = true;
 		}
 		return b;
 	}
 
-	// ----------//
-	// Cache key
-	// ----------//
 	public String getCacheKey() {
 		return genomeFeatureType + "_" + dbKey;
 	}
 
 	/**
-	* Returns the result key of the object hit; overridding method in Abstract
-	* @return String - the result key of object hit
-	*/
+	 * Returns the result key of the object hit; overridding method in Abstract
+	 * @return String - the result key of object hit
+	 */
 	public String getResultKey() {
 		return getCacheKey();
 	}
 
-	// ----------------//
-	// Nomen Matches
-	// ----------------//
-
 	/**
-	* Adds a nomen match to this result
-	* @param MarkerNomenMatch
-	*/
+	 * Adds a nomen match to this result
+	 * @param MarkerNomenMatch
+	 */
 	public void addMarkerNomenMatch(MarkerNomenMatch nm) {
 		if (!handledMarkerNomenMatches.contains( nm.getUniqueKey() ) ) {
-				markerNomenMatches.add(nm);
-				handledMarkerNomenMatches.add( nm.getUniqueKey() );
+			markerNomenMatches.add(nm);
+			handledMarkerNomenMatches.add( nm.getUniqueKey() );
 		}
 	}
 
 	/**
-	* Adds a nomen match to this result
-	* @param AlleleNomenMatch
-	*/
+	 * Adds a nomen match to this result
+	 * @param AlleleNomenMatch
+	 */
 	public void addAlleleNomenMatch(AlleleNomenMatch nm) {
 		if (!handledAlleleNomenMatches.contains( nm.getUniqueKey() ) ) {
-				alleleNomenMatches.add(nm);
-				handledAlleleNomenMatches.add( nm.getUniqueKey() );
+			alleleNomenMatches.add(nm);
+			handledAlleleNomenMatches.add( nm.getUniqueKey() );
 		}
 	}
 
 	/**
-	* Returns the nomen matches of this result
-	* @return List of Match Objects
-	*/
+	 * Returns the nomen matches of this result
+	 * @return List of Match Objects
+	 */
 	public List getNomenMatches() {
 		return markerNomenMatches;
 	}
 
 	/**
-	* returns true if this result has nomen matches
-	* @return Boolean
-	*/
+	 * returns true if this result has nomen matches
+	 * @return Boolean
+	 */
 	public boolean hasMarkerMatches() {
 		boolean b = false;
 		if (markerNomenMatches.size() > 0) {
-				b = true;
+			b = true;
 		}
 		return b;
 	}
 
-	// ---------------//
-	// Vocab Matches
-	// ---------------//
-
 	/**
-	* Adds a AD match to this result
-	* @param MarkerVocabMatch
-	*/
+	 * Adds a AD match to this result
+	 * @param MarkerVocabMatch
+	 */
 	public void addAdMatch(MarkerVocabMatch vm) {
 		adMatches.add(vm);
 	}
 	/**
-	* Returns AD Matches
-	* @return List of Match Objects
-	*/
+	 * Returns AD Matches
+	 * @return List of Match Objects
+	 */
 	public List getAdMatches() {
 		return adMatches;
 	}
 
 	/**
-	* Adds a MP match to this result
-	* @param MarkerVocabMatch
-	*/
+	 * Adds a MP match to this result
+	 * @param MarkerVocabMatch
+	 */
 	public void addMpMatch(MarkerVocabMatch vm) {
 		mpMatches.add(vm);
 	}
 	/**
-	* Returns MP Matches
-	* @return List of Match Objects
-	*/
+	 * Returns MP Matches
+	 * @return List of Match Objects
+	 */
 	public List getMpMatches() {
 		return mpMatches;
 	}
 
 	/**
-	* Adds a GO match to this result
-	* @param MarkerVocabMatch
-	*/
+	 * Adds a GO match to this result
+	 * @param MarkerVocabMatch
+	 */
 	public void addGoMatch(MarkerVocabMatch vm) {
 		goMatches.add(vm);
 	}
 	/**
-	* Returns GO Matches
-	* @return List of Match Objects
-	*/
+	 * Returns GO Matches
+	 * @return List of Match Objects
+	 */
 	public List getGoMatches() {
 		return goMatches;
 	}
-	
+
 	public void addEmapaMatch(MarkerVocabMatch vm) {
 		emapaMatches.add(vm);
 	}
-	
+
 	public List getEmapaMatches() {
 		return emapaMatches;
 	}
-	
+
 	public void addEmapsMatch(MarkerVocabMatch vm) {
 		emapsMatches.add(vm);
 	}
-	
+
 	public List getEmapsMatches() {
 		return emapsMatches;
 	}
 
 	/**
-	* Adds a OMIM match to this result
-	* @param MarkerVocabMatch
-	*/
+	 * Adds a OMIM match to this result
+	 * @param MarkerVocabMatch
+	 */
 	public void addOmimMatch(MarkerVocabMatch vm) {
 		omimMatches.add(vm);
 	}
 	/**
-	* Returns OMIMMatches
-	* @return List of Match Objects
-	*/
+	 * Returns OMIMMatches
+	 * @return List of Match Objects
+	 */
 	public List getOmimMatches() {
 		return omimMatches;
 	}
 
 	/**
-	* Adds a OMIM Ortho match to this result
-	* @param MarkerVocabMatch
-	*/
+	 * Adds a OMIM Ortho match to this result
+	 * @param MarkerVocabMatch
+	 */
 	public void addOmimOrthoMatch(MarkerVocabMatch vm) {
 		omimOrthoMatches.add(vm);
 	}
 	/**
-	* Returns OMIM Ortho Matches
-	* @return List of Match Objects
-	*/
+	 * Returns OMIM Ortho Matches
+	 * @return List of Match Objects
+	 */
 	public List getOmimOrthoMatches() {
 		return omimOrthoMatches;
 	}
 
 	/**
-	* Adds a PIRSF match to this result
-	* @param MarkerVocabMatch
-	*/
+	 * Adds a PIRSF match to this result
+	 * @param MarkerVocabMatch
+	 */
 	public void addPirsfMatch(MarkerVocabMatch vm) {
 		pirsfMatches.add(vm);
 	}
 	/**
-	* Returns PIRSF Matches
-	* @return List of Match Objects
-	*/
+	 * Returns PIRSF Matches
+	 * @return List of Match Objects
+	 */
 	public List getPirsfMatches() {
 		return pirsfMatches;
 	}
 
 	/**
-	* Adds a InterPro match to this result
-	* @param MarkerVocabMatch
-	*/
+	 * Adds a InterPro match to this result
+	 * @param MarkerVocabMatch
+	 */
 	public void addIpMatch(MarkerVocabMatch vm) {
 		ipMatches.add(vm);
 	}
 	/**
-	* Returns InterPro Matches
-	* @return List of Match Objects
-	*/
+	 * Returns InterPro Matches
+	 * @return List of Match Objects
+	 */
 	public List getIpMatches() {
 		return ipMatches;
 	}
@@ -414,15 +396,15 @@ public class GenomeFeatureResult extends AbstractResult {
 	// -------------------------//
 
 	/**
-	* Returns the boost for this match; some results need to be boosted
-	* depending on the type of the best match
-	*/
+	 * Returns the boost for this match; some results need to be boosted
+	 * depending on the type of the best match
+	 */
 	public Float getBestMatchTypeBoost()
 	{
 		Float matchTypeBoost = new Float(0.0);
 		String matchType = getBestMatch().getDataType();
 		if (resultBoostMap.containsKey(matchType)) {
-				matchTypeBoost = (Float)resultBoostMap.get(matchType);
+			matchTypeBoost = (Float)resultBoostMap.get(matchType);
 		}
 		return matchTypeBoost;
 	}
@@ -432,9 +414,9 @@ public class GenomeFeatureResult extends AbstractResult {
 	// ---------------------------//
 
 	/**
-	* Returns all marker vocabulary matches
-	* @return List of Match Objects
-	*/
+	 * Returns all marker vocabulary matches
+	 * @return List of Match Objects
+	 */
 	public List getAllMarkerVocabMatches() {
 		if (allVocMatches == null) {
 			allVocMatches = new ArrayList();
@@ -453,9 +435,9 @@ public class GenomeFeatureResult extends AbstractResult {
 	}
 
 	/**
-	* Returns all nomenclature matches
-	* @return List of Match Objects
-	*/
+	 * Returns all nomenclature matches
+	 * @return List of Match Objects
+	 */
 	public List getAllMarkerNomenMatches() {
 		if (allNomenMatches == null) {
 			allNomenMatches = new ArrayList();
@@ -467,9 +449,9 @@ public class GenomeFeatureResult extends AbstractResult {
 	}
 
 	/**
-	* Returns the number of matches in this result object
-	* @return int - match count
-	*/
+	 * Returns the number of matches in this result object
+	 * @return int - match count
+	 */
 	public int getMatchCount () {
 		return matchCount;
 	}
