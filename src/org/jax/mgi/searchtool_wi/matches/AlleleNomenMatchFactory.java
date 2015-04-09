@@ -22,6 +22,12 @@ import org.jax.mgi.shr.timing.TimeStamper;
 public class AlleleNomenMatchFactory extends AbstractMatchFactory
 {
 
+  // special boost for matches to allele or marker symbol
+  private static int SYMBOL_BOOST = 500;
+
+  // boost for matches to other types of nomenclature
+  private static int OTHER_NOMEN_BOOST = 250;
+
   //-------------//
   // Constructor //
   //-------------//
@@ -54,9 +60,19 @@ public class AlleleNomenMatchFactory extends AbstractMatchFactory
     // fill data specific to this match type
     alleleNomenMatch.setIsCurrent( hit.get(IndexConstants.COL_IS_CURRENT) );
 
+    // prioritize matches to allele and marker symbols, secondarily matches to
+    // other types of nomenclature
+
+    String dataType = alleleNomenMatch.getDataType();
+    if ((dataType != null) &&
+	("current symbol".equals(dataType) ||
+	 "allele symbol".equals(dataType)) ) {
+	alleleNomenMatch.addScore(SYMBOL_BOOST);
+    } else {
+	alleleNomenMatch.addScore(OTHER_NOMEN_BOOST);
+    }
     return alleleNomenMatch;
 
   }
-
 }
 

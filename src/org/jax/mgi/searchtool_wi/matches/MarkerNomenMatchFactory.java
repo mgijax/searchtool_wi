@@ -22,6 +22,8 @@ import org.jax.mgi.shr.timing.TimeStamper;
 public class MarkerNomenMatchFactory extends AbstractMatchFactory
 {
 
+  public static int MARKER_NOMEN_BOOST = 900;
+
   //-------------//
   // Constructor //
   //-------------//
@@ -54,6 +56,9 @@ public class MarkerNomenMatchFactory extends AbstractMatchFactory
     // fill data specific to this match type
     markerNomenMatch.setOrganismKey( hit.get(IndexConstants.COL_ORGANISM) );
     markerNomenMatch.setIsCurrent( hit.get(IndexConstants.COL_IS_CURRENT) );
+
+    // in general, boost marker nomen matches to the top of their bucket
+    markerNomenMatch.addScore(MARKER_NOMEN_BOOST);
 
     return markerNomenMatch;
 
