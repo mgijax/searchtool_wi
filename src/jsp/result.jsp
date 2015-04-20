@@ -4,22 +4,17 @@
 <!--============================================ Setup Scriptlet Variables -->
 <%
   // pull in the result containers from the request object
-  GenomeFeatureResultContainer genomeFeatureResultContainer =
-    (GenomeFeatureResultContainer)request.getAttribute("GenomeFeatureResultContainer");
-  VocabResultContainer vocabResultContainer =
-    (VocabResultContainer)request.getAttribute("VocabResultContainer");
-  OtherResultContainer otherResultContainer =
-    (OtherResultContainer)request.getAttribute("OtherResultContainer");
+  GenomeFeatureResultContainer genomeFeatureResultContainer = (GenomeFeatureResultContainer)request.getAttribute("GenomeFeatureResultContainer");
+  VocabResultContainer vocabResultContainer = (VocabResultContainer)request.getAttribute("VocabResultContainer");
+  OtherResultContainer otherResultContainer = (OtherResultContainer)request.getAttribute("OtherResultContainer");
 
   // display lenghts
   int displayLengthMarker = 10;
   int displayLengthVocab = 10;
   int markerResultLength = genomeFeatureResultContainer.size();
   int vocabResultLength = vocabResultContainer.size();
-  String markerResultSizeStr
-    = displayHelper.commaFormatIntStr(String.valueOf( markerResultLength ));
-  String vocabResultSizeStr
-    = displayHelper.commaFormatIntStr(String.valueOf( vocabResultLength ));
+  String markerResultSizeStr = displayHelper.commaFormatIntStr(String.valueOf( markerResultLength ));
+  String vocabResultSizeStr = displayHelper.commaFormatIntStr(String.valueOf( vocabResultLength ));
 
   boolean needMoreMarkerLink = true;
   boolean needMoreVocabLink = true;

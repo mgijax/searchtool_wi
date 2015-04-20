@@ -11,7 +11,4 @@ fi
 JAVA_HOME=/usr/mgijava7
 export JAVA_HOME
 
-echo $JAVA_HOME
-echo $PATH
-
 ant

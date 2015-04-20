@@ -51,11 +51,6 @@ public class IndexReaderContainer {
         return readerInstance;
     }
 
-
-    /************
-    * ACCESSORS *
-    ************/
-
     /**
      * Get the Vocab Dag IndexReader
      * @return An IndexReader
