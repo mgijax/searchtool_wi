@@ -441,16 +441,13 @@
             out.print("</td>");
         }
         else if (data_type.equals(IndexConstants.OTHER_ANTIBODY)) {
-            out.print("<td><a href='"+stConfig.get("WI_URL")+"searches/antibody.cgi?" +thisOtherResult.getDbKey()+"'>Antibody</a></td>");
+            out.print("<td><a href='"+fewi_url+"antibody/key/" +thisOtherResult.getDbKey()+"'>Antibody</a></td>");
         }
         else if (data_type.equals(IndexConstants.OTHER_ORTHOLOG)) {
             out.print("<td><a href='"+fewi_url+"homology/key/" +thisOtherResult.getDbKey()+"'>Homolog</a></td>");
         }
         else if (data_type.equals(IndexConstants.OTHER_HOMOLOGY)) {
             out.print("<td><a href='"+fewi_url+"homology/" +thisOtherResult.getDbKey()+"'>Homology</a></td>");
-        }
-        else if (data_type.equals(IndexConstants.OTHER_ANTIGEN)) {
-            out.print("<td><a href='"+stConfig.get("WI_URL")+"searches/antigen.cgi?" +thisOtherResult.getDbKey()+"'>Antigen</a></td>");
         }
 
         // Map Data is VERy odd, the qualifier is needed when creating the URL, so.. it HAS to be there.
