@@ -446,10 +446,12 @@
         else if (data_type.equals(IndexConstants.OTHER_ORTHOLOG)) {
             out.print("<td><a href='"+fewi_url+"homology/key/" +thisOtherResult.getDbKey()+"'>Homolog</a></td>");
         }
+        else if (data_type.equals(IndexConstants.OTHER_GENOTYPE)) {
+            out.print("<td><a href='"+fewi_url+"accession/" +thisOtherResult.getDbKey()+"'>MGI Genotype</a></td>");
+        }
         else if (data_type.equals(IndexConstants.OTHER_HOMOLOGY)) {
             out.print("<td><a href='"+fewi_url+"homology/" +thisOtherResult.getDbKey()+"'>Homology</a></td>");
         }
-
         // Map Data is VERy odd, the qualifier is needed when creating the URL, so.. it HAS to be there.
 
         else if (data_type.equals(IndexConstants.OTHER_EXPERIMENT)) {
