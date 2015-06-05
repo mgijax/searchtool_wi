@@ -447,7 +447,7 @@
             out.print("<td><a href='"+fewi_url+"homology/key/" +thisOtherResult.getDbKey()+"'>Homolog</a></td>");
         }
         else if (data_type.equals(IndexConstants.OTHER_GENOTYPE)) {
-            out.print("<td><a href='"+fewi_url+"accession/" +thisOtherResult.getData()+"'>MGI Genotype</a></td>");
+            out.print("<td><a href='"+fewi_url+"accession/" +thisOtherResult.getAccId()+"'>MGI Genotype</a></td>");
         }
         else if (data_type.equals(IndexConstants.OTHER_HOMOLOGY)) {
             out.print("<td><a href='"+fewi_url+"homology/" +thisOtherResult.getDbKey()+"'>Homology</a></td>");
