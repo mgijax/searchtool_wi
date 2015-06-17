@@ -69,8 +69,8 @@
 
 <!--================================================ Genome Feature Bucket -->
 <%
-  GenomeFeatureResult thisGenomeFeatureResult;   //search result 
-  GenomeFeatureDisplay thisGenomeFeatureDisplay; //pulled from cache 
+  GenomeFeatureResult thisGenomeFeatureResult;   //search result
+  GenomeFeatureDisplay thisGenomeFeatureDisplay; //pulled from cache
 
 %>
 <!-- Header Row -->
@@ -181,7 +181,7 @@
   <tr style="background-color:#dfefff;">
     <td colspan=5>
 
-<%  
+<%
   if (displayLengthMarker != 0) {
     out.print("<span class='small grayText'> Showing 1-");
     out.print(displayLengthMarker + " of " + markerResultSizeStr + "</span>");
@@ -282,13 +282,6 @@
         {
         out.print("<a href='"
             + fewi_url + "disease/key/"
-            + thisVocabDisplay.getDbKey() + "'>"
-            + thisVocabDisplay.getName() + "</a>");
-        }
-        else if (thisVocabDisplay.getVocabType().equals(IndexConstants.AD_TYPE_NAME))
-        {
-        out.print("<a href='"
-            + stConfig.get("WI_URL") + "searches/anatdict.cgi?id="
             + thisVocabDisplay.getDbKey() + "'>"
             + thisVocabDisplay.getName() + "</a>");
         }

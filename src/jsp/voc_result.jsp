@@ -123,13 +123,6 @@
         + thisVocabDisplay.getDbKey() + "'>"
         + thisVocabDisplay.getName() + "</a>");
     }
-    else if (thisVocabDisplay.getVocabType().equals(IndexConstants.AD_TYPE_NAME))
-    {
-    out.print("<a href='"
-        + stConfig.get("WI_URL") + "searches/anatdict.cgi?id="
-        + thisVocabDisplay.getDbKey() + "'>"
-        + thisVocabDisplay.getName() + "</a>");
-    }
     else if (thisVocabDisplay.getVocabType().equals(IndexConstants.EMAPA_TYPE_NAME))
     {
     out.print("<a href='"
