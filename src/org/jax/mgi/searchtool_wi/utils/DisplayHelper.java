@@ -857,7 +857,7 @@ public class DisplayHelper
 			url = "<a href='" + stConfig.get("FEWI_URL") + "mp/annotations/" + vocabDisplay.getAcc_id() + "'> " + vocabDisplay.getAnnotDisplay() + "</a>";
 		}
 		else if (vocab.equals(IndexConstants.GO_TYPE_NAME)) {
-			url = "<a href='" + stConfig.get("WI_URL") + "searches/GOannot_report.cgi?id=" + vocabDisplay.getAcc_id() + "'> " + vocabDisplay.getAnnotDisplay() + "</a>";
+			url = "<a href='" + stConfig.get("FEWI_URL") + "go/term/" + vocabDisplay.getAcc_id() + "'> " + vocabDisplay.getAnnotDisplay() + "</a>";
 		}
 		else if (vocab.equals(IndexConstants.OMIM_TYPE_NAME)) {
 			url = "<a href='" + stConfig.get("FEWI_URL") + "disease/key/" + vocabDisplay.getDbKey() + "'>" + vocabDisplay.getAnnotDisplay() + "</a>";
