@@ -17,21 +17,21 @@
 <context-param>
   <param-name>indexDir</param-name>
   <param-value>
-    /data/redsearchtool/build/
+    /data/redbobsearchtool/build/
   </param-value>
 </context-param>
 
 <context-param>
   <param-name>globalConfig</param-name>
   <param-value>
-    /data/redsearchtool/mgiconfig/web/GlobalConfig
+    /data/redbobsearchtool/mgiconfig/web/GlobalConfig
   </param-value>
 </context-param>
 
 <context-param>
   <param-name>templateLoc</param-name>
   <param-value>
-    /data/redsearchtool/mgiconfig/web/
+    /data/redbobsearchtool/mgiconfig/web/
   </param-value>
 </context-param>
 

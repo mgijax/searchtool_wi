@@ -17,21 +17,21 @@
 <context-param>
   <param-name>indexDir</param-name>
   <param-value>
-    /data/bluesearchtool/build/
+    /data/bluebobsearchtool/build/
   </param-value>
 </context-param>
 
 <context-param>
   <param-name>globalConfig</param-name>
   <param-value>
-    /data/bluesearchtool/mgiconfig/web/GlobalConfig
+    /data/bluebobsearchtool/mgiconfig/web/GlobalConfig
   </param-value>
 </context-param>
 
 <context-param>
   <param-name>templateLoc</param-name>
   <param-value>
-    /data/bluesearchtool/mgiconfig/web/
+    /data/bluebobsearchtool/mgiconfig/web/
   </param-value>
 </context-param>
 
