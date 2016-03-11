@@ -1,0 +1,53 @@
+<web-app xmlns="http://java.sun.com/xml/ns/j2ee"
+ xmlns:xsi="http://www.w2.org/2001/XMLSchema-instance"
+ xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
+ version="2.4">
+
+<servlet>
+  <servlet-name>SearchTool</servlet-name>
+  <servlet-class>org.jax.mgi.searchtool_wi.servlet.SearchTool</servlet-class>
+  <load-on-startup/>
+</servlet>
+
+<servlet-mapping>
+  <servlet-name>SearchTool</servlet-name>
+  <url-pattern>/Search.do</url-pattern>
+</servlet-mapping>
+
+<context-param>
+  <param-name>indexDir</param-name>
+  <param-value>
+    /data/bluesearchtool/build/
+  </param-value>
+</context-param>
+
+<context-param>
+  <param-name>globalConfig</param-name>
+  <param-value>
+    /data/bluesearchtool/mgiconfig/web/GlobalConfig
+  </param-value>
+</context-param>
+
+<context-param>
+  <param-name>templateLoc</param-name>
+  <param-value>
+    /data/bluesearchtool/mgiconfig/web/
+  </param-value>
+</context-param>
+
+<context-param>
+  <param-name>resultCacheSize</param-name>
+  <param-value>
+    25
+  </param-value>
+</context-param>
+
+<context-param>
+  <param-name>maxMatchCount</param-name>
+  <param-value>
+    10000
+  </param-value>
+</context-param>
+
+</web-app>
+
