@@ -15,7 +15,29 @@ public class SearchHelper
   // Vocab Identification //
   //----------------------//
 
-  // AD
+	  // Protein Isoform Ontology
+	  public static boolean isProtIso (Hit hit) {
+
+	    boolean isProtIso = false;
+	    try{
+	        if (hit.get(IndexConstants.COL_OBJ_TYPE).equals(IndexConstants.PROTEOFORM_NAME)) {
+	        	isProtIso = true;
+	        }
+	    }
+	    catch (Exception e) {e.printStackTrace();}
+	    return isProtIso;
+	  }
+	  public static boolean isProtIso (String str) {
+
+	    boolean isProtIso = false;
+	    if (str.equals(IndexConstants.PROTEOFORM_NAME)) {
+	        isProtIso = true;
+	    }
+	    return isProtIso;
+	  }
+
+	
+	// AD
   public static boolean isAD (Hit hit) {
 
     boolean isAD = false;

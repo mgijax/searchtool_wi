@@ -54,6 +54,7 @@ public class VocabInfoCache {
 	private static HashMap omimAnnotMarkers       = new HashMap();
 	private static HashMap omimOrthoAnnotMarkers  = new HashMap();
 	private static HashMap psAnnotMarkers         = new HashMap();
+	private static HashMap protIsoAnnotMarkers    = new HashMap();
 	private static HashMap ipAnnotMarkers         = new HashMap();
 
 	// vocabID -> annotated alleles list
@@ -129,6 +130,9 @@ public class VocabInfoCache {
 	public List getPsAnnotMarkers(String termKey){
 		return (List)psAnnotMarkers.get(termKey);
 	}
+	public List getProtIsoAnnotMarkers(String termKey){
+		return (List)protIsoAnnotMarkers.get(termKey);
+	}
 	public List getIpAnnotMarkers(String termKey){
 		return (List)ipAnnotMarkers.get(termKey);
 	}
@@ -201,6 +205,8 @@ public class VocabInfoCache {
 						ipAnnotMarkers.put(doc.get(IndexConstants.COL_DB_KEY), objectKeys);
 					} else if (doc.get(IndexConstants.COL_VOCABULARY).equals(IndexConstants.PIRSF_TYPE_NAME)){
 						psAnnotMarkers.put(doc.get(IndexConstants.COL_DB_KEY), objectKeys);
+					} else if (doc.get(IndexConstants.COL_VOCABULARY).equals(IndexConstants.PROTEOFORM_NAME)){
+						protIsoAnnotMarkers.put(doc.get(IndexConstants.COL_DB_KEY), objectKeys);
 					}
 				}
 
