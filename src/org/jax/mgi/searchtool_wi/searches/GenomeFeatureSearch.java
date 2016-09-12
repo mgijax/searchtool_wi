@@ -57,6 +57,7 @@ public class GenomeFeatureSearch extends AbstractSearch {
 	private List mpMatches				= new ArrayList();
 	private List pirsfMatches			= new ArrayList();
 	private List ipMatches				= new ArrayList();
+	private List protIsoMatches			= new ArrayList();
 
 	// holds vocab terms already handled; If we hit a term multiple ways,
 	// we need only handle the best (first)
@@ -69,6 +70,7 @@ public class GenomeFeatureSearch extends AbstractSearch {
 	private HashSet handledOmimOrthoTerms	= new HashSet();
 	private HashSet handledPirsfTerms		= new HashSet();
 	private HashSet handledIpTerms			= new HashSet();
+	private HashSet handledProtIsoTerms		= new HashSet();
 
 	// both the "and" and the "or" search use the same index; if we have
 	// an "and" hit, do not keep the "or" hit for the same document
@@ -84,6 +86,7 @@ public class GenomeFeatureSearch extends AbstractSearch {
 	private boolean incOmim				= true;
 	private boolean incPirsf			= true;
 	private boolean incIp				= true;
+	private boolean incProtIso			= true;
 
 	// Match factories we'll need generate the matches
 	MarkerNomenMatchFactory markerNomenMatchFactory = new MarkerNomenMatchFactory(config);
@@ -239,6 +242,7 @@ public class GenomeFeatureSearch extends AbstractSearch {
 		List childIDs;
 		String childTermKey;
 
+		logger.debug("----------->" + hit.get(IndexConstants.COL_VOCABULARY) );
 
 		// anatomical dictionary hit
 		if ( SearchHelper.isAD(hit.get(IndexConstants.COL_VOCABULARY)) ) {
@@ -439,6 +443,23 @@ public class GenomeFeatureSearch extends AbstractSearch {
 			}
 		}
 
+
+		// Protien Isoform  hit (no chasing down the dag)
+		else if ( SearchHelper.isProtIso(hit.get(IndexConstants.COL_VOCABULARY)) ) {
+			logger.info("----------->PROTIEN ISOFORM HIT!!!!!" );
+
+			//ensure we haven't already done this term
+			if (!handledProtIsoTerms.contains(hit.get(IndexConstants.COL_DB_KEY))) {
+				markerVocabMatch = markerVocabMatchFactory.getMatch(hit);
+				markerVocabMatch.flagAsTier1();
+				gfExactTypeScorer.addScore(markerVocabMatch);
+				protIsoMatches.add(markerVocabMatch);
+				handledProtIsoTerms.add(markerVocabMatch.getDbKey());
+
+			}
+		}
+
+		
 		// PIRSF hit (no chasing down the dag)
 		else if ( SearchHelper.isPIRSF(hit.get(IndexConstants.COL_VOCABULARY)) ) {
 
@@ -1443,6 +1464,20 @@ public class GenomeFeatureSearch extends AbstractSearch {
 					for (Iterator mrkKeyIter = markerKeys.iterator(); mrkKeyIter.hasNext();) {
 						thisGenomeFeature = getGfResult(MARKER_TYPE, (String)mrkKeyIter.next() );
 						thisGenomeFeature.addOmimOrthoMatch(markerVocabMatch);
+					}
+				}
+			}
+		}
+
+		// assign Protein Isoform matches to their markers
+		if (incProtIso) {
+			for (Iterator iter = protIsoMatches.iterator(); iter.hasNext();) {
+				markerVocabMatch = (MarkerVocabMatch)iter.next();
+				markerKeys = vocabInfoCache.getProtIsoAnnotMarkers(markerVocabMatch.getDbKey());
+				if (markerKeys != null) {
+					for (Iterator mrkKeyIter = markerKeys.iterator(); mrkKeyIter.hasNext();) {
+						thisGenomeFeature = getGfResult(MARKER_TYPE, (String)mrkKeyIter.next() );
+						thisGenomeFeature.addProtIsoMatch(markerVocabMatch);
 					}
 				}
 			}

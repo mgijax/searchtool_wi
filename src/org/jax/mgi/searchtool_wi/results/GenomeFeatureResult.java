@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
 import org.jax.mgi.searchtool_wi.lookup.GenomeFeatureDisplayCache;
 import org.jax.mgi.searchtool_wi.matches.AbstractMatch;
@@ -28,6 +29,9 @@ public class GenomeFeatureResult extends AbstractResult {
 	// Fields
 	// -------//
 
+	// logger
+	private static Logger logger = Logger.getLogger(GenomeFeatureResult.class.getName());
+
 	// type of genomic feature (marker, allele, etc...)
 	private String genomeFeatureType = "";
 
@@ -49,6 +53,7 @@ public class GenomeFeatureResult extends AbstractResult {
 	private ArrayList<MarkerVocabMatch> omimMatches = new ArrayList<MarkerVocabMatch>();
 	private ArrayList<MarkerVocabMatch> omimOrthoMatches = new ArrayList<MarkerVocabMatch>();
 	private ArrayList<MarkerVocabMatch> pirsfMatches = new ArrayList<MarkerVocabMatch>();
+	private ArrayList<MarkerVocabMatch> protIsoMatches = new ArrayList<MarkerVocabMatch>();
 	private ArrayList<MarkerVocabMatch> ipMatches = new ArrayList<MarkerVocabMatch>();
 
 	// scores
@@ -146,6 +151,9 @@ public class GenomeFeatureResult extends AbstractResult {
 		if (pirsfMatches.size() > 0) {
 			Collections.sort(pirsfMatches, matchSorter);
 		}
+		if (protIsoMatches.size() > 0) {
+			Collections.sort(pirsfMatches, matchSorter);
+		}
 		if (ipMatches.size() > 0) {
 			Collections.sort(ipMatches, matchSorter);
 		}
@@ -176,7 +184,23 @@ public class GenomeFeatureResult extends AbstractResult {
 		matchCount = getAllMarkerVocabMatches().size()
 				+ getAllMarkerNomenMatches().size();
 
-		// derive the score for this result object
+
+		
+		logger.info("Scores: Vocab:" + bestVocabScore + "Nomen:" + bestNomenScore);
+		if (bestMatch == null) {
+			logger.info("Before before -- bestMatch is null");
+			if (bestVocabMatch == null) {
+				logger.info("-- bestVocabMatch is null");
+			}
+			if (bestNomenMatch == null) {
+				logger.info("-- bestNomenMatch is null");
+			}
+
+		}
+		logger.info("Before?" + bestMatch.isTier1() );
+
+// derive the score for this result object
+
 		if ( bestMatch.isTier1() ){
 			derivedScore = new Float(100000);
 			derivedScore += getBestMatchTypeBoost(); //flat type boost
@@ -362,6 +386,21 @@ public class GenomeFeatureResult extends AbstractResult {
 	}
 
 	/**
+	 * Adds a Protien Isoform match to this result
+	 * @param MarkerVocabMatch
+	 */
+	public void addProtIsoMatch(MarkerVocabMatch vm) {
+		protIsoMatches.add(vm);
+	}
+	/**
+	 * Returns Protien Isoform Matches
+	 * @return List of Match Objects
+	 */
+	public List getProtIsoMatches() {
+		return protIsoMatches;
+	}
+
+	/**
 	 * Adds a PIRSF match to this result
 	 * @param MarkerVocabMatch
 	 */
@@ -428,6 +467,7 @@ public class GenomeFeatureResult extends AbstractResult {
 			allVocMatches.addAll(omimMatches);
 			allVocMatches.addAll(omimOrthoMatches);
 			allVocMatches.addAll(pirsfMatches);
+			allVocMatches.addAll(protIsoMatches);
 			allVocMatches.addAll(ipMatches);
 			Collections.sort(allVocMatches, matchSorter);
 		}
