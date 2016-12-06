@@ -116,7 +116,7 @@
     // column 1 (term)
     out.print("<span class='matchDisplayableType small'>"
       + thisVocabDisplay.getTypeDisplay() + "</span>: ");
-    if (thisVocabDisplay.getVocabType().equals(IndexConstants.OMIM_TYPE_NAME))
+    if (thisVocabDisplay.getVocabType().equals(IndexConstants.DO_DATABASE_TYPE))
     {
     out.print("<a href='"
         + fewi_url + "disease/key/"
