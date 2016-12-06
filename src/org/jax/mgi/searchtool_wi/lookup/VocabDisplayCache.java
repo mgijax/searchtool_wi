@@ -141,7 +141,7 @@ public class VocabDisplayCache
     public VocabDisplay getGoTerm(String s) {
         return (VocabDisplay)vocabCacheMap.get(s);
     }
-    public VocabDisplay getOmimTerm(String s) {
+    public VocabDisplay getDoTerm(String s) {
         return (VocabDisplay)vocabCacheMap.get(s);
     }
     public VocabDisplay getPirsfTerm(String s) {

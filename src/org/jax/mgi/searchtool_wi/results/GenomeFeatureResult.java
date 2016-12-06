@@ -50,8 +50,8 @@ public class GenomeFeatureResult extends AbstractResult {
 	private ArrayList<MarkerVocabMatch> emapaMatches = new ArrayList<MarkerVocabMatch>();
 	private ArrayList<MarkerVocabMatch> emapsMatches = new ArrayList<MarkerVocabMatch>();
 	private ArrayList<MarkerVocabMatch> mpMatches = new ArrayList<MarkerVocabMatch>();
-	private ArrayList<MarkerVocabMatch> omimMatches = new ArrayList<MarkerVocabMatch>();
-	private ArrayList<MarkerVocabMatch> omimOrthoMatches = new ArrayList<MarkerVocabMatch>();
+	private ArrayList<MarkerVocabMatch> doMatches = new ArrayList<MarkerVocabMatch>();
+	private ArrayList<MarkerVocabMatch> doOrthoMatches = new ArrayList<MarkerVocabMatch>();
 	private ArrayList<MarkerVocabMatch> pirsfMatches = new ArrayList<MarkerVocabMatch>();
 	private ArrayList<MarkerVocabMatch> protIsoMatches = new ArrayList<MarkerVocabMatch>();
 	private ArrayList<MarkerVocabMatch> ipMatches = new ArrayList<MarkerVocabMatch>();
@@ -139,11 +139,11 @@ public class GenomeFeatureResult extends AbstractResult {
 		if (emapsMatches.size() > 0) {
 			Collections.sort(emapsMatches, matchSorter);
 		}
-		if (omimMatches.size() > 0) {
-			Collections.sort(omimMatches, matchSorter);
+		if (doMatches.size() > 0) {
+			Collections.sort(doMatches, matchSorter);
 		}
-		if (omimOrthoMatches.size() > 0) {
-			Collections.sort(omimOrthoMatches, matchSorter);
+		if (doOrthoMatches.size() > 0) {
+			Collections.sort(doOrthoMatches, matchSorter);
 		}
 		if (mpMatches.size() > 0) {
 			Collections.sort(mpMatches, matchSorter);
@@ -356,33 +356,33 @@ public class GenomeFeatureResult extends AbstractResult {
 	}
 
 	/**
-	 * Adds a OMIM match to this result
+	 * Adds a Disease Ontology (DO) match to this result
 	 * @param MarkerVocabMatch
 	 */
-	public void addOmimMatch(MarkerVocabMatch vm) {
-		omimMatches.add(vm);
+	public void addDoMatch(MarkerVocabMatch vm) {
+		doMatches.add(vm);
 	}
 	/**
-	 * Returns OMIMMatches
+	 * Returns DOMatches
 	 * @return List of Match Objects
 	 */
-	public List getOmimMatches() {
-		return omimMatches;
+	public List getDoMatches() {
+		return doMatches;
 	}
 
 	/**
-	 * Adds a OMIM Ortho match to this result
+	 * Adds a Disease Ontology (DO) Ortho match to this result
 	 * @param MarkerVocabMatch
 	 */
-	public void addOmimOrthoMatch(MarkerVocabMatch vm) {
-		omimOrthoMatches.add(vm);
+	public void addDoOrthoMatch(MarkerVocabMatch vm) {
+		doOrthoMatches.add(vm);
 	}
 	/**
-	 * Returns OMIM Ortho Matches
+	 * Returns Disease Ontology (DO) Ortho Matches
 	 * @return List of Match Objects
 	 */
-	public List getOmimOrthoMatches() {
-		return omimOrthoMatches;
+	public List getDoOrthoMatches() {
+		return doOrthoMatches;
 	}
 
 	/**
@@ -464,8 +464,8 @@ public class GenomeFeatureResult extends AbstractResult {
 			allVocMatches.addAll(goMatches);
 			allVocMatches.addAll(emapaMatches);
 			allVocMatches.addAll(emapsMatches);
-			allVocMatches.addAll(omimMatches);
-			allVocMatches.addAll(omimOrthoMatches);
+			allVocMatches.addAll(doMatches);
+			allVocMatches.addAll(doOrthoMatches);
 			allVocMatches.addAll(pirsfMatches);
 			allVocMatches.addAll(protIsoMatches);
 			allVocMatches.addAll(ipMatches);

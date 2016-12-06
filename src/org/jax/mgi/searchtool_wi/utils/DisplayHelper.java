@@ -775,8 +775,8 @@ public class DisplayHelper
 		int adMatches = genomeFeatureResult.getAdMatches().size();
 		int mpMatches = genomeFeatureResult.getMpMatches().size();
 		int goMatches = genomeFeatureResult.getGoMatches().size();
-		int omimMatches = genomeFeatureResult.getOmimMatches().size();
-		int omimOrthoMatches = genomeFeatureResult.getOmimOrthoMatches().size();
+		int doMatches = genomeFeatureResult.getDoMatches().size();
+		int doOrthoMatches = genomeFeatureResult.getDoOrthoMatches().size();
 		int pirsfMatches = genomeFeatureResult.getPirsfMatches().size();
 		int ipMatches = genomeFeatureResult.getIpMatches().size();
 
@@ -800,11 +800,11 @@ public class DisplayHelper
 		if (goMatches != 0) {
 			contents = contents + goMatches + " Function<br/>";
 		}
-		if (omimMatches != 0) {
-			contents = contents + omimMatches + " Disease Model<br/>";
+		if (doMatches != 0) {
+			contents = contents + doMatches + " Disease Model<br/>";
 		}
-		if (omimOrthoMatches != 0) {
-			contents = contents + omimOrthoMatches + " Disease Ortholog<br/>";
+		if (doOrthoMatches != 0) {
+			contents = contents + doOrthoMatches + " Disease Ortholog<br/>";
 		}
 		if (pirsfMatches != 0) {
 			contents = contents + pirsfMatches + " Protein Family<br/>";
@@ -859,7 +859,7 @@ public class DisplayHelper
 		else if (vocab.equals(IndexConstants.GO_TYPE_NAME)) {
 			url = "<a href='" + stConfig.get("FEWI_URL") + "go/term/" + vocabDisplay.getAcc_id() + "'> " + vocabDisplay.getAnnotDisplay() + "</a>";
 		}
-		else if (vocab.equals(IndexConstants.OMIM_TYPE_NAME)) {
+		else if (vocab.equals(IndexConstants.DO_DATABASE_TYPE)) {
 			url = "<a href='" + stConfig.get("FEWI_URL") + "disease/key/" + vocabDisplay.getDbKey() + "'>" + vocabDisplay.getAnnotDisplay() + "</a>";
 		}
 		else if (vocab.equals(IndexConstants.PIRSF_TYPE_NAME))

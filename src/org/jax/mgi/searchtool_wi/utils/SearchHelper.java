@@ -144,47 +144,47 @@ public class SearchHelper
   }
 
 
-  // OMIM
-  public static boolean isOMIM (Hit hit) {
+  // Disease Ontology (DO)
+  public static boolean isDo (Hit hit) {
 
-    boolean isOMIM = false;
+    boolean isDo = false;
     try{
-        if (hit.get(IndexConstants.COL_OBJ_TYPE).equals(IndexConstants.OMIM_TYPE_NAME)) {
-            isOMIM = true;
+        if (hit.get(IndexConstants.COL_OBJ_TYPE).equals(IndexConstants.DO_TYPE_NAME)) {
+            isDo = true;
         }
     }
     catch (Exception e) {e.printStackTrace();}
-    return isOMIM;
+    return isDo;
   }
-  public static boolean isOMIM (String str) {
+  public static boolean isDo (String str) {
 
-    boolean isOMIM = false;
-    if (str.equals(IndexConstants.OMIM_TYPE_NAME)) {
-        isOMIM = true;
+    boolean isDo = false;
+    if (str.equals(IndexConstants.DO_TYPE_NAME)) {
+        isDo = true;
     }
-    return isOMIM;
+    return isDo;
   }
 
 
-  // OMIM ORTHO
-  public static boolean isOMIMORTHO (Hit hit) {
+  // Disease Ontology (DO) ORTHO
+  public static boolean isDoORTHO (Hit hit) {
 
-    boolean isOMIMORTHO = false;
+    boolean isDoORTHO = false;
     try{
-        if (hit.get(IndexConstants.COL_OBJ_TYPE).equals(IndexConstants.OMIM_ORTH_TYPE_NAME)) {
-            isOMIMORTHO = true;
+        if (hit.get(IndexConstants.COL_OBJ_TYPE).equals(IndexConstants.DO_ORTH_TYPE_NAME)) {
+            isDoORTHO = true;
         }
     }
     catch (Exception e) {e.printStackTrace();}
-    return isOMIMORTHO;
+    return isDoORTHO;
   }
-  public static boolean isOMIMORTHO (String str) {
+  public static boolean isDoORTHO (String str) {
 
-    boolean isOMIMORTHO = false;
-    if (str.equals(IndexConstants.OMIM_ORTH_TYPE_NAME)) {
-        isOMIMORTHO = true;
+    boolean isDoORTHO = false;
+    if (str.equals(IndexConstants.DO_ORTH_TYPE_NAME)) {
+        isDoORTHO = true;
     }
-    return isOMIMORTHO;
+    return isDoORTHO;
   }
 
 

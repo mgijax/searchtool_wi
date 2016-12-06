@@ -52,8 +52,8 @@ public class GenomeFeatureSearch extends AbstractSearch {
 	private List goMatches				= new ArrayList();
 	private List emapaMatches			= new ArrayList();
 	private List emapsMatches			= new ArrayList();
-	private List omimMatches			= new ArrayList();
-	private List omimOrthoMatches		= new ArrayList();
+	private List doMatches			= new ArrayList();
+	private List doOrthoMatches		= new ArrayList();
 	private List mpMatches				= new ArrayList();
 	private List pirsfMatches			= new ArrayList();
 	private List ipMatches				= new ArrayList();
@@ -66,8 +66,8 @@ public class GenomeFeatureSearch extends AbstractSearch {
 	private HashSet handledGoTerms			= new HashSet();
 	private HashSet handledEmapaTerms		= new HashSet();
 	private HashSet handledEmapsTerms		= new HashSet();
-	private HashSet handledOmimTerms		= new HashSet();
-	private HashSet handledOmimOrthoTerms	= new HashSet();
+	private HashSet handledDoTerms		= new HashSet();
+	private HashSet handledDoOrthoTerms	= new HashSet();
 	private HashSet handledPirsfTerms		= new HashSet();
 	private HashSet handledIpTerms			= new HashSet();
 	private HashSet handledProtIsoTerms		= new HashSet();
@@ -83,7 +83,7 @@ public class GenomeFeatureSearch extends AbstractSearch {
 	private boolean incGo				= true;
 	private boolean incEmapa			= true;
 	private boolean incEmaps			= true;
-	private boolean incOmim				= true;
+	private boolean incDo				= true;
 	private boolean incPirsf			= true;
 	private boolean incIp				= true;
 	private boolean incProtIso			= true;
@@ -416,29 +416,29 @@ public class GenomeFeatureSearch extends AbstractSearch {
 			}
 		}
 
-		// OMIM hit (no chasing down the dag)
-		else if ( SearchHelper.isOMIM(hit.get(IndexConstants.COL_VOCABULARY)) ) {
+		// Disease Ontology (DO) hit (no chasing down the dag)
+		else if ( SearchHelper.isDo(hit.get(IndexConstants.COL_VOCABULARY)) ) {
 
 			//ensure we haven't already done this term
-			if (!handledOmimTerms.contains(hit.get(IndexConstants.COL_DB_KEY))) {
+			if (!handledDoTerms.contains(hit.get(IndexConstants.COL_DB_KEY))) {
 				markerVocabMatch = markerVocabMatchFactory.getMatch(hit);
 				markerVocabMatch.flagAsTier1();
 				gfExactTypeScorer.addScore(markerVocabMatch);
-				omimMatches.add(markerVocabMatch);
-				handledOmimTerms.add(markerVocabMatch.getDbKey());
+				doMatches.add(markerVocabMatch);
+				handledDoTerms.add(markerVocabMatch.getDbKey());
 
 			}
 		}
 
-		// OMIM ORTHO hit (no chasing down the dag)
-		else if ( SearchHelper.isOMIMORTHO(hit.get(IndexConstants.COL_VOCABULARY)) ) {
+		// Disease Ontology (DO) ORTHO hit (no chasing down the dag)
+		else if ( SearchHelper.isDoORTHO(hit.get(IndexConstants.COL_VOCABULARY)) ) {
 			//ensure we haven't already done this term
-			if (!handledOmimOrthoTerms.contains(hit.get(IndexConstants.COL_DB_KEY))) {
+			if (!handledDoOrthoTerms.contains(hit.get(IndexConstants.COL_DB_KEY))) {
 				markerVocabMatch = markerVocabMatchFactory.getMatch(hit);
 				markerVocabMatch.flagAsTier1();
 				gfExactTypeScorer.addScore(markerVocabMatch);
-				omimOrthoMatches.add(markerVocabMatch);
-				handledOmimOrthoTerms.add(markerVocabMatch.getDbKey());
+				doOrthoMatches.add(markerVocabMatch);
+				handledDoOrthoTerms.add(markerVocabMatch.getDbKey());
 
 			}
 		}
@@ -709,30 +709,30 @@ public class GenomeFeatureSearch extends AbstractSearch {
 				}
 			}
 
-			// OMIM hit (no chasing down the dag)
-			else if ( SearchHelper.isOMIM(hit) ) {
+			// Disease Ontology (DO) hit (no chasing down the dag)
+			else if ( SearchHelper.isDo(hit) ) {
 
 				//ensure we haven't already done this term
-				if (!handledOmimTerms.contains(hit.get(IndexConstants.COL_DB_KEY))) {
+				if (!handledDoTerms.contains(hit.get(IndexConstants.COL_DB_KEY))) {
 					markerVocabMatch = markerVocabMatchFactory.getMatch(hit);
 					markerVocabMatch.flagAsTier2();
 					gfAndTypeScorer.addScore(markerVocabMatch);
-					omimMatches.add(markerVocabMatch);
-					handledOmimTerms.add( markerVocabMatch.getDbKey() );
+					doMatches.add(markerVocabMatch);
+					handledDoTerms.add( markerVocabMatch.getDbKey() );
 
 				}
 			}
 
-			// OMIM Ortho hit (no chasing down the dag)
-			else if ( SearchHelper.isOMIMORTHO(hit) ) {
+			// Disease Ontology (DO) Ortho hit (no chasing down the dag)
+			else if ( SearchHelper.isDoORTHO(hit) ) {
 
 				//ensure we haven't already done this term
-				if (!handledOmimOrthoTerms.contains(hit.get(IndexConstants.COL_DB_KEY))) {
+				if (!handledDoOrthoTerms.contains(hit.get(IndexConstants.COL_DB_KEY))) {
 					markerVocabMatch = markerVocabMatchFactory.getMatch(hit);
 					markerVocabMatch.flagAsTier2();
 					gfAndTypeScorer.addScore(markerVocabMatch);
-					omimOrthoMatches.add(markerVocabMatch);
-					handledOmimOrthoTerms.add( markerVocabMatch.getDbKey() );
+					doOrthoMatches.add(markerVocabMatch);
+					handledDoOrthoTerms.add( markerVocabMatch.getDbKey() );
 
 				}
 			}
@@ -1010,29 +1010,29 @@ public class GenomeFeatureSearch extends AbstractSearch {
 			}
 		}
 
-		// OMIM hit (no chasing down the dag)
-		else if ( SearchHelper.isOMIM(hit.get(IndexConstants.COL_VOCABULARY)) ) {
+		// Disease Ontolgy (DO) hit (no chasing down the dag)
+		else if ( SearchHelper.isDo(hit.get(IndexConstants.COL_VOCABULARY)) ) {
 
 			//ensure we haven't already done this term
-			if (!handledOmimTerms.contains(hit.get(IndexConstants.COL_DB_KEY))) {
+			if (!handledDoTerms.contains(hit.get(IndexConstants.COL_DB_KEY))) {
 				markerVocabMatch = markerVocabMatchFactory.getMatch(hit);
 				markerVocabMatch.flagAsTier3();
 				gfExactTypeScorer.addScore(markerVocabMatch);
-				omimMatches.add(markerVocabMatch);
-				handledOmimTerms.add( markerVocabMatch.getDbKey() );
+				doMatches.add(markerVocabMatch);
+				handledDoTerms.add( markerVocabMatch.getDbKey() );
 
 			}
 		}
 
-		// OMIM ORTHO hit (no chasing down the dag)
-		else if ( SearchHelper.isOMIMORTHO(hit.get(IndexConstants.COL_VOCABULARY)) ) {
+		// Disease Ontology (DO) ORTHO hit (no chasing down the dag)
+		else if ( SearchHelper.isDoORTHO(hit.get(IndexConstants.COL_VOCABULARY)) ) {
 			//ensure we haven't already done this term
-			if (!handledOmimOrthoTerms.contains(hit.get(IndexConstants.COL_DB_KEY))) {
+			if (!handledDoOrthoTerms.contains(hit.get(IndexConstants.COL_DB_KEY))) {
 				markerVocabMatch = markerVocabMatchFactory.getMatch(hit);
 				markerVocabMatch.flagAsTier3();
 				gfExactTypeScorer.addScore(markerVocabMatch);
-				omimOrthoMatches.add(markerVocabMatch);
-				handledOmimOrthoTerms.add( markerVocabMatch.getDbKey() );
+				doOrthoMatches.add(markerVocabMatch);
+				handledDoOrthoTerms.add( markerVocabMatch.getDbKey() );
 
 			}
 		}
@@ -1265,26 +1265,26 @@ public class GenomeFeatureSearch extends AbstractSearch {
 					}
 				}
 
-				// OMIM hit (no chasing down the dag)
-				else if ( SearchHelper.isOMIM(hit) ) {
+				// Disease Ontology (DO) hit (no chasing down the dag)
+				else if ( SearchHelper.isDo(hit) ) {
 
 					//ensure we haven't already done this term
-					if (!handledOmimTerms.contains(hit.get(IndexConstants.COL_DB_KEY))) {
+					if (!handledDoTerms.contains(hit.get(IndexConstants.COL_DB_KEY))) {
 						markerVocabMatch = markerVocabMatchFactory.getMatch(hit);
-						omimMatches.add(markerVocabMatch);
-						handledOmimTerms.add( markerVocabMatch.getDbKey() );
+						doMatches.add(markerVocabMatch);
+						handledDoTerms.add( markerVocabMatch.getDbKey() );
 
 					}
 				}
 
-				// OMIM Ortho hit (no chasing down the dag)
-				else if ( SearchHelper.isOMIMORTHO(hit) ) {
+				// Disease Ontology (DO) Ortho hit (no chasing down the dag)
+				else if ( SearchHelper.isDoORTHO(hit) ) {
 
 					//ensure we haven't already done this term
-					if (!handledOmimOrthoTerms.contains(hit.get(IndexConstants.COL_DB_KEY))) {
+					if (!handledDoOrthoTerms.contains(hit.get(IndexConstants.COL_DB_KEY))) {
 						markerVocabMatch = markerVocabMatchFactory.getMatch(hit);
-						omimOrthoMatches.add(markerVocabMatch);
-						handledOmimOrthoTerms.add( markerVocabMatch.getDbKey() );
+						doOrthoMatches.add(markerVocabMatch);
+						handledDoOrthoTerms.add( markerVocabMatch.getDbKey() );
 
 					}
 				}
@@ -1441,29 +1441,29 @@ public class GenomeFeatureSearch extends AbstractSearch {
 			}
 		}
 
-		// assign Omim matches to their markers
-		if (incOmim) {
-			for (Iterator iter = omimMatches.iterator(); iter.hasNext();) {
+		// assign Disease Ontology (DO) matches to their markers
+		if (incDo) {
+			for (Iterator iter = doMatches.iterator(); iter.hasNext();) {
 				markerVocabMatch = (MarkerVocabMatch)iter.next();
-				alleleKeys = vocabInfoCache.getOmimAnnotAlleles(markerVocabMatch.getDbKey());
+				alleleKeys = vocabInfoCache.getDoAnnotAlleles(markerVocabMatch.getDbKey());
 				if (alleleKeys != null) {
 					for (Iterator mrkKeyIter = alleleKeys.iterator(); mrkKeyIter.hasNext();) {
 						thisGenomeFeature = getGfResult(ALLELE_TYPE, (String)mrkKeyIter.next() );
-						thisGenomeFeature.addOmimMatch(markerVocabMatch);
+						thisGenomeFeature.addDoMatch(markerVocabMatch);
 					}
 				}
 			}
 		}
 
-		// assign Omim ortho matches to their markers
-		if (incOmim) {
-			for (Iterator iter = omimOrthoMatches.iterator(); iter.hasNext();) {
+		// assign Disease Ontology (DO) ortho matches to their markers
+		if (incDo) {
+			for (Iterator iter = doOrthoMatches.iterator(); iter.hasNext();) {
 				markerVocabMatch = (MarkerVocabMatch)iter.next();
-				markerKeys = vocabInfoCache.getOmimOrthoAnnotMarkers(markerVocabMatch.getDbKey());
+				markerKeys = vocabInfoCache.getDoOrthoAnnotMarkers(markerVocabMatch.getDbKey());
 				if (markerKeys != null) {
 					for (Iterator mrkKeyIter = markerKeys.iterator(); mrkKeyIter.hasNext();) {
 						thisGenomeFeature = getGfResult(MARKER_TYPE, (String)mrkKeyIter.next() );
-						thisGenomeFeature.addOmimOrthoMatch(markerVocabMatch);
+						thisGenomeFeature.addDoOrthoMatch(markerVocabMatch);
 					}
 				}
 			}
@@ -1498,7 +1498,7 @@ public class GenomeFeatureSearch extends AbstractSearch {
 		}
 
 		// assign ip matches to their markers
-		if (incOmim) {
+		if (incDo) {
 			for (Iterator iter = ipMatches.iterator(); iter.hasNext();) {
 				markerVocabMatch = (MarkerVocabMatch)iter.next();
 				markerKeys = vocabInfoCache.getIpAnnotMarkers(markerVocabMatch.getDbKey());
@@ -1528,8 +1528,8 @@ public class GenomeFeatureSearch extends AbstractSearch {
 					incEmapa=false;
 				} else if (excludeItem.equals("emaps")) {
 					incEmaps=false;
-				} else if (excludeItem.equals("omim")) {
-					incOmim=false;
+				} else if (excludeItem.equals("do")) {
+					incDo=false;
 				} else if (excludeItem.equals("pirsf")) {
 					incPirsf=false;
 				} else if (excludeItem.equals("Ip")) {

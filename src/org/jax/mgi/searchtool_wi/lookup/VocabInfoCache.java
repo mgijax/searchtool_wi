@@ -40,8 +40,8 @@ public class VocabInfoCache {
 	private static HashMap adChildIds             = new HashMap();
 	private static HashMap emapaChildIds          = new HashMap();
 	private static HashMap emapsChildIds          = new HashMap();
-	private static HashMap omimChildIds           = new HashMap();
-	private static HashMap omimOrthoChildIds      = new HashMap();
+	private static HashMap doChildIds             = new HashMap();
+	private static HashMap doOrthoChildIds        = new HashMap();
 	private static HashMap psChildIds             = new HashMap();
 	private static HashMap ipChildIds             = new HashMap();
 
@@ -51,15 +51,15 @@ public class VocabInfoCache {
 	private static HashMap adAnnotMarkers         = new HashMap();
 	private static HashMap emapaAnnotMarkers      = new HashMap();
 	private static HashMap emapsAnnotMarkers      = new HashMap();
-	private static HashMap omimAnnotMarkers       = new HashMap();
-	private static HashMap omimOrthoAnnotMarkers  = new HashMap();
+	private static HashMap doAnnotMarkers         = new HashMap();
+	private static HashMap doOrthoAnnotMarkers    = new HashMap();
 	private static HashMap psAnnotMarkers         = new HashMap();
 	private static HashMap protIsoAnnotMarkers    = new HashMap();
 	private static HashMap ipAnnotMarkers         = new HashMap();
 
 	// vocabID -> annotated alleles list
 	private static HashMap mpAnnotAlleles         = new HashMap();
-	private static HashMap omimAnnotAlleles       = new HashMap();
+	private static HashMap doAnnotAlleles         = new HashMap();
 
 
 	// IndexReaderContainer
@@ -94,11 +94,11 @@ public class VocabInfoCache {
 	public List getEmapsChildTerms(String termKey){
 		return (List)emapsChildIds.get(termKey);
 	}
-	public List getOmimChildTerms(String termKey){
-		return (List)omimChildIds.get(termKey);
+	public List getDoChildTerms(String termKey){
+		return (List)doChildIds.get(termKey);
 	}
-	public List getOmimOrthoChildTerms(String termKey){
-		return (List)omimOrthoChildIds.get(termKey);
+	public List getDoOrthoChildTerms(String termKey){
+		return (List)doOrthoChildIds.get(termKey);
 	}
 	public List getPsChildTerms(String termKey){
 		return (List)psChildIds.get(termKey);
@@ -121,11 +121,11 @@ public class VocabInfoCache {
 	public List getEmapsAnnotMarkers(String termKey){
 		return (List)emapsAnnotMarkers.get(termKey);
 	}
-	public List getOmimAnnotMarkers(String termKey){
-		return (List)omimAnnotMarkers.get(termKey);
+	public List getDoAnnotMarkers(String termKey){
+		return (List)doAnnotMarkers.get(termKey);
 	}
-	public List getOmimOrthoAnnotMarkers(String termKey){
-		return (List)omimOrthoAnnotMarkers.get(termKey);
+	public List getDoOrthoAnnotMarkers(String termKey){
+		return (List)doOrthoAnnotMarkers.get(termKey);
 	}
 	public List getPsAnnotMarkers(String termKey){
 		return (List)psAnnotMarkers.get(termKey);
@@ -139,8 +139,8 @@ public class VocabInfoCache {
 	public List getMpAnnotAlleles(String termKey){
 		return (List)mpAnnotAlleles.get(termKey);
 	}
-	public List getOmimAnnotAlleles(String termKey){
-		return (List)omimAnnotAlleles.get(termKey);
+	public List getDoAnnotAlleles(String termKey){
+		return (List)doAnnotAlleles.get(termKey);
 	}
 
 	private static void load(Configuration stConfig) {
@@ -172,10 +172,10 @@ public class VocabInfoCache {
 						mpChildIds.put(doc.get(IndexConstants.COL_DB_KEY), objectKeys);
 					} else if (doc.get(IndexConstants.COL_VOCABULARY).equals(IndexConstants.GO_TYPE_NAME)){
 						goChildIds.put(doc.get(IndexConstants.COL_DB_KEY), objectKeys);
-					} else if (doc.get(IndexConstants.COL_VOCABULARY).equals(IndexConstants.OMIM_TYPE_NAME)){
-						omimChildIds.put(doc.get(IndexConstants.COL_DB_KEY), objectKeys);
-					} else if (doc.get(IndexConstants.COL_VOCABULARY).equals(IndexConstants.OMIM_ORTH_TYPE_NAME)){
-						omimOrthoChildIds.put(doc.get(IndexConstants.COL_DB_KEY), objectKeys);
+					} else if (doc.get(IndexConstants.COL_VOCABULARY).equals(IndexConstants.DO_TYPE_NAME)){
+						doChildIds.put(doc.get(IndexConstants.COL_DB_KEY), objectKeys);
+					} else if (doc.get(IndexConstants.COL_VOCABULARY).equals(IndexConstants.DO_ORTH_TYPE_NAME)){
+						doOrthoChildIds.put(doc.get(IndexConstants.COL_DB_KEY), objectKeys);
 					} else if (doc.get(IndexConstants.COL_VOCABULARY).equals(IndexConstants.INTERPRO_TYPE_NAME)){
 						ipChildIds.put(doc.get(IndexConstants.COL_DB_KEY), objectKeys);
 					} else if (doc.get(IndexConstants.COL_VOCABULARY).equals(IndexConstants.PIRSF_TYPE_NAME)){
@@ -197,10 +197,10 @@ public class VocabInfoCache {
 						mpAnnotMarkers.put(doc.get(IndexConstants.COL_DB_KEY), objectKeys);
 					} else if (doc.get(IndexConstants.COL_VOCABULARY).equals(IndexConstants.GO_TYPE_NAME)){
 						goAnnotMarkers.put(doc.get(IndexConstants.COL_DB_KEY), objectKeys);
-					} else if (doc.get(IndexConstants.COL_VOCABULARY).equals(IndexConstants.OMIM_TYPE_NAME)){
-						omimAnnotMarkers.put(doc.get(IndexConstants.COL_DB_KEY), objectKeys);
-					} else if (doc.get(IndexConstants.COL_VOCABULARY).equals(IndexConstants.OMIM_ORTH_TYPE_NAME)){
-						omimOrthoAnnotMarkers.put(doc.get(IndexConstants.COL_DB_KEY), objectKeys);
+					} else if (doc.get(IndexConstants.COL_VOCABULARY).equals(IndexConstants.DO_TYPE_NAME)){
+						doAnnotMarkers.put(doc.get(IndexConstants.COL_DB_KEY), objectKeys);
+					} else if (doc.get(IndexConstants.COL_VOCABULARY).equals(IndexConstants.DO_ORTH_TYPE_NAME)){
+						doOrthoAnnotMarkers.put(doc.get(IndexConstants.COL_DB_KEY), objectKeys);
 					} else if (doc.get(IndexConstants.COL_VOCABULARY).equals(IndexConstants.INTERPRO_TYPE_NAME)){
 						ipAnnotMarkers.put(doc.get(IndexConstants.COL_DB_KEY), objectKeys);
 					} else if (doc.get(IndexConstants.COL_VOCABULARY).equals(IndexConstants.PIRSF_TYPE_NAME)){
@@ -218,8 +218,8 @@ public class VocabInfoCache {
 					// put the data in the proper mapping
 					if (doc.get(IndexConstants.COL_VOCABULARY).equals(IndexConstants.MP_TYPE_NAME)){
 						mpAnnotAlleles.put(doc.get(IndexConstants.COL_DB_KEY), alleleKeys);
-					} else if (doc.get(IndexConstants.COL_VOCABULARY).equals(IndexConstants.OMIM_TYPE_NAME)){
-						omimAnnotAlleles.put(doc.get(IndexConstants.COL_DB_KEY), alleleKeys);
+					} else if (doc.get(IndexConstants.COL_VOCABULARY).equals(IndexConstants.DO_TYPE_NAME)){
+						doAnnotAlleles.put(doc.get(IndexConstants.COL_DB_KEY), alleleKeys);
 					}
 				}
 			}

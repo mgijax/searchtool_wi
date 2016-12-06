@@ -8,7 +8,7 @@ import org.jax.mgi.shr.searchtool.IndexConstants;
 public class VocabResultContainer extends ResultContainer {
 
   HashMap<String, VocabResult> goMappedResults = new HashMap<String, VocabResult>();
-  HashMap<String, VocabResult> omimMappedResults = new HashMap<String, VocabResult>();
+  HashMap<String, VocabResult> doMappedResults = new HashMap<String, VocabResult>();
   HashMap<String, VocabResult> adMappedResults = new HashMap<String, VocabResult>();
   HashMap<String, VocabResult> mpMappedResults = new HashMap<String, VocabResult>();
   HashMap<String, VocabResult> psMappedResults = new HashMap<String, VocabResult>();
@@ -28,8 +28,8 @@ public class VocabResultContainer extends ResultContainer {
           VocabResult current = iter.next();
           if (current.getVocabulary().equals(IndexConstants.GO_TYPE_NAME)) {
               goMappedResults.put(current.getDbKey().toString(), current);
-          } else if (current.getVocabulary().equals(IndexConstants.OMIM_TYPE_NAME)) {
-              omimMappedResults.put(current.getDbKey().toString(), current);
+          } else if (current.getVocabulary().equals(IndexConstants.DO_TYPE_NAME)) {
+              doMappedResults.put(current.getDbKey().toString(), current);
           } else if (current.getVocabulary().equals(IndexConstants.MP_TYPE_NAME)) {
               mpMappedResults.put(current.getDbKey().toString(), current);
           } else if (current.getVocabulary().equals(IndexConstants.EMAPA_TYPE_NAME)) {
@@ -52,9 +52,9 @@ public class VocabResultContainer extends ResultContainer {
       return (VocabResult) goMappedResults.get(key);
   }
 
-  // Omim
-  public VocabResult getOmimByKey(String key) {
-      return (VocabResult) omimMappedResults.get(key);
+  // Disease Ontology (DO)
+  public VocabResult getDoByKey(String key) {
+      return (VocabResult) doMappedResults.get(key);
   }
 
   // MP
