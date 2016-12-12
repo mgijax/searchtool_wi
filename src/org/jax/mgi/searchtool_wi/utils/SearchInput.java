@@ -901,5 +901,32 @@ public class SearchInput {
     return Pattern.matches(regex_pattern, token);
   }
 
-
+  public String toString()
+  {
+    StringBuffer sb = new StringBuffer();
+    sb.append("[SearchInput {searchString:'");
+    sb.append(searchString);
+    sb.append("', cacheString:'");
+    sb.append(cacheString);
+    sb.append("', zeroHitTokens:[");
+    for (String s : zeroHitTokens) {
+      sb.append("'");
+      sb.append(s);
+      sb.append("',");
+    }
+    sb.append("], largeTokens:[");
+    for (String s : this.getLargeTokenList()) {
+      sb.append("'");
+      sb.append(s);
+      sb.append("',");
+    }
+    sb.append("], smallTokens:[");
+    for (String s : this.getSmallTokenList()) {
+      sb.append("'");
+      sb.append(s);
+      sb.append("',");
+    }
+    sb.append("]");
+    return sb.toString();
+  }
 }
