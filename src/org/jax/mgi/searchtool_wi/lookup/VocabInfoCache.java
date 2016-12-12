@@ -172,7 +172,7 @@ public class VocabInfoCache {
 						mpChildIds.put(doc.get(IndexConstants.COL_DB_KEY), objectKeys);
 					} else if (doc.get(IndexConstants.COL_VOCABULARY).equals(IndexConstants.GO_TYPE_NAME)){
 						goChildIds.put(doc.get(IndexConstants.COL_DB_KEY), objectKeys);
-					} else if (doc.get(IndexConstants.COL_VOCABULARY).equals(IndexConstants.DO_TYPE_NAME)){
+					} else if (doc.get(IndexConstants.COL_VOCABULARY).equals(IndexConstants.DO_TYPE_NAME) || doc.get(IndexConstants.COL_VOCABULARY).equals(IndexConstants.DO_DATABASE_TYPE)){
 						doChildIds.put(doc.get(IndexConstants.COL_DB_KEY), objectKeys);
 					} else if (doc.get(IndexConstants.COL_VOCABULARY).equals(IndexConstants.DO_ORTH_TYPE_NAME)){
 						doOrthoChildIds.put(doc.get(IndexConstants.COL_DB_KEY), objectKeys);
@@ -197,7 +197,7 @@ public class VocabInfoCache {
 						mpAnnotMarkers.put(doc.get(IndexConstants.COL_DB_KEY), objectKeys);
 					} else if (doc.get(IndexConstants.COL_VOCABULARY).equals(IndexConstants.GO_TYPE_NAME)){
 						goAnnotMarkers.put(doc.get(IndexConstants.COL_DB_KEY), objectKeys);
-					} else if (doc.get(IndexConstants.COL_VOCABULARY).equals(IndexConstants.DO_TYPE_NAME)){
+					} else if (doc.get(IndexConstants.COL_VOCABULARY).equals(IndexConstants.DO_TYPE_NAME) || doc.get(IndexConstants.COL_VOCABULARY).equals(IndexConstants.DO_DATABASE_TYPE)){
 						doAnnotMarkers.put(doc.get(IndexConstants.COL_DB_KEY), objectKeys);
 					} else if (doc.get(IndexConstants.COL_VOCABULARY).equals(IndexConstants.DO_ORTH_TYPE_NAME)){
 						doOrthoAnnotMarkers.put(doc.get(IndexConstants.COL_DB_KEY), objectKeys);
@@ -218,7 +218,7 @@ public class VocabInfoCache {
 					// put the data in the proper mapping
 					if (doc.get(IndexConstants.COL_VOCABULARY).equals(IndexConstants.MP_TYPE_NAME)){
 						mpAnnotAlleles.put(doc.get(IndexConstants.COL_DB_KEY), alleleKeys);
-					} else if (doc.get(IndexConstants.COL_VOCABULARY).equals(IndexConstants.DO_TYPE_NAME)){
+					} else if (doc.get(IndexConstants.COL_VOCABULARY).equals(IndexConstants.DO_TYPE_NAME) || doc.get(IndexConstants.COL_VOCABULARY).equals(IndexConstants.DO_DATABASE_TYPE)){
 						doAnnotAlleles.put(doc.get(IndexConstants.COL_DB_KEY), alleleKeys);
 					}
 				}
