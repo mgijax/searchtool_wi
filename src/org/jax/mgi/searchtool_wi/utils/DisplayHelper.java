@@ -860,7 +860,7 @@ public class DisplayHelper
 			url = "<a href='" + stConfig.get("FEWI_URL") + "go/term/" + vocabDisplay.getAcc_id() + "'> " + vocabDisplay.getAnnotDisplay() + "</a>";
 		}
 		else if (vocab.equals(IndexConstants.DO_DATABASE_TYPE)) {
-			url = "<a href='" + stConfig.get("FEWI_URL") + "disease/key/" + vocabDisplay.getDbKey() + "'>" + vocabDisplay.getAnnotDisplay() + "</a>";
+			url = "<a href='" + stConfig.get("FEWI_URL") + "disease/" + vocabDisplay.getAcc_id() + "'>" + vocabDisplay.getAnnotDisplay() + "</a>";
 		}
 		else if (vocab.equals(IndexConstants.PIRSF_TYPE_NAME))
 		{
