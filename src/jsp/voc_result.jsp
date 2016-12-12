@@ -119,8 +119,8 @@
     if (thisVocabDisplay.getVocabType().equals(IndexConstants.DO_DATABASE_TYPE))
     {
     out.print("<a href='"
-        + fewi_url + "disease/key/"
-        + thisVocabDisplay.getDbKey() + "'>"
+        + fewi_url + "disease/"
+        + thisVocabDisplay.getAcc_id() + "'>"
         + thisVocabDisplay.getName() + "</a>");
     }
     else if (thisVocabDisplay.getVocabType().equals(IndexConstants.EMAPA_TYPE_NAME))
