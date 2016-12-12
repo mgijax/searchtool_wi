@@ -149,7 +149,7 @@ public class SearchHelper
 
     boolean isDo = false;
     try{
-        if (hit.get(IndexConstants.COL_OBJ_TYPE).equals(IndexConstants.DO_TYPE_NAME)) {
+        if (hit.get(IndexConstants.COL_OBJ_TYPE).equals(IndexConstants.DO_TYPE_NAME) || hit.get(IndexConstants.COL_OBJ_TYPE).equals(IndexConstants.DO_DATABASE_TYPE)) {
             isDo = true;
         }
     }
@@ -159,7 +159,7 @@ public class SearchHelper
   public static boolean isDo (String str) {
 
     boolean isDo = false;
-    if (str.equals(IndexConstants.DO_TYPE_NAME)) {
+    if ((str.equals(IndexConstants.DO_TYPE_NAME)) || (str.equals(IndexConstants.DO_DATABASE_TYPE))) {
         isDo = true;
     }
     return isDo;
