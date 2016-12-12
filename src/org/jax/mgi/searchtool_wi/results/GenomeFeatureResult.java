@@ -186,18 +186,18 @@ public class GenomeFeatureResult extends AbstractResult {
 
 
 		
-		logger.info("Scores: Vocab:" + bestVocabScore + "Nomen:" + bestNomenScore);
+		//logger.info("Scores: Vocab:" + bestVocabScore + "Nomen:" + bestNomenScore);
 		if (bestMatch == null) {
-			logger.info("Before before -- bestMatch is null");
+			//logger.info("Before before -- bestMatch is null");
 			if (bestVocabMatch == null) {
-				logger.info("-- bestVocabMatch is null");
+				//logger.info("-- bestVocabMatch is null");
 			}
 			if (bestNomenMatch == null) {
-				logger.info("-- bestNomenMatch is null");
+				//logger.info("-- bestNomenMatch is null");
 			}
 
 		}
-		logger.info("Before?" + bestMatch.isTier1() );
+		//logger.info("Before?" + bestMatch.isTier1() );
 
 // derive the score for this result object
 
