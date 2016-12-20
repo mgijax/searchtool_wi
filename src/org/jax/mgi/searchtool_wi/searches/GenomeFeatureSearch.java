@@ -125,25 +125,25 @@ public class GenomeFeatureSearch extends AbstractSearch {
 
 		// exact nomenclature matches - tier1
 		searchGenomeFeature_NomenExact(searchInput);
-		timer.record("GenomeFeatre Search - Done searching Exact");
+		timer.record("GenomeFeature Search - Done searching Exact");
 
 		// exact vocabulary matches - tier1
 		searchExactVocabMatches(searchInput);
-		timer.record("GenomeFeatre Search - Done searching Vocab Exact");
+		timer.record("GenomeFeature Search - Done searching Vocab Exact");
 
 		// 'and' matches - tier2
 		searchGenomeFeature_AllTokens(searchInput);
-		timer.record("GenomeFeatre Search - Done searching 'and' matches");
+		timer.record("GenomeFeature Search - Done searching 'and' matches");
 
 		// large token matches tier3 (only if we have more than 1 large token)
 		if (searchInput.getLargeTokenCount() > 1) {
 			// exact nomenclature matches - tier3
 			searchGenomeFeature_LargeToken(searchInput);
-			timer.record("GenomeFeatre Search - large tokens nomen");
+			timer.record("GenomeFeature Search - large tokens nomen");
 
 			// exact vocabulary matches - tier3
 			searchVocab_LargeToken(searchInput);
-			timer.record("GenomeFeatre Search - Done searching large tokens for vocab");
+			timer.record("GenomeFeature Search - Done searching large tokens for vocab");
 		}
 
 		// 'or' matches - tier4 (only if we have more than 1 small token)
@@ -154,8 +154,9 @@ public class GenomeFeatureSearch extends AbstractSearch {
 
 		// assign matches
 		assignMatches();
-		timer.record("GenomeFeatre Search - Done Assigning Matches");
+		timer.record("GenomeFeature Search - Done Assigning Matches");
 
+		logger.debug("searchInput: " + searchInput.toString());
 		return new ArrayList( searchResults.values() );
 	}
 
@@ -242,7 +243,12 @@ public class GenomeFeatureSearch extends AbstractSearch {
 		List childIDs;
 		String childTermKey;
 
-		logger.debug("----------->" + hit.get(IndexConstants.COL_VOCABULARY) );
+		logger.debug("handleTier1VocabHit -----------> " + hit.get(IndexConstants.COL_VOCABULARY) );
+
+
+/* It looks like this method assumes all vocab hits are for markers; all
+ * use markerVocabNomenMatchFactory to get marker-based matches.
+ */ 
 
 		// anatomical dictionary hit
 		if ( SearchHelper.isAD(hit.get(IndexConstants.COL_VOCABULARY)) ) {
@@ -416,9 +422,10 @@ public class GenomeFeatureSearch extends AbstractSearch {
 			}
 		}
 
-		// Disease Ontology (DO) hit (no chasing down the dag)
+		// Disease Ontology (DO) hit (must chase down the dag)
 		else if ( SearchHelper.isDo(hit.get(IndexConstants.COL_VOCABULARY)) ) {
 
+			logger.debug("Found DO Tier 1 vocab hit");
 			//ensure we haven't already done this term
 			if (!handledDoTerms.contains(hit.get(IndexConstants.COL_DB_KEY))) {
 				markerVocabMatch = markerVocabMatchFactory.getMatch(hit);
@@ -427,11 +434,32 @@ public class GenomeFeatureSearch extends AbstractSearch {
 				doMatches.add(markerVocabMatch);
 				handledDoTerms.add(markerVocabMatch.getDbKey());
 
+				//children of this term;
+				childIDs = vocabInfoCache.getDoChildTerms(hit.get(IndexConstants.COL_DB_KEY));
+				if (childIDs != null) {
+					for (Iterator childIter = childIDs.iterator(); childIter.hasNext();) {
+						childTermKey = (String)childIter.next();
+						if ( !handledDoTerms.contains(childTermKey) ) {
+							markerVocabMatch = markerVocabMatchFactory.getMatch(hit);
+							markerVocabMatch.flagAsTier1();
+							gfExactTypeScorer.addScore(markerVocabMatch);
+
+							// change db key to reflect the 'down-dag' term we're dealing
+							// with, and penalize the scores of these, slightly
+							markerVocabMatch.setDbKey(childTermKey);
+							markerVocabMatch.addScore(-0.0001);
+
+							doMatches.add(markerVocabMatch);
+							handledDoTerms.add(markerVocabMatch.getDbKey());
+						}
+					}
+				}
 			}
 		}
 
-		// Disease Ontology (DO) ORTHO hit (no chasing down the dag)
+		// Disease Ontology (DO) ORTHO hit (must chase down the dag)
 		else if ( SearchHelper.isDoORTHO(hit.get(IndexConstants.COL_VOCABULARY)) ) {
+			logger.debug("Found DO/ORTHO Tier 1 vocab hit");
 			//ensure we haven't already done this term
 			if (!handledDoOrthoTerms.contains(hit.get(IndexConstants.COL_DB_KEY))) {
 				markerVocabMatch = markerVocabMatchFactory.getMatch(hit);
@@ -440,13 +468,33 @@ public class GenomeFeatureSearch extends AbstractSearch {
 				doOrthoMatches.add(markerVocabMatch);
 				handledDoOrthoTerms.add(markerVocabMatch.getDbKey());
 
+				//children of this term;
+				childIDs = vocabInfoCache.getDoOrthoChildTerms(hit.get(IndexConstants.COL_DB_KEY));
+				if (childIDs != null) {
+					for (Iterator childIter = childIDs.iterator(); childIter.hasNext();) {
+						childTermKey = (String)childIter.next();
+						if ( !handledDoOrthoTerms.contains(childTermKey) ) {
+							markerVocabMatch = markerVocabMatchFactory.getMatch(hit);
+							markerVocabMatch.flagAsTier1();
+							gfExactTypeScorer.addScore(markerVocabMatch);
+
+							// change db key to reflect the 'down-dag' term we're dealing
+							// with, and penalize the scores of these, slightly
+							markerVocabMatch.setDbKey(childTermKey);
+							markerVocabMatch.addScore(-0.0001);
+
+							doOrthoMatches.add(markerVocabMatch);
+							handledDoOrthoTerms.add(markerVocabMatch.getDbKey());
+						}
+					}
+				}
 			}
 		}
 
 
 		// Protien Isoform  hit (no chasing down the dag)
 		else if ( SearchHelper.isProtIso(hit.get(IndexConstants.COL_VOCABULARY)) ) {
-			logger.info("----------->PROTIEN ISOFORM HIT!!!!!" );
+			logger.debug("----------->PROTEIN ISOFORM HIT!!!!!" );
 
 			//ensure we haven't already done this term
 			if (!handledProtIsoTerms.contains(hit.get(IndexConstants.COL_DB_KEY))) {
@@ -709,7 +757,7 @@ public class GenomeFeatureSearch extends AbstractSearch {
 				}
 			}
 
-			// Disease Ontology (DO) hit (no chasing down the dag)
+			// Disease Ontology (DO) hit (must chase down the dag)
 			else if ( SearchHelper.isDo(hit) ) {
 
 				//ensure we haven't already done this term
@@ -720,10 +768,30 @@ public class GenomeFeatureSearch extends AbstractSearch {
 					doMatches.add(markerVocabMatch);
 					handledDoTerms.add( markerVocabMatch.getDbKey() );
 
+					//children of this term;
+					childIDs = vocabInfoCache.getDoChildTerms(hit.get(IndexConstants.COL_DB_KEY));
+					if (childIDs != null) {
+						for (Iterator childIter = childIDs.iterator(); childIter.hasNext();) {
+							childTermKey = (String)childIter.next();
+							if ( !handledDoTerms.contains(childTermKey) ) {
+								markerVocabMatch = markerVocabMatchFactory.getMatch(hit);
+								markerVocabMatch.flagAsTier2();
+								gfAndTypeScorer.addScore(markerVocabMatch);
+	
+								// change db key to reflect the 'down-dag' term we're dealing
+								// with, and penalize the scores of these, slightly
+								markerVocabMatch.setDbKey(childTermKey);
+								markerVocabMatch.addScore(-0.0001);
+	
+								doMatches.add(markerVocabMatch);
+								handledDoTerms.add(markerVocabMatch.getDbKey());
+							}
+						}
+					}
 				}
 			}
 
-			// Disease Ontology (DO) Ortho hit (no chasing down the dag)
+			// Disease Ontology (DO) Ortho hit (must chase down the dag)
 			else if ( SearchHelper.isDoORTHO(hit) ) {
 
 				//ensure we haven't already done this term
@@ -734,6 +802,26 @@ public class GenomeFeatureSearch extends AbstractSearch {
 					doOrthoMatches.add(markerVocabMatch);
 					handledDoOrthoTerms.add( markerVocabMatch.getDbKey() );
 
+					//children of this term;
+					childIDs = vocabInfoCache.getDoOrthoChildTerms(hit.get(IndexConstants.COL_DB_KEY));
+					if (childIDs != null) {
+						for (Iterator childIter = childIDs.iterator(); childIter.hasNext();) {
+							childTermKey = (String)childIter.next();
+							if ( !handledDoOrthoTerms.contains(childTermKey) ) {
+								markerVocabMatch = markerVocabMatchFactory.getMatch(hit);
+								markerVocabMatch.flagAsTier2();
+								gfAndTypeScorer.addScore(markerVocabMatch);
+	
+								// change db key to reflect the 'down-dag' term we're dealing
+								// with, and penalize the scores of these, slightly
+								markerVocabMatch.setDbKey(childTermKey);
+								markerVocabMatch.addScore(-0.0001);
+	
+								doOrthoMatches.add(markerVocabMatch);
+								handledDoOrthoTerms.add(markerVocabMatch.getDbKey());
+							}
+						}
+					}
 				}
 			}
 
@@ -839,6 +927,8 @@ public class GenomeFeatureSearch extends AbstractSearch {
 		List childIDs;
 		String childTermKey;
 
+
+		logger.debug("handleLargeTokenVocabHit -----------> " + hit.get(IndexConstants.COL_VOCABULARY) );
 
 		// anatomical dictionary hit
 		if ( SearchHelper.isAD(hit.get(IndexConstants.COL_VOCABULARY)) ) {
@@ -1010,7 +1100,7 @@ public class GenomeFeatureSearch extends AbstractSearch {
 			}
 		}
 
-		// Disease Ontolgy (DO) hit (no chasing down the dag)
+		// Disease Ontolgy (DO) hit (must chase down the dag)
 		else if ( SearchHelper.isDo(hit.get(IndexConstants.COL_VOCABULARY)) ) {
 
 			//ensure we haven't already done this term
@@ -1021,10 +1111,30 @@ public class GenomeFeatureSearch extends AbstractSearch {
 				doMatches.add(markerVocabMatch);
 				handledDoTerms.add( markerVocabMatch.getDbKey() );
 
+				//children of this term;
+				childIDs = vocabInfoCache.getDoChildTerms(hit.get(IndexConstants.COL_DB_KEY));
+				if (childIDs != null) {
+					for (Iterator childIter = childIDs.iterator(); childIter.hasNext();) {
+						childTermKey = (String)childIter.next();
+						if ( !handledDoTerms.contains(childTermKey) ) {
+							markerVocabMatch = markerVocabMatchFactory.getMatch(hit);
+							markerVocabMatch.flagAsTier3();
+							gfExactTypeScorer.addScore(markerVocabMatch);
+
+							// change db key to reflect the 'down-dag' term we're dealing
+							// with, and penalize the scores of these, slightly
+							markerVocabMatch.setDbKey(childTermKey);
+							markerVocabMatch.addScore(-0.0001);
+
+							doMatches.add(markerVocabMatch);
+							handledDoTerms.add( markerVocabMatch.getDbKey() );
+						}
+					}
+				}
 			}
 		}
 
-		// Disease Ontology (DO) ORTHO hit (no chasing down the dag)
+		// Disease Ontology (DO) ORTHO hit (must chase down the dag)
 		else if ( SearchHelper.isDoORTHO(hit.get(IndexConstants.COL_VOCABULARY)) ) {
 			//ensure we haven't already done this term
 			if (!handledDoOrthoTerms.contains(hit.get(IndexConstants.COL_DB_KEY))) {
@@ -1034,6 +1144,26 @@ public class GenomeFeatureSearch extends AbstractSearch {
 				doOrthoMatches.add(markerVocabMatch);
 				handledDoOrthoTerms.add( markerVocabMatch.getDbKey() );
 
+				//children of this term;
+				childIDs = vocabInfoCache.getDoOrthoChildTerms(hit.get(IndexConstants.COL_DB_KEY));
+				if (childIDs != null) {
+					for (Iterator childIter = childIDs.iterator(); childIter.hasNext();) {
+						childTermKey = (String)childIter.next();
+						if ( !handledDoOrthoTerms.contains(childTermKey) ) {
+							markerVocabMatch = markerVocabMatchFactory.getMatch(hit);
+							markerVocabMatch.flagAsTier3();
+							gfExactTypeScorer.addScore(markerVocabMatch);
+
+							// change db key to reflect the 'down-dag' term we're dealing
+							// with, and penalize the scores of these, slightly
+							markerVocabMatch.setDbKey(childTermKey);
+							markerVocabMatch.addScore(-0.0001);
+
+							doOrthoMatches.add(markerVocabMatch);
+							handledDoOrthoTerms.add( markerVocabMatch.getDbKey() );
+						}
+					}
+				}
 			}
 		}
 
@@ -1265,7 +1395,7 @@ public class GenomeFeatureSearch extends AbstractSearch {
 					}
 				}
 
-				// Disease Ontology (DO) hit (no chasing down the dag)
+				// Disease Ontology (DO) hit (muts chase down the dag)
 				else if ( SearchHelper.isDo(hit) ) {
 
 					//ensure we haven't already done this term
@@ -1274,10 +1404,28 @@ public class GenomeFeatureSearch extends AbstractSearch {
 						doMatches.add(markerVocabMatch);
 						handledDoTerms.add( markerVocabMatch.getDbKey() );
 
+						//children of this term;
+						childIDs = vocabInfoCache.getDoChildTerms(hit.get(IndexConstants.COL_DB_KEY));
+						if (childIDs != null) {
+							for (Iterator childIter = childIDs.iterator(); childIter.hasNext();) {
+								childTermKey = (String)childIter.next();
+								if ( !handledDoTerms.contains(childTermKey) ) {
+									markerVocabMatch = markerVocabMatchFactory.getMatch(hit);
+
+									// change db key to reflect the 'down-dag' term we're dealing
+									// with, and penalize the scores of these, slightly
+									markerVocabMatch.setDbKey(childTermKey);
+									markerVocabMatch.addScore(-0.0001);
+
+									doMatches.add(markerVocabMatch);
+									handledDoTerms.add( markerVocabMatch.getDbKey() );
+								}
+							}
+						}
 					}
 				}
 
-				// Disease Ontology (DO) Ortho hit (no chasing down the dag)
+				// Disease Ontology (DO) Ortho hit (must chase down the dag)
 				else if ( SearchHelper.isDoORTHO(hit) ) {
 
 					//ensure we haven't already done this term
@@ -1286,6 +1434,24 @@ public class GenomeFeatureSearch extends AbstractSearch {
 						doOrthoMatches.add(markerVocabMatch);
 						handledDoOrthoTerms.add( markerVocabMatch.getDbKey() );
 
+						//children of this term;
+						childIDs = vocabInfoCache.getDoOrthoChildTerms(hit.get(IndexConstants.COL_DB_KEY));
+						if (childIDs != null) {
+							for (Iterator childIter = childIDs.iterator(); childIter.hasNext();) {
+								childTermKey = (String)childIter.next();
+								if ( !handledDoOrthoTerms.contains(childTermKey) ) {
+									markerVocabMatch = markerVocabMatchFactory.getMatch(hit);
+
+									// change db key to reflect the 'down-dag' term we're dealing
+									// with, and penalize the scores of these, slightly
+									markerVocabMatch.setDbKey(childTermKey);
+									markerVocabMatch.addScore(-0.0001);
+
+									doOrthoMatches.add(markerVocabMatch);
+									handledDoTerms.add( markerVocabMatch.getDbKey() );
+								}
+							}
+						}
 					}
 				}
 
@@ -1443,28 +1609,36 @@ public class GenomeFeatureSearch extends AbstractSearch {
 
 		// assign Disease Ontology (DO) matches to their markers
 		if (incDo) {
+			logger.debug("Assigning " + doMatches.size() + " DO matches to markers");
 			for (Iterator iter = doMatches.iterator(); iter.hasNext();) {
 				markerVocabMatch = (MarkerVocabMatch)iter.next();
 				alleleKeys = vocabInfoCache.getDoAnnotAlleles(markerVocabMatch.getDbKey());
 				if (alleleKeys != null) {
-					for (Iterator mrkKeyIter = alleleKeys.iterator(); mrkKeyIter.hasNext();) {
-						thisGenomeFeature = getGfResult(ALLELE_TYPE, (String)mrkKeyIter.next() );
+					logger.debug("allele keys: " + alleleKeys.size());
+					for (Iterator allKeyIter = alleleKeys.iterator(); allKeyIter.hasNext();) {
+						thisGenomeFeature = getGfResult(ALLELE_TYPE, (String)allKeyIter.next() );
 						thisGenomeFeature.addDoMatch(markerVocabMatch);
 					}
+				} else {
+					logger.debug("allele keys: null");
 				}
 			}
 		}
 
 		// assign Disease Ontology (DO) ortho matches to their markers
 		if (incDo) {
+			logger.debug("Assigning " + doMatches.size() + " DO/ORTHO matches to markers");
 			for (Iterator iter = doOrthoMatches.iterator(); iter.hasNext();) {
 				markerVocabMatch = (MarkerVocabMatch)iter.next();
 				markerKeys = vocabInfoCache.getDoOrthoAnnotMarkers(markerVocabMatch.getDbKey());
 				if (markerKeys != null) {
+					logger.debug("marker keys: " + markerKeys.size());
 					for (Iterator mrkKeyIter = markerKeys.iterator(); mrkKeyIter.hasNext();) {
 						thisGenomeFeature = getGfResult(MARKER_TYPE, (String)mrkKeyIter.next() );
 						thisGenomeFeature.addDoOrthoMatch(markerVocabMatch);
 					}
+				} else {
+					logger.debug("marker keys: null, db key: " + markerVocabMatch.getDbKey());
 				}
 			}
 		}
@@ -1497,8 +1671,8 @@ public class GenomeFeatureSearch extends AbstractSearch {
 			}
 		}
 
-		// assign ip matches to their markers
-		if (incDo) {
+		// assign InterPro matches to their markers
+		if (incIp) {
 			for (Iterator iter = ipMatches.iterator(); iter.hasNext();) {
 				markerVocabMatch = (MarkerVocabMatch)iter.next();
 				markerKeys = vocabInfoCache.getIpAnnotMarkers(markerVocabMatch.getDbKey());
