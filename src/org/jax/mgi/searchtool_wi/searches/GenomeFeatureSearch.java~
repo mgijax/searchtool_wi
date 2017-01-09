@@ -1136,6 +1136,7 @@ public class GenomeFeatureSearch extends AbstractSearch {
 
 		// Disease Ontology (DO) ORTHO hit (must chase down the dag)
 		else if ( SearchHelper.isDoORTHO(hit.get(IndexConstants.COL_VOCABULARY)) ) {
+			logger.debug("Found DO/ORTHO Tier 3 vocab hit");
 			//ensure we haven't already done this term
 			if (!handledDoOrthoTerms.contains(hit.get(IndexConstants.COL_DB_KEY))) {
 				markerVocabMatch = markerVocabMatchFactory.getMatch(hit);
@@ -1641,6 +1642,7 @@ public class GenomeFeatureSearch extends AbstractSearch {
 					logger.debug("marker keys: null, db key: " + markerVocabMatch.getDbKey());
 				}
 			}
+			logger.debug(" - Done assigning " + doOrthoMatches.size() + " DO/ORTHO matches to markers");
 		}
 
 		// assign Protein Isoform matches to their markers
