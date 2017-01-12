@@ -1395,7 +1395,7 @@ public class GenomeFeatureSearch extends AbstractSearch {
 					}
 				}
 
-				// Disease Ontology (DO) hit (muts chase down the dag)
+				// Disease Ontology (DO) hit (must chase down the dag)
 				else if ( SearchHelper.isDo(hit) ) {
 
 					//ensure we haven't already done this term
@@ -1448,7 +1448,7 @@ public class GenomeFeatureSearch extends AbstractSearch {
 									markerVocabMatch.addScore(-0.0001);
 
 									doOrthoMatches.add(markerVocabMatch);
-									handledDoTerms.add( markerVocabMatch.getDbKey() );
+									handledDoOrthoTerms.add( markerVocabMatch.getDbKey() );
 								}
 							}
 						}
@@ -1607,9 +1607,9 @@ public class GenomeFeatureSearch extends AbstractSearch {
 			}
 		}
 
-		// assign Disease Ontology (DO) matches to their markers
+		// assign Disease Ontology (DO) matches to their alleles
 		if (incDo) {
-			logger.debug("Assigning " + doMatches.size() + " DO matches to markers");
+			logger.debug("Assigning " + doMatches.size() + " DO matches to alleles");
 			for (Iterator iter = doMatches.iterator(); iter.hasNext();) {
 				markerVocabMatch = (MarkerVocabMatch)iter.next();
 				alleleKeys = vocabInfoCache.getDoAnnotAlleles(markerVocabMatch.getDbKey());
