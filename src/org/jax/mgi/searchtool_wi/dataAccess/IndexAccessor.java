@@ -430,6 +430,7 @@ public class IndexAccessor {
         // Search, no matter what.
 
         hits = searcher.search(bq);
+        log.debug("marker search (" + hits.length() + " hits): " + bq.toString());
 
         return hits;
 
@@ -510,6 +511,7 @@ public class IndexAccessor {
         // Search no matter what.
 
         hits = searcher.search(bq);
+        log.debug("vocab search (" + hits.length() + " hits): " + bq.toString());
 
         return hits;
     }
