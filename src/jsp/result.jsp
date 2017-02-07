@@ -409,7 +409,7 @@
         String data_type = thisOtherResult.getDataType();
 
         if (data_type.equals(IndexConstants.OTHER_PROBE)) {
-            out.print("<td><a href='"+stConfig.get("WI_URL")+"searches/probe.cgi?" +thisOtherResult.getDbKey()+"'>Probe/Clone</a>");
+            out.print("<td><a href='"+stConfig.get("FEWI_URL")+"probe/" +thisOtherResult.getAccId().toUpperCase()+"'>Probe/Clone</a>");
             if (!thisOtherDisplay.getQualifier1().equals("")){
             	out.print(", "+ thisOtherDisplay.getQualifier1());
             }
