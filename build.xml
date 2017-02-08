@@ -25,7 +25,7 @@
   <target name="compile" depends="init" >
     <javac debug="true" srcdir="${src}" destdir="${build}" classpath="
     	${lib.dir}/javaee-api-5.jar; 
-    	${lib.dir}/log4j.jar; 
+    	${lib.dir}/log4j-1.2.15.jar; 
     	${lib.dir}/lucene-core-2.3.2.jar; 
     	${lib.dir}/lucene-snowball-2.3.2.jar;
     	${mgilib.dir}/core.jar; 
