@@ -451,7 +451,7 @@
         // Map Data is VERy odd, the qualifier is needed when creating the URL, so.. it HAS to be there.
 
         else if (data_type.equals(IndexConstants.OTHER_EXPERIMENT)) {
-            out.print("<td><a href='"+stConfig.get("WI_URL")+"searches/mapdata.cgi?" +thisOtherResult.getDbKey()+"/"+thisOtherDisplay.getQualifier1()+"'>Mapping Experiment</a>");
+            out.print("<td><a href='"+fewi_url+"mapping/key/" +thisOtherResult.getDbKey()+"'>Mapping Experiment</a>");
        	    out.print(", "+ thisOtherDisplay.getQualifier1());
 		    out.print("</td>");
         }
