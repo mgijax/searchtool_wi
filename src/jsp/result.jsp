@@ -462,7 +462,7 @@
             out.print("<td><a href='"+fewi_url+"assay/" + thisOtherResult.getAccId().toUpperCase()  +"'>Expression Assay</a></td>");
         }
         else if (data_type.equals(IndexConstants.OTHER_AMA)) {
-            out.print("<td><a href='"+stConfig.get("WI_URL")+"searches/AMA.cgi?id=" +thisOtherResult.getAccId().toUpperCase()+"'>AMA Browser Detail</a></td>");
+            out.print("<td><a href='"+fewi_url+"vocab/gxd/ma_ontology/" +thisOtherResult.getAccId().toUpperCase()+"'>MA Browser Detail</a></td>");
         }
 
         else if (data_type.equals(IndexConstants.OTHER_ESCELL)) {
