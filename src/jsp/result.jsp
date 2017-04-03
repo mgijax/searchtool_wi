@@ -320,7 +320,7 @@
         else
         {
         out.print("<a href='"
-            + stConfig.get("WI_URL") + "searches/Phat.cgi?id="
+            + stConfig.get("FEWI_URL") + "vocab/mp_ontology/"
             + thisVocabDisplay.getAcc_id() + "'>"
             + thisVocabDisplay.getName() + "</a>");
         }
