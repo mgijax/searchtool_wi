@@ -302,7 +302,7 @@
         else if (thisVocabDisplay.getVocabType().equals(IndexConstants.GO_TYPE_NAME))
         {
         out.print("<a href='"
-            + stConfig.get("WI_URL") + "searches/GO.cgi?id="
+            + stConfig.get("FEWI_URL") + "vocab/gene_ontology/"
             + thisVocabDisplay.getAcc_id() + "'>"
             + thisVocabDisplay.getName() + "</a>");
         }
