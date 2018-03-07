@@ -94,7 +94,7 @@ public class IndexAccessor {
         qp_pre.setAllowLeadingWildcard(true);
         qp_large_token.setAllowLeadingWildcard(true);
         qp_large_token.setDefaultOperator(QueryParser.Operator.AND);
-        BooleanQuery.setMaxClauseCount(100000);
+        BooleanQuery.setMaxClauseCount(200000);
 
         // Initialize the reference to the IndexSearcherContainer singleton.
 
