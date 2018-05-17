@@ -1,0 +1,3 @@
+lib.dir=./lib
+mgilib.dir=/usr/local/mgi/live/lib/java
+deploy.dir=/usr/local/mgi/wildfly/searchtool/deployments
