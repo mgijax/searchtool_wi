@@ -153,7 +153,7 @@
     out.print("<a href='"
         + stConfig.get("FEWI_URL") + "strain/"
         + thisVocabDisplay.getAcc_id() + "'>"
-        + thisVocabDisplay.getName() + "</a>");
+        + displayHelper.superscript(thisVocabDisplay.getName()) + "</a>");
     }
     else
     {
