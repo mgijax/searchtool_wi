@@ -870,6 +870,18 @@ public class DisplayHelper
 		{
 			url = "<a href='" + stConfig.get("FEWI_URL") + "marker/summary?interpro=" + vocabDisplay.getAcc_id() + "'>" + vocabDisplay.getAnnotDisplay() + "</a>";
 		}
+		else if (vocab.equals(IndexConstants.STRAIN_NAME))
+		{
+			if (Integer.parseInt(vocabDisplay.getAnnotCount()) > 0) {
+				if (Integer.parseInt(vocabDisplay.getAnnotCount()) > 1) {
+					url = "<a href='" + stConfig.get("FEWI_URL") + "reference/strain/" + vocabDisplay.getAcc_id() + "?typeFilter=Literature'>" + vocabDisplay.getAnnotCount() + " references</a>";
+				} else {
+					url = "<a href='" + stConfig.get("FEWI_URL") + "reference/strain/" + vocabDisplay.getAcc_id() + "?typeFilter=Literature'>" + vocabDisplay.getAnnotCount() + " reference</a>";
+				}
+			} else {
+				url = "";	// if no refs, show nothing
+			}
+		}
 		else
 		{
 			url = vocab;

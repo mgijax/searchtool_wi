@@ -77,7 +77,11 @@ public class VocabResult extends AbstractResult {
   * if the scores (from getScore) are the same
   */
   public String getAlphaSortBy() {
-      return vocabDisplayCache.getVocab(this).getName();
+	  try {
+		  return vocabDisplayCache.getVocab(this).getName();
+	  } catch (Exception e) {
+		  return "Unknown";
+	  }
   }
 
   /**

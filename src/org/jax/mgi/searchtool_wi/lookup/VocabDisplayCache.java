@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.logging.Logger;
 
-import org.apache.log4j.Logger;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.IndexReader;
 import org.jax.mgi.searchtool_wi.dataAccess.IndexReaderContainer;
@@ -81,13 +81,17 @@ public class VocabDisplayCache
 
      public VocabDisplay getVocab(VocabResult s)
     {
-
+      try {
         if (s.getVocabulary().equals(IndexConstants.AD_TYPE_NAME)) {
             return (VocabDisplay)vocabADCacheMap.get(s.getDbKey());
         }
         else {
             return (VocabDisplay)vocabCacheMap.get(s.getDbKey());
         }
+      } catch (Exception e) {
+    	  log.info("Cannot find display value for vocab key: " + s.getDbKey());;
+    	  throw e;
+      }
     }
 
      public VocabDisplay getVocab(VocabMatch vm)

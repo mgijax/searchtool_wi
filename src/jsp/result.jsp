@@ -317,6 +317,13 @@
         {
           out.print(thisVocabDisplay.getName() + "");
         }
+	    else if (thisVocabDisplay.getVocabType().equals(IndexConstants.STRAIN_NAME))
+    	{
+    	out.print("<a href='"
+        	+ stConfig.get("FEWI_URL") + "strain/"
+        	+ thisVocabDisplay.getAcc_id() + "'>"
+            + displayHelper.superscript(thisVocabDisplay.getName()) + "</a>");
+    	}
         else
         {
         out.print("<a href='"
@@ -331,7 +338,11 @@
 
         // column 4 (Why match?)
         out.print("<td class='small'><div style='float:left;'>");
-        out.print( thisVocabResult.getBestMatch().display() );
+ 	 	String bestMatchString = thisVocabResult.getBestMatch().display();
+    	if (thisVocabDisplay.getVocabType().equals(IndexConstants.STRAIN_NAME)) {
+    		bestMatchString = bestMatchString.replace("Term", "Name");
+    	}
+    	out.print(bestMatchString);
 
         if (debug) {
         out.print("</div><a style='float:right;' href='Search.do?query="
