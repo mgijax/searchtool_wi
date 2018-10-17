@@ -2,7 +2,14 @@ package org.jax.mgi.searchtool_wi.searches;
 
 // Standard Java Classes
 import java.util.*;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
+import org.codehaus.jackson.map.ObjectMapper;
 
 // MGI Shared Classes
 import org.jax.mgi.shr.config.Configuration;
@@ -19,6 +26,9 @@ import org.jax.mgi.searchtool_wi.matches.OtherMatchFactory;
 import org.jax.mgi.searchtool_wi.results.OtherResult;
 import org.jax.mgi.searchtool_wi.utils.SearchInput;
 import org.jax.mgi.shr.searchtool.IndexConstants;
+import org.jax.mgi.searchtool_wi.utils.AccessionSummaryRow;
+import org.jax.mgi.searchtool_wi.results.JsonSummaryResponse;
+import org.jax.mgi.searchtool_wi.utils.ResultSetMetaData;
 
 /**
 * This concrete search is responsible for gathering all data required for
@@ -69,10 +79,93 @@ public class OtherSearch extends AbstractSearch {
     searchOtherExact(searchInput);
 
     timer.record("Other - Exact Search Done");
+    
+    if (searchResults.size() == 0) {
+		if (searchInput.getSearchString().matches("^[rR][sS][0-9]+$")) {
+			for (OtherResult result : searchAccessionUrl(searchInput)) {
+				searchResults.put(result.getAccId(), result);
+			}
+			timer.record("Other - fewi/accession/ Search Done");
+		} else {
+			timer.record("Bypassing fewi/accession/ Search for string (" + searchInput.getSearchString() + ")");
+		}
+    }
 
     return new ArrayList( searchResults.values() );
   }
 
+  /**
+   * For certain IDs (currently consensus SNP IDs), get data from the fewi's accession/ URL, since we
+   * no longer index these IDs for the search tool.
+   */
+  private List<OtherResult> searchAccessionUrl(SearchInput searchInput) {
+	String searchUrl = config.get("FEWI_URL") + "accession/json?id=" + searchInput.getSearchString();
+	StringBuffer s = new StringBuffer();
+	List<OtherResult> results = new ArrayList<OtherResult>();
+	  
+	// read JSON from searchUrl
+	try {
+	    URL url = new URL(searchUrl);
+	    URLConnection urlConn = url.openConnection();
+	    HttpURLConnection conn = null;
+
+	    if (urlConn instanceof HttpURLConnection) {
+	    	conn = (HttpURLConnection) urlConn;
+	    	BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+	    	String current = in.readLine();
+	    	while (current != null) {
+	    		if (s.length() > 0) {
+	    			s.append("\n");
+	    		}
+	    		s.append(current);
+	    		current = in.readLine();
+		    }
+	    	in.close();
+	    	conn.disconnect();
+	    } else {
+	    	timer.record("FEWI_URL is not an HTTP URL");
+	    	return results;
+	    }
+
+	} catch (MalformedURLException mue) {
+	    timer.record("MalformedURLException : " + mue.getMessage());
+	    return results;
+	} catch (IOException ioe) {
+	    timer.record("IOException : " + ioe.getMessage());
+	    return results;
+	}
+
+	// use jackson ObjectMapper to convert to JsonSummaryResponse
+	ObjectMapper mapper = new ObjectMapper();
+	try {
+		JsonSummaryResponse response = (JsonSummaryResponse) mapper.readValue(s.toString(), JsonSummaryResponse.class);
+
+		// iterate over AccessionSummaryRow objects and turn into OtherResult objects
+		for (Object obj : response.getSummaryRows()) {
+			AccessionSummaryRow row = (AccessionSummaryRow) obj;
+			OtherResult result = new OtherResult(config);
+			result.setAccId(row.getAccId());
+			result.setDataType(row.getDisplayType());
+			result.setDbKey(row.getAccId());
+			result.setOptionalDescription(row.getDescription());
+
+			OtherMatch match = new OtherMatch();
+			match.setDataType(row.getDisplayType());
+			match.setDbKey(row.getAccId());
+			match.setAccKey(row.getAccId());
+			match.setDisplayableType(row.getDisplayType());
+			match.setMatchedText(searchInput.getSearchString());
+			match.setSearchScore(1); 
+			result.addExactMatch(match);
+
+			results.add(result);
+		}
+	} catch (IOException e) {
+		e.printStackTrace();
+	}
+	return results;
+}
+  
   /**
   * Searches the OtherExact index.  Iterates through results, adding a match
   * for each hit it finds

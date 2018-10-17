@@ -36,6 +36,8 @@ public class OtherResult extends AbstractResult {
   private Float term_score = new Float(0.0);
   private Float exact_score = new Float(0.0);
   private Boolean has_exact = false;
+  
+  private String optionalDescription = null;
 
   // lookup for gathering display string, so we can order alpha-numerically
   private static OtherDisplayLookup otherDisplayLookup = OtherDisplayLookup.getOtherDisplayLookup();
@@ -157,4 +159,15 @@ public class OtherResult extends AbstractResult {
       return has_exact;
   }
 
+  // ------------------------------------- //
+  // optional description field (for SNPs)
+  // ------------------------------------- //
+
+  public String getOptionalDescription() {
+	  return optionalDescription;
+  }
+
+  public void setOptionalDescription(String optionalDescription) {
+	  this.optionalDescription = optionalDescription;
+  }
 }

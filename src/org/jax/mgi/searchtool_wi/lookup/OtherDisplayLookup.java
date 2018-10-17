@@ -104,7 +104,7 @@ public class OtherDisplayLookup
         //if we don't have the requested object, look it up, and add it to the cache
         // if it is STILL null after this, return a null object.
         if (thisOtherDisplay==null) {
-        	thisOtherDisplay = lookupOther(otherResult.getDbKey(), otherResult.getDataType());
+        	thisOtherDisplay = lookupOther(otherResult.getDbKey(), otherResult.getDataType(), otherResult);
         	otherCacheMap.put(otherResult.getDbKey()+"::"+otherResult.getDataType(), thisOtherDisplay);
         }
 
@@ -119,7 +119,7 @@ public class OtherDisplayLookup
      * @return
      */
 
-    private OtherDisplay lookupOther(String dbKey, String type)
+    private OtherDisplay lookupOther(String dbKey, String type, OtherResult result)
     {
 
     	Term termKey = new Term(IndexConstants.COL_DB_KEY, dbKey);
@@ -142,7 +142,19 @@ public class OtherDisplayLookup
 
     	if (results.length() != 1)
     	{
-    		log.error("There is a problem with the index, this should toss an exception! Length: "+results.length());
+    		// only log an error if this is not a SNP ID, as we don't expect to find display strings for them anymore
+    		if (!dbKey.matches("^[Rr][sS][0-9]+$")) {
+    			log.error("There is a problem with the index, this should toss an exception! Length: "+results.length());
+    		} else {
+    			thisOtherDisplay.setDbKey(dbKey);
+    			if (result.getOptionalDescription() != null) {
+    				thisOtherDisplay.setName(result.getOptionalDescription());
+    			} else {
+    				thisOtherDisplay.setName("Mouse SNP " + dbKey);
+    			}
+    			thisOtherDisplay.setDataType(type);
+    			return thisOtherDisplay;
+    		}
             for (Iterator iter = results.iterator(); iter.hasNext();) {
 
                 // get the hit, and build a match
