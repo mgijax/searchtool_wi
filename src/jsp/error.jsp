@@ -3,6 +3,9 @@
 <%
 QuickSearchException qse = (QuickSearchException)request.getAttribute("QuickSearchException");
 String searchString = (String) request.getParameter("query");
+
+// Do some cleanup of the string to prevent reflected XSS attacks
+searchString = searchString.replaceAll("<", "&lt;").replaceAll(">", "&gt;");
 %>
 
 <%=webTemplate.getTemplateHeadHtml()%>
