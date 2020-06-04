@@ -30,6 +30,18 @@ public class SearchInput {
   private String cacheString = new String("");
   private List<String> zeroHitTokens   = new ArrayList<String>();
 
+  // static method - to help prevent reflected XSS attacks
+  private String cleaner(String s) {
+	  // remove any double slashes
+	  String t = s.replaceAll("//", "");
+	  
+	  // remove any alert commands, case-insensitive
+	  t = t.replaceAll("(?i)alert *\([0-9]+\)", "");
+	  
+	  // remove any backslash/quote combos
+	  return t.replaceAll("\\['\"][-]?", "");
+  }
+  
   //-------------//
   // Constructors
   //-------------//
@@ -51,7 +63,7 @@ public class SearchInput {
     }
 
     // setup cache string for result-set caching
-    cacheString =  searchString.toLowerCase();
+    cacheString =  cleaner(searchString).toLowerCase();
   }
 
   //-----------------------//
