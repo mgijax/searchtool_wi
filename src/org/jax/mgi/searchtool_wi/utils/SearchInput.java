@@ -33,13 +33,19 @@ public class SearchInput {
   // static method - to help prevent reflected XSS attacks
   private String cleaner(String s) {
 	  // remove any double slashes
+	  log.error("Original: " + s);
 	  String t = s.replaceAll("//", "");
+	  log.error("Step 1:   " + t);
 	  
 	  // remove any alert commands, case-insensitive
-	  t = t.replaceAll("(?i)alert *\([0-9]+\)", "");
+	  t = t.replaceAll("(?i)alert *.[0-9]+.", "");
+	  log.error("Step 2:   " + t);
 	  
 	  // remove any backslash/quote combos
-	  return t.replaceAll("\\['\"][-]?", "");
+	  t = t.replaceAll("\\\\['\"]-?", "");
+	  log.error("Step 3:   " + t);
+
+	  return t;
   }
   
   //-------------//
@@ -61,9 +67,10 @@ public class SearchInput {
             searchString = "";
         }
     }
+    searchString = cleaner(searchString);
 
     // setup cache string for result-set caching
-    cacheString =  cleaner(searchString).toLowerCase();
+    cacheString =  searchString.toLowerCase();
   }
 
   //-----------------------//
@@ -174,7 +181,7 @@ public class SearchInput {
   * @param String search string
   */
   public void setSearchString(String s) {
-      searchString = s;
+      searchString = cleaner(s);
   }
 
   /**
